@@ -19,3 +19,9 @@ Relationships:
 Data Types:
 
 	Fields like date_naissance, date_debut, and date_fin are represented as Date objects in Java, with the @Temporal annotation to specify their date type.
+
+• Languages : Java, HTML, CSS, JavaScript
+• Framework: Spring Boot 
+• ORM : Hibernate
+• Base de Données : MySQL
+• Server : Apache Tomcat v10.1
