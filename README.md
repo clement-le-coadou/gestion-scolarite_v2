@@ -25,3 +25,6 @@ Data Types:
 • ORM : Hibernate
 • Base de Données : MySQL
 • Server : Apache Tomcat v10.1
+
+The database used is entitled gestion_scolarite and use the port 3306.
+The username of the connection is root, and the password is cytech0001
