@@ -1,81 +1,44 @@
 package jpa;
-
 import jakarta.persistence.*;
-import java.util.Date;
+import java.util.Set;
 
 @Entity
-@Table(name = "Cours")
 public class Cours {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(name = "nom", nullable = false, length = 100)
     private String nom;
 
-    @Column(name = "description")
+    @Column(columnDefinition = "TEXT")
     private String description;
-
-    @Column(name = "date_debut", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date dateDebut;
-
-    @Column(name = "date_fin", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date dateFin;
 
     @ManyToOne
     @JoinColumn(name = "enseignant_id")
-    private Utilisateur enseignant;
+    private Enseignant enseignant;
 
-    // Getters and Setters
-    public long getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "cours", cascade = CascadeType.ALL)
+    private Set<Inscription> inscriptions;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy = "cours", cascade = CascadeType.ALL)
+    private Set<Note> notes;
 
-    public String getNom() {
-        return nom;
-    }
+    // Getters et Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
+    public String getNom() { return nom; }
+    public void setNom(String nom) { this.nom = nom; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public Enseignant getEnseignant() { return enseignant; }
+    public void setEnseignant(Enseignant enseignant) { this.enseignant = enseignant; }
 
-    public Date getDateDebut() {
-        return dateDebut;
-    }
+    public Set<Inscription> getInscriptions() { return inscriptions; }
+    public void setInscriptions(Set<Inscription> inscriptions) { this.inscriptions = inscriptions; }
 
-    public void setDateDebut(Date dateDebut) {
-        this.dateDebut = dateDebut;
-    }
-
-    public Date getDateFin() {
-        return dateFin;
-    }
-
-    public void setDateFin(Date dateFin) {
-        this.dateFin = dateFin;
-    }
-
-    public Utilisateur getEnseignant() {
-        return enseignant;
-    }
-
-    public void setEnseignant(Utilisateur enseignant) {
-        this.enseignant = enseignant;
-    }
+    public Set<Note> getNotes() { return notes; }
+    public void setNotes(Set<Note> notes) { this.notes = notes; }
 }
-
