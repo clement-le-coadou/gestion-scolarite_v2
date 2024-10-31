@@ -17,6 +17,18 @@
 
 <h2>Création de Compte</h2>
 
+<!-- Vérification et affichage du message d'erreur -->
+<% 
+    String errorMessage = (String) request.getAttribute("errorMessage");
+    if (errorMessage != null) { 
+%>
+    <div style="color:red; font-weight:bold; margin-bottom:20px;">
+        <%= errorMessage %>
+    </div>
+<% 
+    } 
+%>
+
 <!-- Sélection du type de compte -->
 <label for="userType">Choisissez le type de compte :</label>
 <select id="userType" onchange="showForm()">

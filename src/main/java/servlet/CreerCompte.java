@@ -26,7 +26,20 @@ public class CreerCompte extends HttpServlet {
         String email = request.getParameter("email");
         String motDePasse = request.getParameter("motDePasse");
         String contact = request.getParameter("contact");
+        String dateNaissance = request.getParameter("dateNaissance");
 
+        // Log pour debug : Afficher toutes les informations reçues
+        System.out.println("=== Informations du formulaire ===");
+        System.out.println("Type d'utilisateur: " + userType);
+        System.out.println("Nom: " + nom);
+        System.out.println("Prénom: " + prenom);
+        System.out.println("Email: " + email);
+        System.out.println("Mot de passe: " + motDePasse);
+        System.out.println("Contact: " + contact);
+        if ("etudiant".equals(userType)) {
+            System.out.println("Date de naissance: " + dateNaissance);
+        }
+        System.out.println("===================================");
         // Vérification des champs vides
         if (nom == null || nom.isEmpty() || prenom == null || prenom.isEmpty() ||
             email == null || email.isEmpty() || motDePasse == null || motDePasse.isEmpty() ||
@@ -34,7 +47,7 @@ public class CreerCompte extends HttpServlet {
             ("etudiant".equals(userType) && (request.getParameter("dateNaissance") == null || request.getParameter("dateNaissance").isEmpty()))) {
 
             request.setAttribute("errorMessage", "Tous les champs sont obligatoires.");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("creerCompte.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("CreationCompte.jsp");
             dispatcher.forward(request, response);
             return;
         }
@@ -79,25 +92,25 @@ public class CreerCompte extends HttpServlet {
                 
             } else {
                 request.setAttribute("errorMessage", "Type de compte invalide.");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("creerCompte.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("CreationCompte.jsp");
                 dispatcher.forward(request, response);
                 return;
             }
 
             // Redirection après création réussie
-            RequestDispatcher dispatcher = request.getRequestDispatcher("success.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Connexion.jsp");
             dispatcher.forward(request, response);
 
         } catch (UniqueConstraintViolationException e) {
             // Exception pour email non unique
             request.setAttribute("errorMessage", e.getMessage());
-            RequestDispatcher dispatcher = request.getRequestDispatcher("creerCompte.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("CreationCompte.jsp");
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
             // Exception générique pour tout autre problème
             request.setAttribute("errorMessage", "Une erreur est survenue lors de la création du compte. Veuillez réessayer.");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("creerCompte.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("CreationCompte.jsp");
             dispatcher.forward(request, response);
         }
     }
