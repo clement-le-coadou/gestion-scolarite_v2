@@ -52,6 +52,25 @@ public class CrudGeneric<T> implements GenericDAO<T> {
             }
         }
     }
+    
+    public T findByEmail(String email) {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            String hql = "from " + entityType.getName() + " where email = :email";
+            return session.createQuery(hql, entityType)
+                          .setParameter("email", email)
+                          .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace(); // Log de l'exception
+            return null;
+        } finally {
+            if (session != null) {
+                session.close(); // Fermeture de la session
+            }
+        }
+    }
+
 
     @Override
     public void update(T entity) {
