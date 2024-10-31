@@ -24,10 +24,15 @@
         } else if (user instanceof Administrateur) {
             Administrateur administrateur = (Administrateur) user;
             out.println("Vous êtes connecté en tant qu'Administrateur : " + administrateur.getNom() + " " + administrateur.getPrenom());
+                       
         }
     } else {
         out.println("Aucun utilisateur connecté.");
     }
 %>
+
+           
+            <a href="AfficherEtudiants">Afficher la liste des élèves</a>
+            
 </body>
 </html>
