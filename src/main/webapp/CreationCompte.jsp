@@ -70,10 +70,6 @@
             <label for="email">Email :</label>
             <input type="email" id="email" name="email" class="form-control" required>
         </div>
-        <div class="form-group">
-            <label for="motDePasse">Mot de Passe :</label>
-            <input type="password" id="motDePasse" name="motDePasse" class="form-control" required>
-        </div>
 
         <!-- Champ spécifique à l'étudiant : Date de Naissance -->
         <div id="dateNaissanceField" style="display:none;" class="form-group">
@@ -84,6 +80,11 @@
         <div class="form-group">
             <label for="contact">Contact :</label>
             <input type="text" id="contact" name="contact" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="motDePasse">Mot de Passe :</label>
+            <input type="password" id="motDePasse" name="motDePasse" class="form-control" required>
         </div>
 
         <!-- Bouton de soumission -->
