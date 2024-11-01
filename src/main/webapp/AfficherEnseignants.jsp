@@ -1,14 +1,17 @@
 <%@ page import="java.util.List" %>
 <%@ page import="jpa.Enseignant" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Liste des Enseignants</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/banniere.css">
 </head>
 <body class="bg-light">
+    <%@ include file="header.jsp" %>
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Liste des Enseignants</h2>
