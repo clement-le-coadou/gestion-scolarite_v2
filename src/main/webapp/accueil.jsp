@@ -12,7 +12,7 @@
     <%@ include file="header.jsp" %>
     <nav class="navbar navbar-expand-lg navbar-light bg-light"> 
         <div class="container"> 
-            <span class="navbar-text">Rôle: Étudiant</span> 
+            <span class="navbar-text">Rôle: <%=role %></span> 
             <ul class="navbar-nav ml-auto"> 
                 <li class="nav-item"> 
                     <a class="nav-link" href="#">Gestion des cours</a> 
@@ -33,7 +33,6 @@
             </ul> 
         </div> 
     </nav>
-
 
             <br>
             <a href="AfficherEtudiants">Afficher la liste des élèves</a>

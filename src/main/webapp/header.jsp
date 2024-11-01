@@ -11,26 +11,32 @@
             <%     // Récupération de l'objet utilisateur depuis la session
             Object user = session.getAttribute("username");
             String username;
+            String role;
             
         if (user != null) {
 	        if (user instanceof Etudiant) {
 	            Etudiant etudiant = (Etudiant) user;
 	            
 	             username = etudiant.getNom() + " " + etudiant.getPrenom();
+	             role = "Etudiant";
 	        } else if (user instanceof Enseignant) {
 	            Enseignant enseignant = (Enseignant) user;
 	            
 	            username =  enseignant.getNom() + " " + enseignant.getPrenom();
+	            role = "Enseignant";
 	        } else if (user instanceof Administrateur) {
 	            Administrateur administrateur = (Administrateur) user;
 	            
-	            username =  administrateur.getNom() + " " + administrateur.getPrenom();          
+	            username =  administrateur.getNom() + " " + administrateur.getPrenom();  
+	            role = "Administrateur";
 	        }
 	        else{
 		        username = "Non connecté";
+		        role = "Non connecté";
 	        }
 	    } else {
 	        username = "Non connecté";
+	        role = "Non connecté";
 	    }%>
                 <span>Utilisateur: <% out.print(username);%></span> <br>
             </div>
