@@ -13,18 +13,29 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h2 class="text-center mb-4">Connexion</h2>
-                    <%
-                        String message = (String) session.getAttribute("message");
-                        if (message != null && !message.isEmpty()) {
+                    
+               		<%
+                        String errorMessage = (String) session.getAttribute("errorMessage");
+                        if (errorMessage != null && !errorMessage.isEmpty()) {
                     %>
                         <div class="alert alert-danger" role="alert">
-                            <%= message %>
+                            <%= errorMessage %>
                         </div>
                     <%
-                            session.removeAttribute("message");
+                            session.removeAttribute("errorMessage");
+                        }
+                        String successMessage = (String) session.getAttribute("successMessage");
+                        if (successMessage != null && !successMessage.isEmpty()) {
+                    %>
+                        <div class="alert alert-success" role="alert">
+                            <%= successMessage %>
+                        </div>
+                    <%
+                            session.removeAttribute("successMessage");
                         }
                     %>
-                    
+
+                    <!-- Formulaire de connexion -->
                     <form action="Login" method="post">
                         <div class="form-group">
                             <label for="username">E-mail</label>

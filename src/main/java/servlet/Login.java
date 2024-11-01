@@ -55,12 +55,12 @@ public class Login extends HttpServlet {
 					if(test.getMotDePasse().equals(password)) {
 						session.setAttribute("username", test);
 					}else{
-						session.setAttribute("message", "Mot de passe incorrect");
+						session.setAttribute("errorMessage", "Mot de passe incorrect");
 						request.getRequestDispatcher("Connexion.jsp").forward(request, response);
 						return;
 					}
 				}else{
-					session.setAttribute("message", "Adresse mail incorrecte");
+					session.setAttribute("errorMessage", "Adresse mail incorrecte");
 					request.getRequestDispatcher("Connexion.jsp").forward(request, response);
 					return;
 				}
@@ -72,12 +72,12 @@ public class Login extends HttpServlet {
 					if(test.getMotDePasse().equals(password)) {
 						session.setAttribute("username", test);
 					}else{
-						session.setAttribute("message", "Mot de passe incorrect");
+						session.setAttribute("errorMessage", "Mot de passe incorrect");
 						request.getRequestDispatcher("Connexion.jsp").forward(request, response);
 						return;
 					}
 				}else{
-					session.setAttribute("message", "Adresse mail incorrecte");
+					session.setAttribute("errorMessage", "Adresse mail incorrecte");
 					request.getRequestDispatcher("Connexion.jsp").forward(request, response);
 					return;
 				}
@@ -89,18 +89,18 @@ public class Login extends HttpServlet {
 					if(test.getMotDePasse().equals(password)) {
 						session.setAttribute("username", test);
 					}else{
-						session.setAttribute("message", "Mot de passe incorrect");
+						session.setAttribute("errorMessage", "Mot de passe incorrect");
 						request.getRequestDispatcher("Connexion.jsp").forward(request, response);
 						return;
 					}
 				}else{
-					session.setAttribute("message", "Adresse mail incorrecte");
+					session.setAttribute("errorMessage", "Adresse mail incorrecte");
 					request.getRequestDispatcher("Connexion.jsp").forward(request, response);
 					return;
 				}
 			}
 	    }else {
-	    	session.setAttribute("message", "Veuillez sélectionner le type de votre compte");
+	    	session.setAttribute("errorMessage", "Veuillez sélectionner le type de votre compte");
 			request.getRequestDispatcher("Connexion.jsp").forward(request, response);
 			return;
 	    }

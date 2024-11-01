@@ -10,6 +10,9 @@ import jpa.Enseignant;
 import jpa.Etudiant;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import daogenerique.CrudGeneric;
@@ -51,7 +54,7 @@ public class CreerCompte extends HttpServlet {
             dispatcher.forward(request, response);
             return;
         }
-
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
             if ("etudiant".equals(userType)) {
                 CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
@@ -64,7 +67,7 @@ public class CreerCompte extends HttpServlet {
                 // Logique de création pour un étudiant
                 Etudiant etudiant = new Etudiant();
                 etudiant.setContact(contact);
-                etudiant.setDateNaissance(null); // Ajoutez ici la logique pour convertir la date en format Date
+                etudiant.setDateNaissance(formatter.parse(dateNaissance));
                 etudiant.setEmail(email);
                 etudiant.setNom(nom);
                 etudiant.setPrenom(prenom);
@@ -98,6 +101,7 @@ public class CreerCompte extends HttpServlet {
             }
 
             // Redirection après création réussie
+            request.setAttribute("successMessage", "Compte créé avec succés.");
             RequestDispatcher dispatcher = request.getRequestDispatcher("Connexion.jsp");
             dispatcher.forward(request, response);
 
@@ -109,7 +113,7 @@ public class CreerCompte extends HttpServlet {
 
         } catch (Exception e) {
             // Exception générique pour tout autre problème
-            request.setAttribute("errorMessage", "Une erreur est survenue lors de la création du compte. Veuillez réessayer.");
+            request.setAttribute("errorMessage", "Une erreur est survenue lors de la création du compte. Veuillez réessayer."+"\n Message:"+e.getMessage()+"\n Trace:"+e.getStackTrace());
             RequestDispatcher dispatcher = request.getRequestDispatcher("CreationCompte.jsp");
             dispatcher.forward(request, response);
         }
