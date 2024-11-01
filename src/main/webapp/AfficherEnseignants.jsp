@@ -6,9 +6,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Liste des Enseignants</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="resources/bootstrap.min.css">
+    <link rel="stylesheet" href="resources/banniere.css">
 </head>
 <body class="bg-light">
+    <%@ include file="header.jsp" %>
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Liste des Enseignants</h2>

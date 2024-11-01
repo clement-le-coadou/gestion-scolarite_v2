@@ -5,14 +5,34 @@
     <meta charset="UTF-8">
     <title>Création de Compte</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script>
-        function showForm() {
-            const userType = document.getElementById("userType").value;
-            document.getElementById("etudiantForm").style.display = userType === "etudiant" ? "block" : "none";
-            document.getElementById("enseignantForm").style.display = userType === "enseignant" ? "block" : "none";
-            document.getElementById("selectedUserType").value = userType; // Définir le type sélectionné
-        }
-    </script>
+	<script>
+	    function showForm() {
+	        const userType = document.getElementById("userType").value;
+	        
+	        // Get all input elements within each form section
+	        const etudiantInputs = document.querySelectorAll("#etudiantForm input");
+	        const enseignantInputs = document.querySelectorAll("#enseignantForm input");
+	
+	        // Hide both sections and remove 'required' attribute from both sets of inputs
+	        document.getElementById("etudiantForm").style.display = "none";
+	        document.getElementById("enseignantForm").style.display = "none";
+	        etudiantInputs.forEach(input => input.required = false);
+	        enseignantInputs.forEach(input => input.required = false);
+	
+	        // Display the appropriate form based on selected user type and set 'required' where necessary
+	        if (userType === "etudiant") {
+	            document.getElementById("etudiantForm").style.display = "block";
+	            etudiantInputs.forEach(input => input.required = true);
+	        } else if (userType === "enseignant") {
+	            document.getElementById("enseignantForm").style.display = "block";
+	            enseignantInputs.forEach(input => input.required = true);
+	        }
+	
+	        // Set hidden input's value to the selected user type
+	        document.getElementById("selectedUserType").value = userType;
+	    }
+	</script>
+
 </head>
 <body class="bg-light">
 
