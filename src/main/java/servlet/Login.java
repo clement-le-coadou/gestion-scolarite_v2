@@ -46,38 +46,65 @@ public class Login extends HttpServlet {
 	    HttpSession session = request.getSession();
 	    CrudGeneric<?> user;
 	    
-	    if(user_type.equals("etudiant")) {
-			user = new CrudGeneric<>(sessionFactory, Etudiant.class);
-			Etudiant test= new Etudiant();
-			user.findByEmail(username);	
-			if(test!=null) {
-				if(test.getMotDePasse().equals(password)) {
-					session.setAttribute("username", test);
+	    if(user_type!=null) {
+	    	if(user_type.equals("etudiant")) {
+				user = new CrudGeneric<>(sessionFactory, Etudiant.class);
+				Etudiant test= new Etudiant();
+				test=(Etudiant)user.findByEmail(username);	
+				if(test!=null) {
+					if(test.getMotDePasse().equals(password)) {
+						session.setAttribute("username", test);
+					}else{
+						session.setAttribute("message", "Mot de passe incorrect");
+						request.getRequestDispatcher("Connexion.jsp").forward(request, response);
+						return;
+					}
+				}else{
+					session.setAttribute("message", "Adresse mail incorrect");
+					request.getRequestDispatcher("Connexion.jsp").forward(request, response);
+					return;
+				}
+			}else if(user_type.equals("administrateur")) {
+				user = new CrudGeneric<>(sessionFactory, Administrateur.class);
+				Administrateur test= new Administrateur();
+				test=(Administrateur)user.findByEmail(username);
+				if(test!=null) {
+					if(test.getMotDePasse().equals(password)) {
+						session.setAttribute("username", test);
+					}else{
+						session.setAttribute("message", "Mot de passe incorrect");
+						request.getRequestDispatcher("Connexion.jsp").forward(request, response);
+						return;
+					}
+				}else{
+					session.setAttribute("message", "Adresse mail incorrect");
+					request.getRequestDispatcher("Connexion.jsp").forward(request, response);
+					return;
+				}
+			}else if(user_type.equals("enseignant")) {
+				user = new CrudGeneric<>(sessionFactory, Enseignant.class);
+				Enseignant test= new Enseignant();
+				test=(Enseignant)user.findByEmail(username);
+				if(test!=null) {
+					if(test.getMotDePasse().equals(password)) {
+						session.setAttribute("username", test);
+					}else{
+						session.setAttribute("message", "Mot de passe incorrect");
+						request.getRequestDispatcher("Connexion.jsp").forward(request, response);
+						return;
+					}
+				}else{
+					session.setAttribute("message", "Adresse mail incorrect");
+					request.getRequestDispatcher("Connexion.jsp").forward(request, response);
+					return;
 				}
 			}
-		}else if(user_type.equals("administrateur")) {
-			user = new CrudGeneric<>(sessionFactory, Administrateur.class);
-			Administrateur test= new Administrateur();
-			user.findByEmail(username);
-			if(test!=null) {
-				if(test.getMotDePasse().equals(password)) {
-					session.setAttribute("username", test);
-				}
-			}
-		}else if(user_type.equals("enseignant")) {
-			user = new CrudGeneric<>(sessionFactory, Enseignant.class);
-			Enseignant test= new Enseignant();
-			user.findByEmail(username);
-			if(test!=null) {
-				if(test.getMotDePasse().equals(password)) {
-					session.setAttribute("username", test);
-				}
-			}
-		}else {
-			request.setAttribute("message", "Type sélectionné manquant ou incorrect.");
-            request.getRequestDispatcher("Connexion.jsp").forward(request, response);
-            return;
-		}
+	    }else {
+	    	session.setAttribute("message", "Veuillez sélectionner le type de votre compte");
+			request.getRequestDispatcher("Connexion.jsp").forward(request, response);
+			return;
+	    }
+	    
         request.getRequestDispatcher("accueil.jsp");
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
