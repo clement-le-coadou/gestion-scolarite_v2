@@ -7,8 +7,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Liste des Enseignants</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/banniere.css">
+    <link rel="stylesheet" href="resources/bootstrap.min.css">
+    <link rel="stylesheet" href="resources/banniere.css">
 </head>
 <body class="bg-light">
     <%@ include file="header.jsp" %>

@@ -9,8 +9,8 @@
     <head>
         <meta charset="UTF-8">
         <title>Accueil</title>
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/banniere.css">
+        <link rel="stylesheet" href="resources/bootstrap.min.css">
+        <link rel="stylesheet" href="resources/banniere.css">
     </head>
 <body>
     <%@ include file="header.jsp" %>
