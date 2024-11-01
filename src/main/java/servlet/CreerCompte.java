@@ -31,11 +31,11 @@ public class CreerCompte extends HttpServlet {
         String contact = request.getParameter("contact");
         String dateNaissance = request.getParameter("dateNaissance");
 
-        // Log pour debug : Afficher toutes les informations reçues
+        // Log pour debug : Afficher toutes les informations reï¿½ues
         System.out.println("=== Informations du formulaire ===");
         System.out.println("Type d'utilisateur: " + userType);
         System.out.println("Nom: " + nom);
-        System.out.println("Prénom: " + prenom);
+        System.out.println("Prï¿½nom: " + prenom);
         System.out.println("Email: " + email);
         System.out.println("Mot de passe: " + motDePasse);
         System.out.println("Contact: " + contact);
@@ -43,7 +43,7 @@ public class CreerCompte extends HttpServlet {
             System.out.println("Date de naissance: " + dateNaissance);
         }
         System.out.println("===================================");
-        // Vérification des champs vides
+        // Vï¿½rification des champs vides
         if (nom == null || nom.isEmpty() || prenom == null || prenom.isEmpty() ||
             email == null || email.isEmpty() || motDePasse == null || motDePasse.isEmpty() ||
             contact == null || contact.isEmpty() ||
@@ -59,12 +59,12 @@ public class CreerCompte extends HttpServlet {
             if ("etudiant".equals(userType)) {
                 CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
 
-                // Vérifier si l'email existe déjà
+                // Vï¿½rifier si l'email existe dï¿½jï¿½
                 if (etudiantDAO.findByEmail(email) != null) {
-                    throw new UniqueConstraintViolationException("L'email est déjà utilisé.");
+                    throw new UniqueConstraintViolationException("L'email est dÃ©jÃ  utilisÃ©.");
                 }
 
-                // Logique de création pour un étudiant
+                // Logique de crï¿½ation pour un ï¿½tudiant
                 Etudiant etudiant = new Etudiant();
                 etudiant.setContact(contact);
                 etudiant.setDateNaissance(formatter.parse(dateNaissance));
@@ -73,17 +73,17 @@ public class CreerCompte extends HttpServlet {
                 etudiant.setPrenom(prenom);
                 etudiant.setMotDePasse(motDePasse);
                 etudiantDAO.create(etudiant);
-                response.getWriter().println("Compte Étudiant créé avec succès !");
+                response.getWriter().println("Compte ï¿½tudiant crÃ©Ã© avec succÃ¨s !");
                 
             } else if ("enseignant".equals(userType)) {
                 CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
 
-                // Vérifier si l'email existe déjà
+                // Vï¿½rifier si l'email existe dï¿½jï¿½
                 if (enseignantDAO.findByEmail(email) != null) {
-                    throw new UniqueConstraintViolationException("L'email est déjà utilisé.");
+                    throw new UniqueConstraintViolationException("L'email est dÃ©jÃ  utilisÃ©.");
                 }
 
-                // Logique de création pour un enseignant
+                // Logique de crï¿½ation pour un enseignant
                 Enseignant enseignant = new Enseignant();
                 enseignant.setContact(contact);
                 enseignant.setEmail(email);
@@ -91,7 +91,7 @@ public class CreerCompte extends HttpServlet {
                 enseignant.setPrenom(prenom);
                 enseignant.setMotDePasse(motDePasse);
                 enseignantDAO.create(enseignant);
-                response.getWriter().println("Compte Enseignant créé avec succès !");
+                response.getWriter().println("Compte Enseignant crÃ©Ã© avec succÃ¨s !");
                 
             } else {
                 request.setAttribute("errorMessage", "Type de compte invalide.");
@@ -100,8 +100,8 @@ public class CreerCompte extends HttpServlet {
                 return;
             }
 
-            // Redirection après création réussie
-            request.setAttribute("successMessage", "Compte créé avec succés.");
+            // Redirection aprï¿½s crï¿½ation rï¿½ussie
+            request.setAttribute("successMessage", "Compte crÃ©Ã© avec succÃ¨s.");
             RequestDispatcher dispatcher = request.getRequestDispatcher("Connexion.jsp");
             dispatcher.forward(request, response);
 
@@ -112,8 +112,8 @@ public class CreerCompte extends HttpServlet {
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
-            // Exception générique pour tout autre problème
-            request.setAttribute("errorMessage", "Une erreur est survenue lors de la création du compte. Veuillez réessayer."+"\n Message:"+e.getMessage()+"\n Trace:"+e.getStackTrace());
+            // Exception gï¿½nï¿½rique pour tout autre problï¿½me
+            request.setAttribute("errorMessage", "Une erreur est survenue lors de la crï¿½ation du compte. Veuillez rÃ©essayer."+"\n Message:"+e.getMessage()+"\n Trace:"+e.getStackTrace());
             RequestDispatcher dispatcher = request.getRequestDispatcher("CreationCompte.jsp");
             dispatcher.forward(request, response);
         }
