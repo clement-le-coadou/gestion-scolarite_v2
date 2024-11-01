@@ -105,8 +105,7 @@ public class Login extends HttpServlet {
 			return;
 	    }
 	    
-        request.getRequestDispatcher("accueil.jsp");
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+        response.sendRedirect("accueil.jsp");
 	}
 
 	/**
