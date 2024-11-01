@@ -60,7 +60,7 @@ public class Login extends HttpServlet {
 						return;
 					}
 				}else{
-					session.setAttribute("message", "Adresse mail incorrect");
+					session.setAttribute("message", "Adresse mail incorrecte");
 					request.getRequestDispatcher("Connexion.jsp").forward(request, response);
 					return;
 				}
@@ -77,7 +77,7 @@ public class Login extends HttpServlet {
 						return;
 					}
 				}else{
-					session.setAttribute("message", "Adresse mail incorrect");
+					session.setAttribute("message", "Adresse mail incorrecte");
 					request.getRequestDispatcher("Connexion.jsp").forward(request, response);
 					return;
 				}
@@ -94,7 +94,7 @@ public class Login extends HttpServlet {
 						return;
 					}
 				}else{
-					session.setAttribute("message", "Adresse mail incorrect");
+					session.setAttribute("message", "Adresse mail incorrecte");
 					request.getRequestDispatcher("Connexion.jsp").forward(request, response);
 					return;
 				}

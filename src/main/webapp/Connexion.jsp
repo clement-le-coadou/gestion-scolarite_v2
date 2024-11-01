@@ -13,6 +13,18 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h2 class="text-center mb-4">Connexion</h2>
+                    <%
+                        String message = (String) session.getAttribute("message");
+                        if (message != null && !message.isEmpty()) {
+                    %>
+                        <div class="alert alert-danger" role="alert">
+                            <%= message %>
+                        </div>
+                    <%
+                            session.removeAttribute("message");
+                        }
+                    %>
+                    
                     <form action="Login" method="post">
                         <div class="form-group">
                             <label for="username">E-mail</label>
@@ -32,7 +44,7 @@
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Connexion</button>
-                	</form>
+                    </form>
                 </div>
             </div>
         </div>
