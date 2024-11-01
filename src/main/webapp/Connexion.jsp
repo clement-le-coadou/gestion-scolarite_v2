@@ -56,6 +56,8 @@
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Connexion</button>
                     </form>
+					<a href="CreationCompte.jsp">Se créer un compte</a>
+
                 </div>
             </div>
         </div>
