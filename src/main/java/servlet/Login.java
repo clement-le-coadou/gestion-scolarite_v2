@@ -100,7 +100,7 @@ public class Login extends HttpServlet {
 				}
 			}
 	    }else {
-	    	session.setAttribute("errorMessage", "Veuillez sélectionner le type de votre compte");
+	    	session.setAttribute("errorMessage", "Veuillez sï¿½lectionner le type de votre compte");
 			request.getRequestDispatcher("Connexion.jsp").forward(request, response);
 			return;
 	    }

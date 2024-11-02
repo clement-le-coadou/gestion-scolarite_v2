@@ -9,17 +9,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestion des Cours</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="resources/bootstrap.min.css">
+    <link rel="stylesheet" href="resources/banniere.css">
 </head>
 <body class="bg-light">
+      <%@ include file="header.jsp" %>
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Gestion des Cours</h2>
 
-   <div class="mb-3">
-    <a href="AjouterCours.jsp" class="btn btn-success">Ajouter un Cours</a>
-</div>
 
+	<div class="d-flex justify-content-between w-100 mt-3 mb-3">
+    	<a href="AjouterCours.jsp" class="btn btn-success">Ajouter un Cours</a>
+    	<a href="InscrireEtudiant.jsp" class="btn btn-info">Inscrire un Étudiant</a>    
+	</div>
 
     <table class="table table-bordered">
         <thead>
