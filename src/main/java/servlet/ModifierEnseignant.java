@@ -21,10 +21,10 @@ public class ModifierEnseignant extends HttpServlet {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
 
-        // Récupérer l'enseignant par ID
+        // Rï¿½cupï¿½rer l'enseignant par ID
         Enseignant enseignant = enseignantDAO.read(enseignantId);
         
-        // Passer l'enseignant à la JSP de modification
+        // Passer l'enseignant ï¿½ la JSP de modification
         request.setAttribute("enseignant", enseignant);
         
         RequestDispatcher dispatcher = request.getRequestDispatcher("ModifierEnseignant.jsp");
@@ -41,7 +41,7 @@ public class ModifierEnseignant extends HttpServlet {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
 
-        // Récupérer l'enseignant par ID et mettre à jour les informations
+        // Rï¿½cupï¿½rer l'enseignant par ID et mettre ï¿½ jour les informations
         Enseignant enseignant = enseignantDAO.read(enseignantId);
         enseignant.setNom(nom);
         enseignant.setPrenom(prenom);
@@ -51,7 +51,7 @@ public class ModifierEnseignant extends HttpServlet {
         // Enregistrer les modifications
         enseignantDAO.update(enseignant);
         
-        // Redirection après modification
-        response.sendRedirect("AfficherEnseignants");
+        // Redirection aprï¿½s modification
+        response.sendRedirect("GestionEnseignants.jsp");
     }
 }
