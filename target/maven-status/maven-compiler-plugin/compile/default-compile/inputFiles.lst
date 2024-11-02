@@ -1,5 +1,27 @@
-C:\Users\CYTech Student\eclipse-workspace\gestion-scolarite_v2\src\main\java\jpa\Cours.java
-C:\Users\CYTech Student\eclipse-workspace\gestion-scolarite_v2\src\main\java\jpa\Inscription.java
-C:\Users\CYTech Student\eclipse-workspace\gestion-scolarite_v2\src\main\java\jpa\Note.java
-C:\Users\CYTech Student\eclipse-workspace\gestion-scolarite_v2\src\main\java\jpa\Role.java
-C:\Users\CYTech Student\eclipse-workspace\gestion-scolarite_v2\src\main\java\jpa\Utilisateur.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\servlet\AfficherEnseignants.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\jpa\Etudiant.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\exceptions\UniqueConstraintViolationException.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\jpa\Inscription.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\servlet\ModifierEnseignant.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\dao\CoursDAO.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\servlet\CreerCompte.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\servlet\Login.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\daogenerique\CrudGeneric.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\dao\AdministrateurDAO.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\dao\InscriptionDAO.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\jpa\Enseignant.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\dao\NoteDAO.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\dao\EtudiantDAO.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\exceptions\MissingFieldException.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\servlet\AjouterCours.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\dao\EnseignantDAO.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\servlet\ModifierCours.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\daogenerique\GenericDAO.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\servlet\ModifierEtudiant.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\servlet\SupprimerCours.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\servlet\AfficherEtudiants.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\test\Main.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\servlet\AfficherCours.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\jpa\Note.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\jpa\Administrateur.java
+C:\Pascal\EclipseProjectsJEE\JEEProjectWorkspace\gestion-scolarite_v2\src\main\java\jpa\Cours.java
