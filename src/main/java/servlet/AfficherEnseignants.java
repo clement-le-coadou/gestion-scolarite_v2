@@ -21,7 +21,7 @@ public class AfficherEnseignants extends HttpServlet {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
 
-        // Récupérer tous les enseignants
+        // Rï¿½cupï¿½rer tous les enseignants
         List<Enseignant> enseignants = enseignantDAO.findAll();
         
         // Debugging : Affichage des ID de chaque enseignant dans la console
@@ -29,11 +29,11 @@ public class AfficherEnseignants extends HttpServlet {
             System.out.println("Enseignant ID: " + enseignant.getId() + ", Nom: " + enseignant.getNom());
         }
 
-        // Passer la liste des enseignants à la JSP
+        // Passer la liste des enseignants ï¿½ la JSP
         request.setAttribute("enseignants", enseignants);
 
         // Rediriger vers la page JSP pour l'affichage
-        RequestDispatcher dispatcher = request.getRequestDispatcher("AfficherEnseignants.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("GestionEnseignants.jsp");
         dispatcher.forward(request, response);
 
         // Fermer la session Hibernate

@@ -20,17 +20,17 @@ public class AfficherEtudiants extends HttpServlet {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
 
-        // Récupérer tous les étudiants
+        // Rï¿½cupï¿½rer tous les ï¿½tudiants
         List<Etudiant> etudiants = etudiantDAO.findAll();
         for (Etudiant etudianttemp : etudiants) {
             System.out.println("Etudiant ID: " + etudianttemp.getId());
         }
         
-        // Passer la liste des étudiants à la JSP
+        // Passer la liste des ï¿½tudiants ï¿½ la JSP
         request.setAttribute("etudiants", etudiants);
         
         // Redirection vers la page d'affichage
-        RequestDispatcher dispatcher = request.getRequestDispatcher("AfficherEtudiants.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("GestionEtudiants.jsp");
         dispatcher.forward(request, response);
     }
 }
