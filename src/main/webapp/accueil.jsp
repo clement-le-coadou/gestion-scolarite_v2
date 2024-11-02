@@ -1,6 +1,3 @@
-<%@page import="jpa.Administrateur"%>
-<%@page import="jpa.Enseignant"%>
-<%@page import="jpa.Etudiant"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -15,7 +12,7 @@
     <%@ include file="header.jsp" %>
     <nav class="navbar navbar-expand-lg navbar-light bg-light"> 
         <div class="container"> 
-            <span class="navbar-text">Rôle: Étudiant</span> 
+            <span class="navbar-text">Rôle: <%=role %></span> 
             <ul class="navbar-nav ml-auto"> 
                 <li class="nav-item"> 
                     <a class="nav-link" href="#">Gestion des cours</a> 
@@ -36,26 +33,6 @@
             </ul> 
         </div> 
     </nav>
-<%
-    // Récupération de l'objet utilisateur depuis la session
-    Object user = session.getAttribute("username");
-
-    if (user != null) {
-        if (user instanceof Etudiant) {
-            Etudiant etudiant = (Etudiant) user;
-            out.println("Vous êtes connecté en tant qu'Étudiant : " + etudiant.getNom() + " " + etudiant.getPrenom());
-        } else if (user instanceof Enseignant) {
-            Enseignant enseignant = (Enseignant) user;
-            out.println("Vous êtes connecté en tant qu'Enseignant : " + enseignant.getNom() + " " + enseignant.getPrenom());
-        } else if (user instanceof Administrateur) {
-            Administrateur administrateur = (Administrateur) user;
-            out.println("Vous êtes connecté en tant qu'Administrateur : " + administrateur.getNom() + " " + administrateur.getPrenom());
-                       
-        }
-    } else {
-        out.println("Aucun utilisateur connecté.");
-    }
-%>
 
             <br>
             <a href="AfficherEtudiants">Afficher la liste des élèves</a>
