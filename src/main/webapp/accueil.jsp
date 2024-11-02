@@ -15,7 +15,7 @@
             <span class="navbar-text">Rôle: <%=role %></span> 
             <ul class="navbar-nav ml-auto"> 
                 <li class="nav-item"> 
-                    <a class="nav-link" href="#">Gestion des cours</a> 
+                    <a class="nav-link" href="GestionCours.jsp">Gestion des cours</a> 
                 </li> 
                 <li class="nav-item"> 
                     <a class="nav-link" href="AfficherCours.jsp">Liste des cours</a> 

@@ -23,10 +23,10 @@ public class ModifierCours extends HttpServlet {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
 
-        // Récupérer le cours par ID
+        // Rï¿½cupï¿½rer le cours par ID
         Cours cours = coursDAO.read(coursId);
         
-        // Passer le cours à la JSP de modification
+        // Passer le cours ï¿½ la JSP de modification
         request.setAttribute("cours", cours);
         
         RequestDispatcher dispatcher = request.getRequestDispatcher("ModifierCours.jsp");
@@ -42,12 +42,12 @@ public class ModifierCours extends HttpServlet {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
 
-        // Récupérer le cours par ID et mettre à jour les informations
+        // Rï¿½cupï¿½rer le cours par ID et mettre ï¿½ jour les informations
         Cours cours = coursDAO.read(coursId);
         cours.setNom(nom);
         cours.setDescription(description);
         
-        // Récupérer l'enseignant et le définir dans le cours
+        // Rï¿½cupï¿½rer l'enseignant et le dï¿½finir dans le cours
         CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
         Enseignant enseignant = enseignantDAO.read(enseignantId);
         cours.setEnseignant(enseignant);
@@ -55,7 +55,7 @@ public class ModifierCours extends HttpServlet {
         // Enregistrer les modifications
         coursDAO.update(cours);
         
-        // Redirection après modification
-        response.sendRedirect("AfficherCours");
+        // Redirection aprï¿½s modification
+        response.sendRedirect("GestionCours.jsp");
     }
 }

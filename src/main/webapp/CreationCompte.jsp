@@ -90,6 +90,7 @@
         <!-- Bouton de soumission -->
         <button type="submit" class="btn btn-primary btn-block">Créer Compte</button>
     </form>
+    <a href="Connexion.jsp">Vous avez déjà un compte ? connectez-vous</a>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

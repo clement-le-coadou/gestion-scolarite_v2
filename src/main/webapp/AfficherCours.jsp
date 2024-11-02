@@ -37,7 +37,7 @@
                 <th>Nom</th>
                 <th>Description</th>
                 <th>Enseignant</th>
-                <th>Action</th>
+             
             </tr>
         </thead>
         <tbody>
@@ -47,12 +47,6 @@
                         <td><%= cours.getNom() %></td>
                         <td><%= cours.getDescription() %></td>
                         <td><%= cours.getEnseignant().getNom() %> <%= cours.getEnseignant().getPrenom() %></td>
-                        <td>
-                            <form action="ModifierCours" method="get" class="d-inline">
-                                <input type="hidden" name="id" value="<%= cours.getId() %>">
-                                <button type="submit" class="btn btn-primary btn-sm">Afficher Détails</button>
-                            </form>
-                        </td>
                     </tr>
                 <% } %>
             <% } else { %>
@@ -62,6 +56,8 @@
             <% } %>
         </tbody>
     </table>
+    
+    <a href="accueil.jsp" class="btn btn-secondary">retour à l'accueil</a>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

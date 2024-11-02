@@ -23,6 +23,19 @@ public class Cours {
     @OneToMany(mappedBy = "cours", cascade = CascadeType.ALL)
     private Set<Note> notes;
 
+  
+        // Constructeur par défaut
+        public Cours() {
+        }
+
+        // Constructeur avec paramètres
+        public Cours(String nom, String description, Enseignant enseignant) {
+            this.nom = nom;
+            this.description = description;
+            this.enseignant = enseignant;
+        }
+
+    
     // Getters et Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
