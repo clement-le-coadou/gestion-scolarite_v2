@@ -1,5 +1,5 @@
 <%@ page import="java.util.List" %>
-<%@ page import="jpa.Enseignant" %>
+<%@ page import="jpa.Etudiant" %>
 <%@ page import="daogenerique.CrudGeneric" %>
 <%@ page import="org.hibernate.SessionFactory" %>
 <%@ page import="org.hibernate.cfg.Configuration" %>
@@ -8,19 +8,19 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Gestion des Enseignants</title>
+    <title>Gestion des Étudiants</title>
     <link rel="stylesheet" href="resources/bootstrap.min.css">
     <link rel="stylesheet" href="resources/banniere.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 	<%@ include file="header.jsp" %>
-	
+
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Gestion des Enseignants</h2>
+    <h2 class="text-center mb-4">Gestion des Étudiants</h2>
 
     <div class="mb-3">
-        <a href="AjouterEnseignant.jsp" class="btn btn-success">Ajouter un Enseignant</a>
+        <a href="AjouterEtudiant.jsp" class="btn btn-success">Ajouter un Étudiant</a>
     </div>
 
     <table class="table table-bordered">
@@ -35,22 +35,22 @@
         </thead>
         <tbody>
             <%
-                // Initialisation de la session et récupération des enseignants
+                // Initialisation de la session et récupération des étudiants
                 SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-                CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
-                List<Enseignant> enseignantList = enseignantDAO.findAll();
+                CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
+                List<Etudiant> etudiantList = etudiantDAO.findAll();
 
-                for (Enseignant enseignant : enseignantList) {
+                for (Etudiant etudiant : etudiantList) {
             %>
             <tr>
-                <td><%= enseignant.getId() %></td>
-                <td><%= enseignant.getNom() %></td>
-                <td><%= enseignant.getPrenom() %></td>
-                <td><%= enseignant.getEmail() %></td>
+                <td><%= etudiant.getId() %></td>
+                <td><%= etudiant.getNom() %></td>
+                <td><%= etudiant.getPrenom() %></td>
+                <td><%= etudiant.getEmail() %></td>
                 <td>
-                    <a href="ModifierEnseignant?id=<%= enseignant.getId() %>" class="btn btn-primary">Modifier</a>
-                    <form action="SupprimerEnseignant" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="<%= enseignant.getId() %>">
+                    <a href="ModifierEtudiant?id=<%= etudiant.getId() %>" class="btn btn-primary">Modifier</a>
+                    <form action="SupprimerEtudiant" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="<%= etudiant.getId() %>">
                         <button type="submit" class="btn btn-danger">Supprimer</button>
                     </form>
                 </td>
@@ -60,7 +60,7 @@
             %>
         </tbody>
     </table>
-    
+
     <a href="accueil.jsp" class="btn btn-secondary">Retour à l'accueil</a>
     
 </div>
