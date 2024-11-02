@@ -38,10 +38,10 @@
 
 
             <br>
-            <a href="AfficherEtudiants">Afficher la liste des élèves</a>
+            <a href="GestionEtudiants">Afficher la liste des élèves</a>
             <br>
             <a href="AfficherCours">Afficher la liste des cours</a>
             <br>
-            <a href="AfficherEnseignants">Afficher la liste des enseignants</a>
+            <a href="GestionEnseignants">Afficher la liste des enseignants</a>
 </body>
 </html>
