@@ -9,7 +9,9 @@
         <link rel="stylesheet" href="resources/banniere.css">
     </head>
 <body>
+
 		  <%@ include file="menu-nav.jsp" %>
+
 
             <br>
             <a href="AfficherEtudiants">Afficher la liste des élèves</a>
