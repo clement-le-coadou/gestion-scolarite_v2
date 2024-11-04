@@ -20,10 +20,10 @@
                 </li> 
             <% } %>
             <li class="nav-item"> 
-                <a class="nav-link" href="AfficherCours.jsp">Liste des cours</a> 
+                <a class="nav-link" href="AfficherCours">Liste des cours</a> 
             </li> 
             <li class="nav-item"> 
-                <a class="nav-link" href="#">Mes notes</a> 
+                <a class="nav-link" href="GestionNotes.jsp">Mes notes</a> 
             </li> 
             <li class="nav-item"> 
                 <a class="nav-link" href="#">Mes infos</a> 

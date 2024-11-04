@@ -34,7 +34,7 @@ public class MesCours extends HttpServlet {
         
         CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
 
-        List<Cours> mesCours = null;
+        List<Cours> coursList = null;
 
         if (utilisateur instanceof Etudiant) {
             Etudiant etudiant = (Etudiant) utilisateur;
@@ -45,7 +45,7 @@ public class MesCours extends HttpServlet {
                     .filter(inscription -> inscription.getEtudiant().getId().equals(etudiant.getId()))
                     .collect(Collectors.toList());
 
-            mesCours = inscriptions.stream()
+            coursList = inscriptions.stream()
                     .map(Inscription::getCours)
                     .distinct()
                     .collect(Collectors.toList());
@@ -53,15 +53,15 @@ public class MesCours extends HttpServlet {
         } else if (utilisateur instanceof Enseignant) {
             Enseignant enseignant = (Enseignant) utilisateur;
 
-            mesCours = coursDAO.findAll()
+            coursList = coursDAO.findAll()
                     .stream()
                     .filter(cours -> cours.getEnseignant() != null && cours.getEnseignant().getId().equals(enseignant.getId()))
                     .collect(Collectors.toList());
         }
 
-        request.setAttribute("mesCours", mesCours);
+        request.setAttribute("coursList", coursList);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("MesCours.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("AfficherCours.jsp");
         dispatcher.forward(request, response);
     }
 
