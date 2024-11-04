@@ -11,17 +11,25 @@
     <title>Gestion des Étudiants</title>
     <link rel="stylesheet" href="resources/bootstrap.min.css">
     <link rel="stylesheet" href="resources/banniere.css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-	<%@ include file="header.jsp" %>
+	<%@ include file="menu-nav.jsp" %>
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Gestion des Étudiants</h2>
-
+	<%if("Administrateur".equals(role)) {%>
     <div class="mb-3">
         <a href="AjouterEtudiant.jsp" class="btn btn-success">Ajouter un Étudiant</a>
     </div>
+    <%} %>
+    
+    <!-- Formulaire de recherche -->
+    <form action="GestionEtudiant.jsp" method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Pas encore fonctionnel">
+            <button class="btn btn-primary" type="submit">Rechercher</button>
+        </div>
+    </form>
 
     <table class="table table-bordered">
         <thead>
@@ -39,6 +47,17 @@
                 SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
                 CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
                 List<Etudiant> etudiantList = etudiantDAO.findAll();
+                
+                String search = request.getParameter("search");
+                //List<Etudiant> etudiantList;
+                
+                /*
+                if (search != null && !search.isEmpty()) {
+                    etudiantList = etudiantDAO.findBy("nom", search); // Méthode à implémenter pour filtrer par nom ou prénom
+                } else {
+                    etudiantList = etudiantDAO.findAll();
+                }
+                */
 
                 for (Etudiant etudiant : etudiantList) {
             %>
@@ -47,12 +66,16 @@
                 <td><%= etudiant.getNom() %></td>
                 <td><%= etudiant.getPrenom() %></td>
                 <td><%= etudiant.getEmail() %></td>
+                
                 <td>
+                	<a href="ConsulterCours?id=<%= etudiant.getId() %>" class="btn btn-info">Voir les Cours</a>
+                	<%if("Administrateur".equals(role)) {%>
                     <a href="ModifierEtudiant?id=<%= etudiant.getId() %>" class="btn btn-primary">Modifier</a>
                     <form action="SupprimerEtudiant" method="post" style="display:inline;">
                         <input type="hidden" name="id" value="<%= etudiant.getId() %>">
                         <button type="submit" class="btn btn-danger">Supprimer</button>
                     </form>
+                    <%} %>
                 </td>
             </tr>
             <%
@@ -65,7 +88,5 @@
     
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
