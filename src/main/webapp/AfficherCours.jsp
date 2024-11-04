@@ -11,7 +11,7 @@
 </head>
 <body class="bg-light">
 
-<%@ include file="header.jsp" %>
+<%@ include file="menu-nav.jsp" %>
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Liste des Cours</h2>
