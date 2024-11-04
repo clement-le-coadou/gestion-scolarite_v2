@@ -11,8 +11,10 @@
     <meta charset="UTF-8">
     <title>Gestion des Notes</title>
     <link rel="stylesheet" href="resources/bootstrap.min.css">
+    <link rel="stylesheet" href="resources/banniere.css">
 </head>
 <body class="bg-light">
+	<%@ include file="menu-nav.jsp" %>
     <div class="container mt-5">
         <h2 class="text-center mb-4">Gestion des Notes</h2>
 

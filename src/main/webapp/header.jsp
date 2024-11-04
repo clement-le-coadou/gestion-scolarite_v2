@@ -5,7 +5,7 @@
     <div class="container"> 
         <div class="row d-flex align-items-center">
             <div class="col">
-                <h1>CY Tech</h1> 
+                <h1><a class="nav-link" href="accueil.jsp">CY Tech</a></h1> 
             </div>
             <div class="info-right col text-right">
             <%     // Récupération de l'objet utilisateur depuis la session
