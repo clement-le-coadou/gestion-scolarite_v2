@@ -4,6 +4,7 @@
 <%@ page import="org.hibernate.SessionFactory" %>
 <%@ page import="org.hibernate.cfg.Configuration" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,30 +36,30 @@
             </tr>
         </thead>
         <tbody>
-            <%
-                // Initialisation de la session et récupération des cours
-                SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-                CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
-                List<Cours> coursList = coursDAO.findAll();
-
-                for (Cours cours : coursList) {
-            %>
-            <tr>
-                <td><%= cours.getId() %></td>
-                <td><%= cours.getNom() %></td>
-                <td><%= cours.getDescription() %></td>
-                <td><%= (cours.getEnseignant() != null ? cours.getEnseignant().getNom() + " " + cours.getEnseignant().getPrenom() : "Non assigné") %></td>
-                <td>
-                    <a href="ModifierCours?id=<%= cours.getId() %>" class="btn btn-primary">Modifier</a>
-                    <form action="SupprimerCours" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="<%= cours.getId() %>">
-                        <button type="submit" class="btn btn-danger">Supprimer</button>
-                    </form>
-                </td>
-            </tr>
-            <%
-                }
-            %>
+			<c:forEach var="cours" items="${coursList}">
+                    <tr>
+                        <td>${cours.id}</td>
+                        <td>${cours.nom}</td>
+                        <td>${cours.description}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${cours.enseignant != null}">
+                                    ${cours.enseignant.nom} ${cours.enseignant.prenom}
+                                </c:when>
+                                <c:otherwise>
+                                    Non assigné
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td>
+                            <a href="ModifierCours?id=${cours.id}" class="btn btn-primary">Modifier</a>
+                            <form action="SupprimerCours" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="${cours.id}">
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
         </tbody>
     </table>
     
