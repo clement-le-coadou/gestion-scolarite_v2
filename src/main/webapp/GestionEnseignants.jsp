@@ -4,6 +4,7 @@
 <%@ page import="org.hibernate.SessionFactory" %>
 <%@ page import="org.hibernate.cfg.Configuration" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,30 +35,21 @@
             </tr>
         </thead>
         <tbody>
-            <%
-                // Initialisation de la session et récupération des enseignants
-                SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-                CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
-                List<Enseignant> enseignantList = enseignantDAO.findAll();
-
-                for (Enseignant enseignant : enseignantList) {
-            %>
-            <tr>
-                <td><%= enseignant.getId() %></td>
-                <td><%= enseignant.getNom() %></td>
-                <td><%= enseignant.getPrenom() %></td>
-                <td><%= enseignant.getEmail() %></td>
-                <td>
-                    <a href="ModifierEnseignant?id=<%= enseignant.getId() %>" class="btn btn-primary">Modifier</a>
-                    <form action="SupprimerEnseignant" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="<%= enseignant.getId() %>">
-                        <button type="submit" class="btn btn-danger">Supprimer</button>
-                    </form>
-                </td>
-            </tr>
-            <%
-                }
-            %>
+				<c:forEach var="enseignant" items="${enseignants}">
+                    <tr>
+                        <td>${enseignant.id}</td>
+                        <td>${enseignant.nom}</td>
+                        <td>${enseignant.prenom}</td>
+                        <td>${enseignant.email}</td>
+                        <td>
+                            <a href="ModifierEnseignant?id=${enseignant.id}" class="btn btn-primary">Modifier</a>
+                            <form action="SupprimerEnseignant" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="${enseignant.id}">
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
         </tbody>
     </table>
     

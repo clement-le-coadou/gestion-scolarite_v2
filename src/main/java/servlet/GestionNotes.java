@@ -36,6 +36,10 @@ public class GestionNotes extends HttpServlet {
         note.setNote(nouvelleNote);
 
         noteDAO.update(note);
+        
+        
+        request.setAttribute("noteList", noteDAO.findAll());
+        
         response.sendRedirect("GestionNotes.jsp");
     }
 }

@@ -9,32 +9,8 @@
         <link rel="stylesheet" href="resources/banniere.css">
     </head>
 <body>
-  <%@ include file="header.jsp" %>
-<nav class="navbar navbar-expand-lg navbar-light bg-light"> 
-    <div class="container"> 
-        <span class="navbar-text">Rôle: <%= role %></span> 
-        <ul class="navbar-nav ml-auto"> 
-            <% if ("Administrateur".equals(role)) { %>
-                <li class="nav-item"> 
-                    <a class="nav-link" href="GestionCours.jsp">Gestion des cours</a> 
-                </li> 
-            <% } %>
-            <li class="nav-item"> 
-                <a class="nav-link" href="AfficherCours">Liste des cours</a> 
-            </li> 
-            <li class="nav-item"> 
-                <a class="nav-link" href="GestionNotes.jsp">Mes notes</a> 
-            </li> 
-            <li class="nav-item"> 
-                <a class="nav-link" href="#">Mes infos</a> 
-            </li> 
-            <li class="nav-item"> 
-                <!-- Affiche "Se déconnecter" si l'utilisateur est connecté -->
-                <a class="nav-link" href="#">Se déconnecter</a> 
-            </li> 
-        </ul> 
-    </div> 
-</nav>
+
+		  <%@ include file="menu-nav.jsp" %>
 
 
             <br>
