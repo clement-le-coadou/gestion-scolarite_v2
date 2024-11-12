@@ -15,7 +15,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-	<%@ include file="header.jsp" %>
+	<%@ include file="menu-nav.jsp" %>
 	
 <div class="container mt-5">
     <h2 class="text-center mb-4">Gestion des Enseignants</h2>
