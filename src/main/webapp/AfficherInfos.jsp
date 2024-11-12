@@ -15,6 +15,28 @@
 </head>
 <body class="bg-light">
 	<%@ include file="menu-nav.jsp" %>
-
+	
+	<div>
+	<%
+	
+	/* 
+	if (user != null){
+		if (user instanceof Etudiant) {
+            Etudiant users = (Etudiant) user;        
+        } else if (user instanceof Enseignant) {
+            Enseignant users = (Enseignant) user;
+        } else if (user instanceof Administrateur) {
+            Administrateur users = (Administrateur) user;
+        } else{
+        	Object users;
+        }
+	}else{
+		Object users;
+	}
+	users.getPrenom();
+	*/
+	%>
+	</div>
+	
 </body>
 </html>
