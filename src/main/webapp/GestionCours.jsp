@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="resources/banniere.css">
 </head>
 <body class="bg-light">
-      <%@ include file="header.jsp" %>
+      <%@ include file="menu-nav.jsp" %>
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Gestion des Cours</h2>
@@ -67,7 +67,5 @@
     
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
