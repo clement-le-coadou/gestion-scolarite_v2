@@ -9,7 +9,7 @@
         <ul class="navbar-nav ml-auto"> 
             <% if ("Administrateur".equals(role)) { %>
                 <li class="nav-item"> 
-                    <a class="nav-link" href="GestionCours.jsp">Gestion des cours</a> 
+                    <a class="nav-link" href="AfficherCours?page=gestion">Gestion des cours</a> 
                 </li> 
             <% } %>
              <% if ("Administrateur".equals(role) || ("Enseignant".equals(role))) { %>
@@ -18,7 +18,7 @@
                 </li> 
             <% } %>
             <li class="nav-item"> 
-                <a class="nav-link" href="AfficherCours">Liste des cours</a> 
+                <a class="nav-link" href="AfficherCours?page=liste">Liste des cours</a> 
             </li> 
             <li class="nav-item"> <% if ("Enseignant".equals(role)){         	
             		%>

@@ -34,6 +34,6 @@ public class AjouterCours extends HttpServlet {
         Cours cours = new Cours(nom, description, enseignant);
         coursDAO.create(cours);
 
-        response.sendRedirect("GestionCours.jsp");  // Redirection vers la liste des cours
+        response.sendRedirect("AfficherCours?page=gestion");  // Redirection vers la liste des cours
     }
 }

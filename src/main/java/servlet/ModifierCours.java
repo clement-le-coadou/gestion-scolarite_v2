@@ -56,6 +56,6 @@ public class ModifierCours extends HttpServlet {
         coursDAO.update(cours);
         
         // Redirection apr�s modification
-        response.sendRedirect("GestionCours.jsp");
+        response.sendRedirect("AfficherCours?page=gestion");
     }
 }

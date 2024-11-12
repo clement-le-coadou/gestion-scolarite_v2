@@ -29,6 +29,6 @@ public class SupprimerCours extends HttpServlet {
             coursDAO.delete(cours);
         }
 
-        response.sendRedirect("GestionCours.jsp");
+        response.sendRedirect("AfficherCours?page=gestion");
     }
 }

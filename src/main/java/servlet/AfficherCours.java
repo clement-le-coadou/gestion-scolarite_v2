@@ -37,9 +37,12 @@ public class AfficherCours extends HttpServlet {
         // Passer la liste des cours � la JSP
         request.setAttribute("coursList", coursList);
 
-        // Rediriger vers la page JSP pour l'affichage
-        RequestDispatcher dispatcher = request.getRequestDispatcher("AfficherCours.jsp");
-        dispatcher.forward(request, response);
+        String page = request.getParameter("page");
+        if ("gestion".equals(page)) {
+            request.getRequestDispatcher("GestionCours.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("AfficherCours.jsp").forward(request, response);
+        }
 
         // Fermer la session Hibernate
         sessionFactory.close();
