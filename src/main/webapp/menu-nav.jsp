@@ -24,9 +24,11 @@
             <a class="nav-link" href="RedirectionNotesServlet">Notes</a> 
                  
             </li> 
+            <%if(user != null){ %>
             <li class="nav-item"> 
                 <a class="nav-link" href="AfficherInfos.jsp">Mes infos</a> 
             </li> 
+            <%} %>
             <li class="nav-item"> 
             	
                 <!--  -->
