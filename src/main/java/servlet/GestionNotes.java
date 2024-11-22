@@ -56,15 +56,10 @@ public class GestionNotes extends HttpServlet {
                         .filter(inscription -> inscription.getCours().getId() == coursId)
                         .map(Inscription::getEtudiant)
                         .collect(Collectors.toList());
-                List<Note> notes = new ArrayList<>();
+                List<Note> notes = noteDAO.findAll();
                 
                 
-                for (Etudiant etudiant : etudiantList) {
-                    notes = noteDAO.findAll().stream()
-                            .filter(note -> note.getEtudiant().getId().equals(etudiant.getId()) 
-                                          && note.getCours().getId() == coursId) // Ajouter la condition sur le cours
-                            .toList();
-                }
+                
                 
                 
                 request.setAttribute("notes", notes);

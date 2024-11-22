@@ -25,53 +25,44 @@
                     <th>ID Étudiant</th>
                     <th>Nom</th>
                     <th>Prénom</th>
-                    <th>Notes</th>
-                   
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <%
-                 
-                    // Liste des étudiants
+                    // Récupérer les données passées depuis le contrôleur
                     int coursId = (int) request.getAttribute("coursId");
                     List<Note> notes = (List<Note>) request.getAttribute("notes");
                     List<Etudiant> etudiantList = (List<Etudiant>) request.getAttribute("etudiantList");
+
                     for (Etudiant etudiant : etudiantList) {
-                        
-                        
+                        // Filtrer les notes spécifiques à cet étudiant
+                        Note noteEtudiant = null;
+                        for (Note note : notes) {
+                            if (note.getEtudiant().getId() == etudiant.getId() && note.getCours().getId() == coursId) {
+                                noteEtudiant = note;
+                                break;
+                            }
+                        }
                 %>
                 <tr>
                     <td><%= etudiant.getId() %></td>
                     <td><%= etudiant.getNom() %></td>
                     <td><%= etudiant.getPrenom() %></td>
-               
-					<td>
-					    <% if (!notes.isEmpty()) { %>
-					        <ul class="list-unstyled">
-					            <% for (Note note : notes) { %>
-					                <li class="d-flex align-items-center mb-2">
-					                    <!-- Affichage de la note -->
-					                    <span class="me-3"><%= note.getNote() %> - <%= note.getCours().getNom() %></span>
-					
-					                    <!-- Boutons d'action pour la note -->
-					                    <a href="ModifierNote?idNote=<%= note.getId() %>" class="btn btn-primary btn-sm me-2">Modifier</a>
-					                    <form action="SupprimerNote" method="post" style="display:inline;">
-					                        <input type="hidden" name="idNote" value="<%= note.getId() %>">
-					                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-					                    </form>
-					                </li>
-					            <% } %>
-					        </ul>
-					    <% } else { %>
-					        <em>Aucune note attribuée</em>
-					    <% } %>
-					
-					 
-					    <a href="AjouterNote?idEtudiant=<%= etudiant.getId() %>&coursId=<%= coursId %>" class="btn btn-success btn-sm mt-2">Ajouter Note</a>
-					</td>
-					
-					
-
+                    <td>
+                        <% if (noteEtudiant != null) { %>
+                            <!-- Si une note existe, afficher Modifier et Supprimer -->
+                            <span class="me-3"><%= noteEtudiant.getNote() %> - <%= noteEtudiant.getCours().getNom() %></span>
+                            <a href="ModifierNote?idNote=<%= noteEtudiant.getId() %>" class="btn btn-primary btn-sm me-2">Modifier</a>
+                            <form action="SupprimerNote" method="post" style="display:inline;">
+                                <input type="hidden" name="idNote" value="<%= noteEtudiant.getId() %>">
+                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        <% } else { %>
+                            <!-- Si aucune note, afficher Ajouter -->
+                            <a href="AjouterNote?idEtudiant=<%= etudiant.getId() %>&coursId=<%= coursId %>" class="btn btn-success btn-sm">Ajouter Note</a>
+                        <% } %>
+                    </td>
                 </tr>
                 <%
                     }

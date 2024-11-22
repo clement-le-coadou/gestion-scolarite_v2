@@ -19,7 +19,7 @@
             </div>
             
             <button type="submit" class="btn btn-primary">Modifier</button>
-            <a href="GestionNotes" class="btn btn-secondary">Annuler</a>
+                 <a href="accueil.jsp" class="btn btn-secondary">Retour à l'accueil</a>
         </form>
     </div>
 </body>

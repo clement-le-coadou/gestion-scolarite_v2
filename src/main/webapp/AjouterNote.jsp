@@ -15,13 +15,15 @@
             <input type="hidden" name="idEtudiant" value="<%= request.getParameter("idEtudiant") %>">
             <input type="hidden" name="coursId" value="<%= request.getParameter("coursId") %>">
             
-            <div class="mb-3">
-                <label for="note" class="form-label">Note :</label>
-                <input type="number" step="0.01" name="note" id="note" class="form-control" required>
-            </div>
+           <div class="mb-3">
+			    <label for="note" class="form-label">Note :</label>
+			    <input type="number" step="0.01" name="note" id="note" class="form-control" required min="0" max="20">
+			</div>
+
             
             <button type="submit" class="btn btn-success">Ajouter</button>
-            <a href="AfficherNoteEnseignant" class="btn btn-secondary">Annuler</a>
+            <a href="accueil.jsp" class="btn btn-secondary">Retour à l'accueil</a>
+
         </form>
     </div>
 </body>

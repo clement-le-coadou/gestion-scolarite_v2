@@ -68,12 +68,8 @@ public class RedirectionNotesServlet extends HttpServlet {
                     .distinct()
                     .collect(Collectors.toList());
             
-            List<Note> notesList = noteDAO.findAll()
-                    .stream()
-                    .filter(note -> note.getEtudiant().getId().equals(etudiant.getId())
-                            && coursList.contains(note.getCours()))
-                    .collect(Collectors.toList());
-            
+            List<Note> notesList = noteDAO.findAll();
+                   
             request.setAttribute("coursList", coursList);
             request.setAttribute("notesList", notesList);
             request.getRequestDispatcher("AfficherNotes.jsp").forward(request, response);

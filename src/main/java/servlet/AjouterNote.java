@@ -46,7 +46,7 @@ public class AjouterNote extends HttpServlet {
                 // Mettre les données nécessaires dans la requête
                 request.setAttribute("etudiant", etudiant);
                 request.setAttribute("cours", cours);
-
+                request.setAttribute("coursId", coursId);
                 // Rediriger vers la page JSP du formulaire
                 RequestDispatcher dispatcher = request.getRequestDispatcher("AjouterNote.jsp");
                 dispatcher.forward(request, response);
