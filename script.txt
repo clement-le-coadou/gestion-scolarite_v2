@@ -1,0 +1,133 @@
+DROP TABLE IF EXISTS Note;
+DROP TABLE IF EXISTS Inscription;
+DROP TABLE IF EXISTS Cours;
+DROP TABLE IF EXISTS Enseignant;
+DROP TABLE IF EXISTS Etudiant;
+DROP TABLE IF EXISTS Administrateur;
+
+
+-- Création de la base de données si elle n'existe pas déjà
+CREATE DATABASE IF NOT EXISTS gestion_scolarite;
+
+-- Sélection de la base de données pour les commandes suivantes
+USE gestion_scolarite;
+
+-- Table pour les Etudiants
+CREATE TABLE Etudiant (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,           -- Identifiant unique pour chaque utilisateur
+    nom VARCHAR(100) NOT NULL,                      -- Nom de l'utilisateur
+    prenom VARCHAR(100) NOT NULL,                   -- Prénom de l'utilisateur
+    dateNaissance DATE NOT NULL,                   -- Date de naissance de l'utilisateur
+    email VARCHAR(100) NOT NULL UNIQUE,             -- Adresse email, doit être unique
+    contact VARCHAR(15) NOT NULL,                   -- Numéro de contact
+    mot_de_passe VARCHAR(255) NOT NULL             -- Mot de passe (devrait être stocké haché)
+);
+
+-- Table pour les Enseignants
+CREATE TABLE Enseignant (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,           -- Identifiant unique pour chaque utilisateur
+    nom VARCHAR(100) NOT NULL,                      -- Nom de l'utilisateur
+    prenom VARCHAR(100) NOT NULL,                   -- Prénom de l'utilisateur
+    email VARCHAR(100) NOT NULL UNIQUE,             -- Adresse email, doit être unique
+    contact VARCHAR(15) NOT NULL,                   -- Numéro de contact
+    mot_de_passe VARCHAR(255) NOT NULL             -- Mot de passe (devrait être stocké haché)
+);
+
+-- Table pour les Administrateurs
+CREATE TABLE Administrateur (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,           -- Identifiant unique pour chaque utilisateur
+    nom VARCHAR(100) NOT NULL,                      -- Nom de l'utilisateur
+    prenom VARCHAR(100) NOT NULL,                   -- Prénom de l'utilisateur
+    email VARCHAR(100) NOT NULL UNIQUE,             -- Adresse email, doit être unique
+    mot_de_passe VARCHAR(255) NOT NULL             -- Mot de passe (devrait être stocké haché)
+);
+
+
+-- Table pour gérer les cours offerts
+CREATE TABLE Cours (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,               -- Identifiant unique pour chaque cours
+    nom VARCHAR(100) NOT NULL,                          -- Nom du cours
+    description TEXT,                                   -- Description du cours
+    enseignant_id BIGINT,                               -- Identifiant de l'enseignant qui enseigne ce cours
+    CONSTRAINT fk_enseignant FOREIGN KEY (enseignant_id) REFERENCES Enseignant(id) ON DELETE SET NULL  -- Clé étrangère vers la table Utilisateur
+);
+
+-- Table pour gérer les inscriptions des étudiants aux cours
+CREATE TABLE Inscription (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,               -- Identifiant unique pour chaque inscription
+    etudiant_id BIGINT,                                 -- Identifiant de l'étudiant inscrit
+    cours_id BIGINT,                                    -- Identifiant du cours auquel l'étudiant est inscrit
+    CONSTRAINT fk_etudiant FOREIGN KEY (etudiant_id) REFERENCES Etudiant(id) ON DELETE CASCADE,  -- Clé étrangère vers la table Utilisateur
+    CONSTRAINT fk_cours FOREIGN KEY (cours_id) REFERENCES Cours(id) ON DELETE CASCADE,  -- Clé étrangère vers la table Cours
+    UNIQUE(etudiant_id, cours_id)                       -- Empêche une inscription multiple au même cours
+);
+
+-- Table pour gérer les notes des étudiants dans les cours
+CREATE TABLE Note (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,               -- Identifiant unique pour chaque note
+    etudiant_id BIGINT,                                 -- Identifiant de l'étudiant ayant reçu la note
+    cours_id BIGINT,                                    -- Identifiant du cours pour lequel la note est attribuée
+    note DECIMAL(5,2) CHECK (note >= 0 AND note <= 20), -- Note entre 0 et 20, avec deux décimales
+    CONSTRAINT fk_etudiant_note FOREIGN KEY (etudiant_id) REFERENCES Etudiant(id) ON DELETE CASCADE,  -- Clé étrangère vers la table Utilisateur
+    CONSTRAINT fk_cours_note FOREIGN KEY (cours_id) REFERENCES Cours(id) ON DELETE CASCADE  -- Clé étrangère vers la table Cours
+);
+
+select * from etudiant;
+select * from enseignant;
+
+
+
+-- Insertion de données de test pour les Etudiants
+INSERT INTO Etudiant (nom, prenom, dateNaissance, email, contact, mot_de_passe) VALUES
+('Dupont', 'Jean', '2000-01-15', 'jean.dupont@example.com', '0612345678', 'password123'),
+('Martin', 'Sophie', '2001-05-22', 'sophie.martin@example.com', '0623456789', 'password123'),
+('Durand', 'Lucas', '1999-10-30', 'lucas.durand@example.com', '0634567890', 'password123'),
+('Petit', 'Marie', '2002-03-14', 'marie.petit@example.com', '0645678901', 'password123'),
+('Leroy', 'Emma', '2000-08-05', 'emma.leroy@example.com', '0656789012', 'password123');
+
+-- Insertion de données de test pour les Enseignants
+INSERT INTO Enseignant (nom, prenom, email, contact, mot_de_passe) VALUES
+('Legrand', 'Paul', 'paul.legrand@example.com', '0611122233', 'password123'),
+('Bernard', 'Alice', 'alice.bernard@example.com', '0622233445', 'password123'),
+('Moreau', 'Clara', 'clara.moreau@example.com', '0633344556', 'password123'),
+('Garnier', 'Marc', 'marc.garnier@example.com', '0644455667', 'password123'),
+('Richard', 'Isabelle', 'isabelle.richard@example.com', '0655566778', 'password123');
+
+-- Insertion de données de test pour les Administrateurs
+INSERT INTO Administrateur (nom, prenom, email, mot_de_passe) VALUES
+('Admin', 'Super', 'admin@example.com', 'admin123'),
+('User', 'Test', 'user@example.com', 'user123');
+
+-- Insertion de données de test pour les Cours
+INSERT INTO Cours (nom, description, enseignant_id) VALUES
+('Mathématiques', 'Introduction aux concepts mathématiques.', 1),
+('Physique', 'Principes de la physique moderne.', 2),
+('Chimie', 'Chimie organique et inorganique.', 3),
+('Informatique', 'Introduction à la programmation.', 4),
+('Philosophie', 'Philosophie et éthique.', 5);
+
+-- Insertion de données de test pour les Inscriptions
+INSERT INTO Inscription (etudiant_id, cours_id) VALUES
+(1, 1),
+(1, 2),
+(2, 1),
+(2, 3),
+(3, 2),
+(3, 4),
+(4, 1),
+(4, 5),
+(5, 3);
+
+-- Insertion de données de test pour les Notes
+INSERT INTO Note (etudiant_id, cours_id, note) VALUES
+(1, 1, 15.50),
+(1, 2, 18.00),
+(2, 1, 14.00),
+(2, 3, 16.50),
+(3, 2, 12.00),
+(3, 4, 17.00),
+(4, 1, 19.00),
+(4, 5, 16.00),
+(5, 3, 13.50);
+
+select * from inscription

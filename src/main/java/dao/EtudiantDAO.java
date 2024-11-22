@@ -17,7 +17,7 @@ public class EtudiantDAO {
         sessionFactory = new Configuration().configure().buildSessionFactory();
     }
 
-    // Création d'un nouvel étudiant avec `persist`
+    // Crï¿½ation d'un nouvel ï¿½tudiant avec `persist`
     public void createEtudiant(Etudiant etudiant) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
@@ -35,14 +35,12 @@ public class EtudiantDAO {
             return session.get(Etudiant.class, id);
         }
     }
+    
 
-    public List<Etudiant> findAllEtudiants() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Etudiant", Etudiant.class).list();
-        }
-    }
 
-    // Mise à jour d'un étudiant existant avec `merge`
+
+
+    // Mise ï¿½ jour d'un ï¿½tudiant existant avec `merge`
     public void updateEtudiant(Etudiant etudiant) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
@@ -62,7 +60,7 @@ public class EtudiantDAO {
             Etudiant etudiant = session.get(Etudiant.class, id);
             if (etudiant != null) {
                 session.remove(etudiant); 
-                System.out.println("Étudiant supprimé : " + etudiant.getNom());
+                System.out.println("ï¿½tudiant supprimï¿½ : " + etudiant.getNom());
             }
             transaction.commit();
         } catch (Exception e) {

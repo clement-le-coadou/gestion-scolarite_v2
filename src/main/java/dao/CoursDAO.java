@@ -19,7 +19,7 @@ public class CoursDAO {
         sessionFactory = new Configuration().configure().buildSessionFactory();
     }
 
-    // Création d'un nouveau cours avec `persist`
+    // Crï¿½ation d'un nouveau cours avec `persist`
     public void createCours(Cours cours) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
@@ -38,13 +38,8 @@ public class CoursDAO {
         }
     }
 
-    public List<Cours> findAllCours() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Cours", Cours.class).list();
-        }
-    }
 
-    // Mise à jour d'un cours existant avec `merge`
+    // Mise ï¿½ jour d'un cours existant avec `merge`
     public void updateCours(Cours cours) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
@@ -64,7 +59,7 @@ public class CoursDAO {
             Cours cours = session.get(Cours.class, id);
             if (cours != null) {
                 session.remove(cours); // Utilisation de `remove`
-                System.out.println("Cours supprimé : " + cours.getNom());
+                System.out.println("Cours supprimï¿½ : " + cours.getNom());
             }
             transaction.commit();
         } catch (Exception e) {

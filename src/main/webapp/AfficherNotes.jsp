@@ -1,19 +1,36 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
-<%@ page import="jpa.Cours" %>
-<%@ page import="daogenerique.CrudGeneric" %>
-<%@ page import="org.hibernate.SessionFactory" %>
-<%@ page import="org.hibernate.cfg.Configuration" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ page import="jpa.Cours, jpa.Note" %>
+
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Mes notes</title>
-	<link rel="stylesheet" href="resources/bootstrap.min.css">
-    <link rel="stylesheet" href="resources/banniere.css">
+    <title>Mes Notes</title>
 </head>
-<body class="bg-light">
-	<%@ include file="menu-nav.jsp" %>
+<body>
+    <h2>Mes Notes</h2>
+
+    <% 
+        List<Cours> coursList = (List<Cours>) request.getAttribute("coursList");
+        List<Note> notes = (List<Note>) request.getAttribute("notesList");
+        
+        if (coursList != null && !coursList.isEmpty()) {
+    %>
+        <table border="1">
+            <tr>
+                <th>Cours</th>
+                <th>Note</th>
+            </tr>
+            <% for (Cours cours : coursList) { 
+                Note note = notes.stream().filter(n -> n.getCours().getId().equals(cours.getId())).findFirst().orElse(null);
+            %>
+            <tr>
+                <td><%= cours.getNom() %></td>
+                <td><%= (note != null) ? note.getNote() : "Pas de note" %></td>
+            </tr>
+            <% } %>
+        </table>
+    <% } else { %>
+        <p>Aucune note disponible.</p>
+    <% } %>
 </body>
 </html>

@@ -20,7 +20,7 @@ public class EnseignantDAO {
 
     public void createEnseignant(Enseignant enseignant) {
         Transaction transaction = null;
-        Session session = null; // Déclarer la session ici
+        Session session = null; // Dï¿½clarer la session ici
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
@@ -28,7 +28,7 @@ public class EnseignantDAO {
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback(); // Rétrogradation en cas d'erreur
+                transaction.rollback(); // Rï¿½trogradation en cas d'erreur
             }
             e.printStackTrace();
         } finally {
@@ -46,13 +46,7 @@ public class EnseignantDAO {
         }
     }
 
-    public List<Enseignant> findAllEnseignants() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Enseignant", Enseignant.class).list();
-        }
-    }
-
-    // Mise à jour d'un enseignant existant avec `merge`
+    // Mise ï¿½ jour d'un enseignant existant avec `merge`
     public void updateEnseignant(Enseignant enseignant) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
@@ -72,7 +66,7 @@ public class EnseignantDAO {
             Enseignant enseignant = session.get(Enseignant.class, id);
             if (enseignant != null) {
                 session.remove(enseignant); // Utilisation de `remove`
-                System.out.println("Enseignant supprimé : " + enseignant.getNom());
+                System.out.println("Enseignant supprimï¿½ : " + enseignant.getNom());
             }
             transaction.commit();
         } catch (Exception e) {

@@ -18,7 +18,7 @@ public class NoteDAO {
         sessionFactory = new Configuration().configure().buildSessionFactory();
     }
 
-    // Création d'une nouvelle note avec `persist`
+    // Crï¿½ation d'une nouvelle note avec `persist`
     public void createNote(Note note) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
@@ -37,13 +37,7 @@ public class NoteDAO {
         }
     }
 
-    public List<Note> findAllNotes() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Note", Note.class).list();
-        }
-    }
-
-    // Mise à jour d'une note existante avec `merge`
+    // Mise ï¿½ jour d'une note existante avec `merge`
     public void updateNote(Note note) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
@@ -63,7 +57,7 @@ public class NoteDAO {
             Note note = session.get(Note.class, id);
             if (note != null) {
                 session.remove(note); // Utilisation de `remove`
-                System.out.println("Note supprimée pour l'étudiant : " + note.getEtudiant().getPrenom() + " " + note.getEtudiant().getNom());
+                System.out.println("Note supprimï¿½e pour l'ï¿½tudiant : " + note.getEtudiant().getPrenom() + " " + note.getEtudiant().getNom());
             }
             transaction.commit();
         } catch (Exception e) {

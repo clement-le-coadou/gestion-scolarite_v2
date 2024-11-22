@@ -2,6 +2,10 @@ package daogenerique;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import jpa.Cours;
+import jpa.Etudiant;
+
 import org.hibernate.SessionFactory;
 import java.util.List;
 
@@ -129,4 +133,20 @@ public class CrudGeneric<T> implements GenericDAO<T> {
             }
         }
     }
+
+    public T findById(int id) {
+        Session session = null;
+        T entity = null;
+        try {
+            session = sessionFactory.openSession(); // Ouvrir une nouvelle session
+            entity = session.get(entityType, id);
+        } finally {
+            if (session != null) {
+                session.close(); // Fermer la session après utilisation
+            }
+        }
+        return entity;
+    }
+
+
 }

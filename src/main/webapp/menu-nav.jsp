@@ -20,12 +20,8 @@
             <li class="nav-item"> 
                 <a class="nav-link" href="AfficherCours?page=liste">Liste des cours</a> 
             </li> 
-            <li class="nav-item"> <% if ("Enseignant".equals(role)){         	
-            		%>
-            		<a class="nav-link" href="ModifierNote.jsp">Gestion des notes</a>
-            		<%}else if("Etudiant".equals(role)){ %>
-            		<a class="nav-link" href="GestionNotes.jsp">Mes notes</a>
-            		<%} %>
+            <li class="nav-item">
+            <a class="nav-link" href="RedirectionNotesServlet">Notes</a> 
                  
             </li> 
             <li class="nav-item"> 
