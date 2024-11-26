@@ -23,13 +23,14 @@
     </div>
     <%} %>
     
-    <!-- Formulaire de recherche -->
-    <form action="GestionEtudiant.jsp" method="get" class="mb-4">
-        <div class="input-group">
-            <input type="text" name="search" class="form-control" placeholder="Pas encore fonctionnel">
-            <button class="btn btn-primary" type="submit">Rechercher</button>
-        </div>
-    </form>
+	<!-- Formulaire de recherche -->
+	<div class="mb-4">
+	    <div class="input-group">
+	        <input id="searchInput" type="text" class="form-control" placeholder="Rechercher un étudiant" oninput="filterTable()">
+	        <button class="btn btn-primary" type="button">Rechercher</button>
+	    </div>
+	</div>
+
 
     <table class="table table-bordered">
         <thead>
@@ -87,6 +88,26 @@
     <a href="accueil.jsp" class="btn btn-secondary">Retour à l'accueil</a>
     
 </div>
+
+
+<script>
+    function filterTable() {
+        const searchValue = document.getElementById("searchInput").value.toLowerCase();
+        const tableRows = document.querySelectorAll("table tbody tr");
+
+        tableRows.forEach(row => {
+            const cells = row.querySelectorAll("td");
+            const rowText = Array.from(cells).slice(1, 4) // Nom, Prénom, Email
+                                  .map(cell => cell.textContent.toLowerCase())
+                                  .join(" ");
+            if (rowText.includes(searchValue)) {
+                row.style.display = ""; // Afficher la ligne
+            } else {
+                row.style.display = "none"; // Masquer la ligne
+            }
+        });
+    }
+</script>
 
 </body>
 </html>
