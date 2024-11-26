@@ -14,6 +14,8 @@ import jpa.Note;
 import jpa.Etudiant;
 import jpa.Cours;
 import daogenerique.CrudGeneric;
+import email.EmailUtil;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 @WebServlet("/AjouterNote")
@@ -78,6 +80,16 @@ public class AjouterNote extends HttpServlet {
 
                 // Sauvegarde de la note
                 noteDAO.create(newNote);
+                
+             // Envoi d'un email après l'ajout de la note
+                String destinataire = etudiant.getEmail(); // Assurez-vous que l'objet Etudiant contient l'email
+                String sujet = "Nouvelle note ajoutée";
+                String contenu = "Bonjour " + etudiant.getPrenom() + " " + etudiant.getNom() +
+                                 ",\n\nUne nouvelle note a été ajoutée pour le cours " + cours.getNom() + ".\n" +
+                                 "Note : " + noteValue + "\n\nCordialement,\nL'équipe de gestion des études.";
+
+                EmailUtil.envoyerEmail(destinataire, sujet, contenu);
+
 
                 // Redirection aprÃ¨s l'ajout
                 response.sendRedirect("GestionNotes?coursId=" + coursId);

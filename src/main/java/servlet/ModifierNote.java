@@ -13,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import daogenerique.CrudGeneric;
+import email.EmailUtil;
 
 /**
  * Servlet implementation class ModifierNotes
@@ -51,6 +52,16 @@ public class ModifierNote extends HttpServlet {
         if (note != null) {
             note.setNote(newNoteValue);
             noteDAO.update(note);
+            
+         // Envoi d'un email après la modification de la note
+            String destinataire = note.getEtudiant().getEmail(); // Assurez-vous que l'objet Etudiant contient l'email
+            String sujet = "Modification de votre note";
+            String contenu = "Bonjour " + note.getEtudiant().getPrenom() + " " + note.getEtudiant().getNom() +
+                             ",\n\nVotre note pour le cours " + note.getCours().getNom() + " a été mise à jour.\n" +
+                             "Nouvelle note : " + newNoteValue + "\n\nCordialement,\nL'équipe de gestion des études.";
+
+            EmailUtil.envoyerEmail(destinataire, sujet, contenu);
+
         }
 
         response.sendRedirect("GestionNotes?coursId=" + note.getCours().getId());
