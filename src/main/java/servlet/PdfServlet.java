@@ -12,13 +12,17 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.PdfDocument;
 
 import daogenerique.CrudGeneric;
 import org.hibernate.SessionFactory;
@@ -64,42 +68,89 @@ public class PdfServlet extends HttpServlet {
                 .collect(Collectors.toList());
 
         if (coursList == null || notesList == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Les donnÃ©es sont introuvables.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Les données sont introuvables.");
             return;
         }
 
+        // Définir le type de contenu comme PDF
         response.setContentType("application/pdf");
         OutputStream outputStream = response.getOutputStream();
         
+        // Créer un PdfWriter et un PdfDocument
         PdfWriter writer = new PdfWriter(outputStream);
         PdfDocument pdfDoc = new PdfDocument(writer);
         Document document = new Document(pdfDoc);
 
-        // En-tÃªte du document
-        document.add(new Paragraph("RelevÃ© de Notes")
-                .setBold()
-                .setFontSize(18)
+        // Charger les polices (polices de base et personnalisées)
+        PdfFont fontBold = PdfFontFactory.createFont("Helvetica-Bold");
+        PdfFont fontRegular = PdfFontFactory.createFont("Helvetica");
+
+        // Titre du document (header) avec style et couleur
+        Paragraph header = new Paragraph("Relevé de Notes - CY Tech")
+                .setFont(fontBold)
+                .setFontSize(22)
                 .setTextAlignment(TextAlignment.CENTER)
-                .setMarginBottom(10));
+                .setMarginBottom(20)
+                .setBackgroundColor(new com.itextpdf.kernel.colors.DeviceRgb(0, 123, 255))  // bleu
+                .setFontColor(ColorConstants.WHITE); // texte blanc
+        document.add(header);
 
-        // Table des notes (sans la date d'inscription)
-        Table table = new Table(2); // 2 colonnes : Cours et Note
-        table.addHeaderCell(new Cell().add(new Paragraph("Cours")).setBold().setTextAlignment(TextAlignment.CENTER));
-        table.addHeaderCell(new Cell().add(new Paragraph("Note")).setBold().setTextAlignment(TextAlignment.CENTER));
+        // Informations de l'étudiant
+        Paragraph studentInfo = new Paragraph("Nom : " + etudiant.getNom() + "\n" +
+                                              "Prénom : " + etudiant.getPrenom() + "\n" +
+                                              "Email : " + etudiant.getEmail())
+                .setFont(fontRegular)
+                .setFontSize(12)
+                .setTextAlignment(TextAlignment.LEFT)
+                .setMarginBottom(20);
+        document.add(studentInfo);
 
-        // Remplissage de la table avec les donnÃ©es
+        // Créer une table pour les résultats
+        Table table = new Table(2);  // 2 colonnes : "Cours" et "Note"
+        table.setWidth(UnitValue.createPercentValue(100));  // Table pleine largeur
+
+        // Ajouter les en-têtes de table avec une couleur de fond et un texte centré
+        table.addHeaderCell(new Cell().add(new Paragraph("Cours"))
+                .setBackgroundColor(new com.itextpdf.kernel.colors.DeviceRgb(0, 123, 255))  // bleu
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFont(fontBold)
+                .setFontColor(ColorConstants.WHITE));
+        table.addHeaderCell(new Cell().add(new Paragraph("Note"))
+                .setBackgroundColor(new com.itextpdf.kernel.colors.DeviceRgb(0, 123, 255))  // bleu
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFont(fontBold)
+                .setFontColor(ColorConstants.WHITE));
+
+        // Remplir la table avec les données
         for (Cours cours : coursList) {
             Note note = notesList.stream().filter(n -> n.getCours().getId().equals(cours.getId())).findFirst().orElse(null);
             String noteValue = (note != null) ? String.valueOf(note.getNote()) : "Pas de note";
 
-            table.addCell(new Cell().add(new Paragraph(cours.getNom())).setTextAlignment(TextAlignment.LEFT));
-            table.addCell(new Cell().add(new Paragraph(noteValue)).setTextAlignment(TextAlignment.CENTER));
+            // Ajouter chaque ligne dans la table
+            table.addCell(new Cell().add(new Paragraph(cours.getNom()))
+                    .setTextAlignment(TextAlignment.LEFT)
+                    .setFont(fontRegular)
+                    .setPadding(8));
+            table.addCell(new Cell().add(new Paragraph(noteValue))
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setFont(fontRegular)
+                    .setPadding(8)
+                    .setBackgroundColor(ColorConstants.LIGHT_GRAY));  // Fond gris clair pour les notes
         }
 
         // Ajouter la table au document
         document.add(table);
 
-        // Ne pas ajouter de footer avec la date
+        // Ajouter une section de pied de page pour l'email ou des informations supplémentaires si nécessaire
+        Paragraph footer = new Paragraph("Pour plus d'informations, contactez nous à : contact@cytech.com")
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFont(fontRegular)
+                .setFontSize(10)
+                .setMarginTop(30)
+                .setFontColor(new com.itextpdf.kernel.colors.DeviceRgb(0, 123, 255));  // bleu
+        document.add(footer);
+
+        // Fermer le document PDF
         document.close();
     }
 
