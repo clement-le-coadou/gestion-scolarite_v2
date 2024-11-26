@@ -61,6 +61,7 @@ public class Login extends HttpServlet {
 				if(test!=null) {
 					if(test.getMotDePasse().equals(password)) {
 						session.setAttribute("username", test);
+						session.setAttribute("role", "Etudiant");
 					}else{
 						session.setAttribute("errorMessage", "Mot de passe incorrect");
 						request.getRequestDispatcher("Connexion.jsp").forward(request, response);
@@ -78,6 +79,7 @@ public class Login extends HttpServlet {
 				if(test!=null) {
 					if(test.getMotDePasse().equals(password)) {
 						session.setAttribute("username", test);
+						session.setAttribute("role", "Administrateur");
 					}else{
 						session.setAttribute("errorMessage", "Mot de passe incorrect");
 						request.getRequestDispatcher("Connexion.jsp").forward(request, response);
@@ -95,6 +97,7 @@ public class Login extends HttpServlet {
 				if(test!=null) {
 					if(test.getMotDePasse().equals(password)) {
 						session.setAttribute("username", test);
+						session.setAttribute("role", "Enseignant");
 					}else{
 						session.setAttribute("errorMessage", "Mot de passe incorrect");
 						request.getRequestDispatcher("Connexion.jsp").forward(request, response);

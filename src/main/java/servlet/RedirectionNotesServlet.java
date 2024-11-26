@@ -42,10 +42,16 @@ public class RedirectionNotesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        String role = (String) session.getAttribute("role");
+        System.out.println(role);
+        if(role == null) {
+        	response.sendRedirect("Connexion.jsp");
+        	return;
+        }
         Object utilisateur = session.getAttribute("username");
         CrudGeneric<Note> noteDAO = new CrudGeneric<>(sessionFactory, Note.class);
         CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
-        if (utilisateur instanceof Enseignant) {
+        if (role.equals("Enseignant")) {
         	Enseignant enseignant = (Enseignant) utilisateur;
 
             List<Cours> coursList = coursDAO.findAll()
@@ -54,7 +60,7 @@ public class RedirectionNotesServlet extends HttpServlet {
                     .collect(Collectors.toList());
             request.setAttribute("coursList", coursList);
             request.getRequestDispatcher("GestionNotes.jsp").forward(request, response);
-        } else if (utilisateur instanceof Etudiant) {
+        } else if (role.equals("Etudiant")) {
             Etudiant etudiant = (Etudiant) utilisateur;
 
             CrudGeneric<Inscription> inscriptionDAO = new CrudGeneric<>(sessionFactory, Inscription.class);

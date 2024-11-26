@@ -16,7 +16,6 @@
 			<h1 class="display-4">Bienvenue à CY Tech</h1>
             <p class="lead">Gérez les étudiants, enseignants, cours et résultats efficacement.</p>
             <hr class="my-4">
-            <p class="text-muted">Utilisez le menu de navigation pour explorer les fonctionnalités.</p>
         </div>
 
         <div class="row text-center mt-5">
