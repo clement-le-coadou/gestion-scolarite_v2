@@ -41,6 +41,6 @@ public class InscrireEtudiant extends HttpServlet {
         inscriptionDAO.create(inscription);
 
         // Rediriger vers la page de confirmation ou liste des cours
-        response.sendRedirect("GestionCours.jsp");
+        response.sendRedirect("AfficherCours?page=gestion");
     }
 }

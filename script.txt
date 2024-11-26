@@ -72,26 +72,64 @@ CREATE TABLE Note (
     CONSTRAINT fk_cours_note FOREIGN KEY (cours_id) REFERENCES Cours(id) ON DELETE CASCADE  -- Clé étrangère vers la table Cours
 );
 
-select * from etudiant;
-select * from enseignant;
 
+INSERT INTO Etudiant (nom, prenom, dateNaissance, email, contact, mot_de_passe)
+VALUES
+('Martin', 'Emma', '2000-01-15', 'emma.martin@example.com', '0612345001', 'password123'),
+('Durand', 'Lucas', '2000-02-20', 'lucas.durand@example.com', '0612345002', 'password123'),
+('Lemoine', 'Chloé', '2000-03-10', 'chloe.lemoine@example.com', '0612345003', 'password123'),
+('Bernard', 'Hugo', '2000-04-05', 'hugo.bernard@example.com', '0612345004', 'password123'),
+('Morel', 'Alice', '2000-05-25', 'alice.morel@example.com', '0612345005', 'password123'),
+('Garnier', 'Mathieu', '2000-06-18', 'mathieu.garnier@example.com', '0612345006', 'password123'),
+('Petit', 'Sophie', '2000-07-09', 'sophie.petit@example.com', '0612345007', 'password123'),
+('Roux', 'Thomas', '2000-08-14', 'thomas.roux@example.com', '0612345008', 'password123'),
+('Fournier', 'Laura', '2000-09-22', 'laura.fournier@example.com', '0612345009', 'password123'),
+('Girard', 'Paul', '2000-10-13', 'paul.girard@example.com', '0612345010', 'password123'),
+('Blanc', 'Camille', '2000-11-08', 'camille.blanc@example.com', '0612345011', 'password123'),
+('Perrot', 'Louis', '2000-12-02', 'louis.perrot@example.com', '0612345012', 'password123'),
+('Leclerc', 'Julie', '2000-01-28', 'julie.leclerc@example.com', '0612345013', 'password123'),
+('Renaud', 'Arthur', '2000-02-16', 'arthur.renaud@example.com', '0612345014', 'password123'),
+('Renard', 'Charlotte', '2000-03-03', 'charlotte.renard@example.com', '0612345015', 'password123'),
+('Bertrand', 'Lucas', '2000-04-21', 'lucas.bertrand@example.com', '0612345016', 'password123'),
+('Bourgeois', 'Emma', '2000-05-14', 'emma.bourgeois@example.com', '0612345017', 'password123'),
+('Chevalier', 'Noah', '2000-06-09', 'noah.chevalier@example.com', '0612345018', 'password123'),
+('Baron', 'Manon', '2000-07-30', 'manon.baron@example.com', '0612345019', 'password123'),
+('Perrin', 'Nathan', '2000-08-12', 'nathan.perrin@example.com', '0612345020', 'password123'),
+('Clément', 'Léa', '2000-09-05', 'lea.clement@example.com', '0612345021', 'password123'),
+('Lambert', 'Adam', '2000-10-19', 'adam.lambert@example.com', '0612345022', 'password123'),
+('Bonnet', 'Sarah', '2000-11-23', 'sarah.bonnet@example.com', '0612345023', 'password123'),
+('Dupuis', 'Enzo', '2000-12-11', 'enzo.dupuis@example.com', '0612345024', 'password123'),
+('Mercier', 'Zoé', '2000-01-05', 'zoe.mercier@example.com', '0612345025', 'password123'),
+('Morin', 'Jules', '2000-02-09', 'jules.morin@example.com', '0612345026', 'password123'),
+('Marchand', 'Clara', '2000-03-29', 'clara.marchand@example.com', '0612345027', 'password123'),
+('Dubois', 'Gabriel', '2000-04-15', 'gabriel.dubois@example.com', '0612345028', 'password123'),
+('Vidal', 'Anna', '2000-05-23', 'anna.vidal@example.com', '0612345029', 'password123'),
+('Giraud', 'Maxime', '2000-06-17', 'maxime.giraud@example.com', '0612345030', 'password123'),
+('Fontaine', 'Inès', '2000-07-22', 'ines.fontaine@example.com', '0612345031', 'password123'),
+('Royer', 'Antoine', '2000-08-03', 'antoine.royer@example.com', '0612345032', 'password123'),
+('Lopez', 'Clémence', '2000-09-11', 'clemence.lopez@example.com', '0612345033', 'password123'),
+('Gauthier', 'Ethan', '2000-10-28', 'ethan.gauthier@example.com', '0612345034', 'password123'),
+('Caron', 'Lisa', '2000-11-15', 'lisa.caron@example.com', '0612345035', 'password123'),
+('Collet', 'Léo', '2000-12-21', 'leo.collet@example.com', '0612345036', 'password123'),
+('Benoit', 'Axelle', '2000-01-10', 'axelle.benoit@example.com', '0612345037', 'password123'),
+('Moulin', 'Théo', '2000-02-22', 'theo.moulin@example.com', '0612345038', 'password123'),
+('Descamps', 'Maëlle', '2000-03-08', 'maelle.descamps@example.com', '0612345039', 'password123'),
+('Charpentier', 'Liam', '2000-04-30', 'liam.charpentier@example.com', '0612345040', 'password123');
 
-
--- Insertion de données de test pour les Etudiants
-INSERT INTO Etudiant (nom, prenom, dateNaissance, email, contact, mot_de_passe) VALUES
-('Dupont', 'Jean', '2000-01-15', 'jean.dupont@example.com', '0612345678', 'password123'),
-('Martin', 'Sophie', '2001-05-22', 'sophie.martin@example.com', '0623456789', 'password123'),
-('Durand', 'Lucas', '1999-10-30', 'lucas.durand@example.com', '0634567890', 'password123'),
-('Petit', 'Marie', '2002-03-14', 'marie.petit@example.com', '0645678901', 'password123'),
-('Leroy', 'Emma', '2000-08-05', 'emma.leroy@example.com', '0656789012', 'password123');
 
 -- Insertion de données de test pour les Enseignants
-INSERT INTO Enseignant (nom, prenom, email, contact, mot_de_passe) VALUES
+INSERT INTO Enseignant (nom, prenom, email, contact, mot_de_passe)
+VALUES
 ('Legrand', 'Paul', 'paul.legrand@example.com', '0611122233', 'password123'),
 ('Bernard', 'Alice', 'alice.bernard@example.com', '0622233445', 'password123'),
 ('Moreau', 'Clara', 'clara.moreau@example.com', '0633344556', 'password123'),
 ('Garnier', 'Marc', 'marc.garnier@example.com', '0644455667', 'password123'),
-('Richard', 'Isabelle', 'isabelle.richard@example.com', '0655566778', 'password123');
+('Richard', 'Isabelle', 'isabelle.richard@example.com', '0655566778', 'password123'),
+('Dubois', 'Louis', 'louis.dubois@example.com', '0611678901', 'password123'),
+('Fontaine', 'Julie', 'julie.fontaine@example.com', '0622789012', 'password123'),
+('Vidal', 'Maxime', 'maxime.vidal@example.com', '0633890123', 'password123'),
+('Lopez', 'Camille', 'camille.lopez@example.com', '0644901234', 'password123');
+
 
 -- Insertion de données de test pour les Administrateurs
 INSERT INTO Administrateur (nom, prenom, email, mot_de_passe) VALUES
@@ -99,24 +137,63 @@ INSERT INTO Administrateur (nom, prenom, email, mot_de_passe) VALUES
 ('User', 'Test', 'user@example.com', 'user123');
 
 -- Insertion de données de test pour les Cours
-INSERT INTO Cours (nom, description, enseignant_id) VALUES
+INSERT INTO Cours (nom, description, enseignant_id)
+VALUES
 ('Mathématiques', 'Introduction aux concepts mathématiques.', 1),
 ('Physique', 'Principes de la physique moderne.', 2),
 ('Chimie', 'Chimie organique et inorganique.', 3),
 ('Informatique', 'Introduction à la programmation.', 4),
-('Philosophie', 'Philosophie et éthique.', 5);
+('Philosophie', 'Philosophie et éthique.', 5),
+('Histoire', 'Exploration des grandes périodes historiques.', 6),
+('Biologie', 'Étude des organismes vivants.', 7),
+('Économie', 'Introduction aux principes économiques.', 8),
+('Littérature', 'Analyse des grands classiques.', 9);
+
 
 -- Insertion de données de test pour les Inscriptions
-INSERT INTO Inscription (etudiant_id, cours_id) VALUES
-(1, 1),
-(1, 2),
-(2, 1),
-(2, 3),
-(3, 2),
-(3, 4),
-(4, 1),
-(4, 5),
-(5, 3);
+INSERT INTO Inscription (etudiant_id, cours_id)
+VALUES
+(1, 1), (1, 2), (1, 3), (1, 4), (1, 5),
+(2, 2), (2, 3), (2, 4), (2, 5), (2, 6),
+(3, 3), (3, 4), (3, 5), (3, 6), (3, 7),
+(4, 4), (4, 5), (4, 6), (4, 7), (4, 8),
+(5, 5), (5, 6), (5, 7), (5, 8), (5, 9),
+(6, 1), (6, 2), (6, 3), (6, 4), (6, 5),
+(7, 2), (7, 3), (7, 4), (7, 5), (7, 6),
+(8, 3), (8, 4), (8, 5), (8, 6), (8, 7),
+(9, 4), (9, 5), (9, 6), (9, 7), (9, 8),
+(10, 5), (10, 6), (10, 7), (10, 8), (10, 9),
+(11, 1), (11, 2), (11, 3), (11, 4), (11, 5),
+(12, 2), (12, 3), (12, 4), (12, 5), (12, 6),
+(13, 3), (13, 4), (13, 5), (13, 6), (13, 7),
+(14, 4), (14, 5), (14, 6), (14, 7), (14, 8),
+(15, 5), (15, 6), (15, 7), (15, 8), (15, 9),
+(16, 1), (16, 2), (16, 3), (16, 4), (16, 5),
+(17, 2), (17, 3), (17, 4), (17, 5), (17, 6),
+(18, 3), (18, 4), (18, 5), (18, 6), (18, 7),
+(19, 4), (19, 5), (19, 6), (19, 7), (19, 8),
+(20, 5), (20, 6), (20, 7), (20, 8), (20, 9),
+(21, 1), (21, 2), (21, 3), (21, 4), (21, 5),
+(22, 2), (22, 3), (22, 4), (22, 5), (22, 6),
+(23, 3), (23, 4), (23, 5), (23, 6), (23, 7),
+(24, 4), (24, 5), (24, 6), (24, 7), (24, 8),
+(25, 5), (25, 6), (25, 7), (25, 8), (25, 9),
+(26, 1), (26, 2), (26, 3), (26, 4), (26, 5),
+(27, 2), (27, 3), (27, 4), (27, 5), (27, 6),
+(28, 3), (28, 4), (28, 5), (28, 6), (28, 7),
+(29, 4), (29, 5), (29, 6), (29, 7), (29, 8),
+(30, 5), (30, 6), (30, 7), (30, 8), (30, 9),
+(31, 1), (31, 2), (31, 3), (31, 4), (31, 5),
+(32, 2), (32, 3), (32, 4), (32, 5), (32, 6),
+(33, 3), (33, 4), (33, 5), (33, 6), (33, 7),
+(34, 4), (34, 5), (34, 6), (34, 7), (34, 8),
+(35, 5), (35, 6), (35, 7), (35, 8), (35, 9),
+(36, 1), (36, 2), (36, 3), (36, 4), (36, 5),
+(37, 2), (37, 3), (37, 4), (37, 5), (37, 6),
+(38, 3), (38, 4), (38, 5), (38, 6), (38, 7),
+(39, 4), (39, 5), (39, 6), (39, 7), (39, 8),
+(40, 5), (40, 6), (40, 7), (40, 8), (40, 9);
+
 
 -- Insertion de données de test pour les Notes
 INSERT INTO Note (etudiant_id, cours_id, note) VALUES
@@ -130,4 +207,3 @@ INSERT INTO Note (etudiant_id, cours_id, note) VALUES
 (4, 5, 16.00),
 (5, 3, 13.50);
 
-select * from inscription
