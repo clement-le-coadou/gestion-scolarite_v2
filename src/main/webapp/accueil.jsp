@@ -13,7 +13,7 @@
 
     <div class="container my-5">
         <div class="jumbotron text-center bg-light shadow">
-            <h1 class="display-4 text-primary">Bienvenue à CY Tech</h1>
+			<h1 class="display-4">Bienvenue à CY Tech</h1>
             <p class="lead">Gérez les étudiants, enseignants, cours et résultats efficacement.</p>
             <hr class="my-4">
             <p class="text-muted">Utilisez le menu de navigation pour explorer les fonctionnalités.</p>
