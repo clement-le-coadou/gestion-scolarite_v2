@@ -16,12 +16,15 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Mes Notes</h2>
 
-        <%
+		<%
             List<Cours> coursList = (List<Cours>) request.getAttribute("coursList");
             List<Note> notes = (List<Note>) request.getAttribute("notesList");
 
             if (coursList != null && !coursList.isEmpty()) {
         %>
+		
+		<br>
+        
         <table class="table table-striped table-bordered">
             <thead class="table-dark">
                 <tr>
@@ -43,6 +46,10 @@
         <% } else { %>
         <p class="text-center text-danger">Aucune note disponible.</p>
         <% } %>
+        
+        <div class="d-flex justify-content-center mt-4">
+		    <a href="generatePdf" class="btn btn-success btn-sm">Generer le PDF</a>
+		</div>
 
         <div class="d-flex justify-content-center mt-4">
             <a href="accueil.jsp" class="btn btn-secondary">Retour à l'accueil</a>
