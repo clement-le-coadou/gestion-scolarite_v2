@@ -56,7 +56,6 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
-        <a href="GestionCours.jsp" class="btn btn-secondary">Annuler</a>
     </form>
 </div>
 
