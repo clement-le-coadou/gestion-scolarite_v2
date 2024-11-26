@@ -15,7 +15,7 @@
             
             <div class="mb-3">
                 <label for="note" class="form-label">Nouvelle Note :</label>
-                <input type="number" step="0.01" name="note" id="note" class="form-control" value="<%= request.getParameter("noteValue") %>" required>
+                <input type="number" step="0.01" name="note" id="note" class="form-control" value="<%= request.getParameter("noteValue") %>" required min="0" max="20">
             </div>
             
             <button type="submit" class="btn btn-primary">Modifier</button>
