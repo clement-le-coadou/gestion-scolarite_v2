@@ -53,7 +53,7 @@ public class SupprimerEtudiant extends HttpServlet {
         	etudiantDAO.delete(etudiant);
         }
 
-        response.sendRedirect("GestionEtudiants.jsp");
+        response.sendRedirect("AfficherEtudiants");
 	}
 
 }
