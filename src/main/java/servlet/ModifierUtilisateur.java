@@ -17,6 +17,8 @@ import org.hibernate.cfg.Configuration;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @WebServlet("/ModifierUtilisateur")
@@ -88,13 +90,11 @@ public class ModifierUtilisateur extends HttpServlet {
         // Parse date of birth for Etudiant
         String dateNaissanceString = request.getParameter("dateNaissance");
         if (dateNaissanceString != null && !dateNaissanceString.isEmpty()) {
-            try {
-                Date dateNaissance = new SimpleDateFormat("yyyy-MM-dd").parse(dateNaissanceString);
-                etudiant.setDateNaissance(dateNaissance);
-            } catch (ParseException e) {
-                e.printStackTrace(); // Handle the exception appropriately
-            }
+            	 LocalDate dateNaissance = LocalDate.parse(dateNaissanceString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                 etudiant.setDateNaissance(java.sql.Date.valueOf(dateNaissance));
         }
+        
+       
 
         // Set contact for Etudiant
         String contact = request.getParameter("contact");
