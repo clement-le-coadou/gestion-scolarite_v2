@@ -81,12 +81,12 @@ public class AjouterNote extends HttpServlet {
                 // Sauvegarde de la note
                 noteDAO.create(newNote);
                 
-             // Envoi d'un email après l'ajout de la note
+             // Envoi d'un email aprï¿½s l'ajout de la note
                 String destinataire = etudiant.getEmail(); // Assurez-vous que l'objet Etudiant contient l'email
-                String sujet = "Nouvelle note ajoutée";
+                String sujet = "Nouvelle note ajoutÃ©e";
                 String contenu = "Bonjour " + etudiant.getPrenom() + " " + etudiant.getNom() +
-                                 ",\n\nUne nouvelle note a été ajoutée pour le cours " + cours.getNom() + ".\n" +
-                                 "Note : " + noteValue + "\n\nCordialement,\nL'équipe de gestion des études.";
+                                 ",\n\nUne nouvelle note a Ã©tÃ© ajoutÃ©e pour le cours " + cours.getNom() + ".\n" +
+                                 "Note : " + noteValue + "\n\nCordialement,\nL'Ã©quipe de gestion des Ã©tudes.";
 
                 EmailUtil.envoyerEmail(destinataire, sujet, contenu);
 

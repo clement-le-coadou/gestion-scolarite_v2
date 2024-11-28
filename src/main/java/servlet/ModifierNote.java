@@ -53,12 +53,12 @@ public class ModifierNote extends HttpServlet {
             note.setNote(newNoteValue);
             noteDAO.update(note);
             
-         // Envoi d'un email après la modification de la note
+         // Envoi d'un email aprï¿½s la modification de la note
             String destinataire = note.getEtudiant().getEmail(); // Assurez-vous que l'objet Etudiant contient l'email
             String sujet = "Modification de votre note";
             String contenu = "Bonjour " + note.getEtudiant().getPrenom() + " " + note.getEtudiant().getNom() +
-                             ",\n\nVotre note pour le cours " + note.getCours().getNom() + " a été mise à jour.\n" +
-                             "Nouvelle note : " + newNoteValue + "\n\nCordialement,\nL'équipe de gestion des études.";
+                             ",\n\nVotre note pour le cours " + note.getCours().getNom() + " a Ã©tÃ© mise Ã  jour.\n" +
+                             "Nouvelle note : " + newNoteValue + "\n\nCordialement,\nL'Ã©quipe de gestion des Ã©tudes.";
 
             EmailUtil.envoyerEmail(destinataire, sujet, contenu);
 
