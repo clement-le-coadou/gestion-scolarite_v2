@@ -10,3 +10,4 @@ public interface GenericDAO<T> {
     List<T> findAll();
 }
 
+//New Branch
