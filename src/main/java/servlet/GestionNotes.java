@@ -1,78 +1,59 @@
 package servlet;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-
-import jpa.Note;
 import jpa.Cours;
 import jpa.Etudiant;
 import jpa.Inscription;
-import dao.NoteDAO;
-import daogenerique.CrudGeneric;
-import dao.CoursDAO;
-import dao.EtudiantDAO;
-@WebServlet("/GestionNotes")
-public class GestionNotes extends HttpServlet {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private CrudGeneric<Inscription> inscriptionDAO;
-	private CrudGeneric<Note> noteDAO;
-    @Override
-    public void init() throws ServletException {
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        inscriptionDAO = new CrudGeneric<>(sessionFactory, Inscription.class);
-        noteDAO = new CrudGeneric<>(sessionFactory, Note.class);
-    }
+import jpa.Note;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Redirige les appels GET vers doPost pour rÃ©utiliser la logique
-        doPost(request, response);
-    }
+import java.util.List;
+import java.util.stream.Collectors;
 
-    
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String coursIdParam = request.getParameter("coursId");
+@Controller
+public class GestionNotesController {
 
-        if (coursIdParam != null && !coursIdParam.isEmpty()) {
+    @Autowired
+    private CrudGeneric<Inscription> inscriptionDAO;
+
+    @Autowired
+    private CrudGeneric<Note> noteDAO;
+
+    @Autowired
+    private CrudGeneric<Cours> coursDAO;
+
+    @GetMapping("/GestionNotes")
+    public String gestionNotes(@RequestParam(value = "coursId", required = false) Integer coursId, Model model) {
+        if (coursId != null) {
             try {
-                int coursId = Integer.parseInt(coursIdParam);
-
-                // RÃ©cupÃ©rer toutes les inscriptions et filtrer celles pour le cours donnÃ©
+                // Récupérer toutes les inscriptions et filtrer celles pour le cours donné
                 List<Inscription> inscriptions = inscriptionDAO.findAll();
                 List<Etudiant> etudiantList = inscriptions.stream()
                         .filter(inscription -> inscription.getCours().getId() == coursId)
                         .map(Inscription::getEtudiant)
                         .collect(Collectors.toList());
-                List<Note> notes = noteDAO.findAll();
-                
-                
-                
-                
-                
-                request.setAttribute("notes", notes);
-                request.setAttribute("etudiantList", etudiantList);
-                request.setAttribute("coursId", coursId);
-            
-                request.getRequestDispatcher("AfficherNoteEnseignant.jsp").forward(request, response);
-            } catch (NumberFormatException e) {
+
+                // Récupérer les notes des étudiants pour ce cours
+                List<Note> notes = noteDAO.findAll().stream()
+                        .filter(note -> note.getCours().getId() == coursId)
+                        .collect(Collectors.toList());
+
+                model.addAttribute("notes", notes);
+                model.addAttribute("etudiantList", etudiantList);
+                model.addAttribute("coursId", coursId);
+
+                return "AfficherNoteEnseignant"; // Redirige vers la vue AfficherNoteEnseignant
+            } catch (Exception e) {
                 e.printStackTrace();
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de cours invalide.");
+                model.addAttribute("errorMessage", "ID de cours invalide.");
+                return "error"; // Page d'erreur si le cours est invalide
             }
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Aucun cours sÃ©lectionnÃ©.");
+            model.addAttribute("errorMessage", "Aucun cours sélectionné.");
+            return "error"; // Page d'erreur si aucun cours n'est sélectionné
         }
     }
 }

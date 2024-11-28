@@ -1,39 +1,52 @@
 package servlet;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 import daogenerique.CrudGeneric;
 import jpa.Cours;
 import jpa.Enseignant;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@Controller
+public class AjouterCours {
 
-@WebServlet("/AjouterCours")
-public class AjouterCours extends HttpServlet {
-    SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-    CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
+    private final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+    private final CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
 
-    
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String nom = request.getParameter("nom");
-        String description = request.getParameter("description");
-        Long enseignantId = Long.parseLong(request.getParameter("enseignantId"));
+    // Méthode pour afficher la page de formulaire d'ajout (si nécessaire)
+    @GetMapping("/AjouterCours")
+    public String afficherFormulaire() {
+        // Retourner la vue du formulaire d'ajout de cours (nom du fichier JSP ou autre template)
+        return "AjouterCours"; // Cette page JSP doit être dans le dossier WEB-INF/jsp/
+    }
 
-        // RÃ©cupÃ©ration de l'enseignant par son ID
+    // Méthode pour traiter la soumission du formulaire
+    @PostMapping("/AjouterCours")
+    public String ajouterCours(@RequestParam("nom") String nom, 
+                               @RequestParam("description") String description, 
+                               @RequestParam("enseignantId") Long enseignantId, 
+                               RedirectAttributes redirectAttributes) {
+        // Récupération de l'enseignant par son ID
         CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
         Enseignant enseignant = enseignantDAO.read(enseignantId);
 
-        Cours cours = new Cours(nom, description, enseignant);
-        coursDAO.create(cours);
+        if (enseignant != null) {
+            // Création du cours
+            Cours cours = new Cours(nom, description, enseignant);
+            coursDAO.create(cours);
+            
+            // Ajouter un message de succès dans les attributs de redirection
+            redirectAttributes.addFlashAttribute("message", "Cours ajouté avec succès!");
+        } else {
+            // Ajouter un message d'erreur en cas de problème avec l'enseignant
+            redirectAttributes.addFlashAttribute("message", "Enseignant non trouvé!");
+        }
 
-        response.sendRedirect("AfficherCours?page=gestion");  // Redirection vers la liste des cours
+        // Redirection vers la liste des cours ou la page de gestion des cours
+        return "redirect:/AfficherCours?page=gestion";
     }
 }

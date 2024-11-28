@@ -1,12 +1,5 @@
 package servlet;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jpa.Cours;
 import jpa.Etudiant;
 import jpa.Enseignant;
@@ -14,24 +7,27 @@ import jpa.Inscription;
 import daogenerique.CrudGeneric;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet("/MesCours")
-public class MesCours extends HttpServlet {
-    private SessionFactory sessionFactory;
+@Controller
+public class MesCoursController {
 
-    @Override
-    public void init() {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
+    private final SessionFactory sessionFactory;
+
+    @Autowired
+    public MesCoursController() {
+        this.sessionFactory = new Configuration().configure().buildSessionFactory();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Object utilisateur = session.getAttribute("username");
-        
+    @GetMapping("/mesCours")
+    public String getMesCours(@SessionAttribute("username") Object utilisateur, Model model) {
         CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
 
         List<Cours> coursList = null;
@@ -59,11 +55,7 @@ public class MesCours extends HttpServlet {
                     .collect(Collectors.toList());
         }
 
-        request.setAttribute("coursList", coursList);
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("AfficherCours.jsp");
-        dispatcher.forward(request, response);
+        model.addAttribute("coursList", coursList);
+        return "AfficherCours";  // View name (Thymeleaf template)
     }
-
- 
 }

@@ -1,32 +1,26 @@
 package servlet;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jpa.Cours;
 import daogenerique.CrudGeneric;
+import jpa.Cours;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/AfficherCours")
-public class AfficherCours extends HttpServlet {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+@Controller
+public class AfficherCours {
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @GetMapping("/AfficherCours")
+    public String afficherCours(@RequestParam(value = "page", required = false) String page, Model model) {
         // Configurer la SessionFactory pour Hibernate
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
 
-        // Rï¿½cupï¿½rer tous les cours
+        // Récupérer tous les cours
         List<Cours> coursList = coursDAO.findAll();
         
         // Debugging : Affichage des ID de chaque cours dans la console
@@ -34,17 +28,14 @@ public class AfficherCours extends HttpServlet {
             System.out.println("Cours ID: " + cours.getId() + ", Nom: " + cours.getNom());
         }
 
-        // Passer la liste des cours ï¿½ la JSP
-        request.setAttribute("coursList", coursList);
+        // Passer la liste des cours à la JSP
+        model.addAttribute("coursList", coursList);
 
-        String page = request.getParameter("page");
+        // Rediriger vers la page appropriée
         if ("gestion".equals(page)) {
-            request.getRequestDispatcher("GestionCours.jsp").forward(request, response);
+            return "GestionCours"; // Page de gestion des cours
         } else {
-            request.getRequestDispatcher("AfficherCours.jsp").forward(request, response);
+            return "AfficherCours"; // Page d'affichage des cours
         }
-
-        // Fermer la session Hibernate
-        sessionFactory.close();
     }
 }

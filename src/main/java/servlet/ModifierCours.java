@@ -1,61 +1,61 @@
 package servlet;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jpa.Cours;
+import jpa.Etudiant;
 import jpa.Enseignant;
+import jpa.Inscription;
 import daogenerique.CrudGeneric;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
-import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@WebServlet("/ModifierCours")
-public class ModifierCours extends HttpServlet {
+@Controller
+public class MesCoursController {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long coursId = Long.valueOf(request.getParameter("id"));
+    private final SessionFactory sessionFactory;
 
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
-
-        // R�cup�rer le cours par ID
-        Cours cours = coursDAO.read(coursId);
-        
-        // Passer le cours � la JSP de modification
-        request.setAttribute("cours", cours);
-        
-        RequestDispatcher dispatcher = request.getRequestDispatcher("ModifierCours.jsp");
-        dispatcher.forward(request, response);
+    @Autowired
+    public MesCoursController() {
+        this.sessionFactory = new Configuration().configure().buildSessionFactory();
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long coursId = Long.valueOf(request.getParameter("id"));
-        String nom = request.getParameter("nom");
-        String description = request.getParameter("description");
-        Long enseignantId = Long.valueOf(request.getParameter("enseignantId"));
-
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+    @GetMapping("/mesCours")
+    public String getMesCours(@SessionAttribute("username") Object utilisateur, Model model) {
         CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
 
-        // R�cup�rer le cours par ID et mettre � jour les informations
-        Cours cours = coursDAO.read(coursId);
-        cours.setNom(nom);
-        cours.setDescription(description);
-        
-        // R�cup�rer l'enseignant et le d�finir dans le cours
-        CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
-        Enseignant enseignant = enseignantDAO.read(enseignantId);
-        cours.setEnseignant(enseignant);
+        List<Cours> coursList = null;
 
-        // Enregistrer les modifications
-        coursDAO.update(cours);
-        
-        // Redirection apr�s modification
-        response.sendRedirect("AfficherCours?page=gestion");
+        if (utilisateur instanceof Etudiant) {
+            Etudiant etudiant = (Etudiant) utilisateur;
+
+            CrudGeneric<Inscription> inscriptionDAO = new CrudGeneric<>(sessionFactory, Inscription.class);
+            List<Inscription> inscriptions = inscriptionDAO.findAll()
+                    .stream()
+                    .filter(inscription -> inscription.getEtudiant().getId().equals(etudiant.getId()))
+                    .collect(Collectors.toList());
+
+            coursList = inscriptions.stream()
+                    .map(Inscription::getCours)
+                    .distinct()
+                    .collect(Collectors.toList());
+
+        } else if (utilisateur instanceof Enseignant) {
+            Enseignant enseignant = (Enseignant) utilisateur;
+
+            coursList = coursDAO.findAll()
+                    .stream()
+                    .filter(cours -> cours.getEnseignant() != null && cours.getEnseignant().getId().equals(enseignant.getId()))
+                    .collect(Collectors.toList());
+        }
+
+        model.addAttribute("coursList", coursList);
+        return "AfficherCours";  // View name (Thymeleaf template)
     }
 }
