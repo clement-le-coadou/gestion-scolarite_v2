@@ -12,110 +12,81 @@ import jpa.Etudiant;
 
 import java.io.IOException;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import dao.EtudiantDAO;
 import daogenerique.CrudGeneric;
 
-/**
- * Servlet implementation class Login
- */
-@WebServlet("/Login")
-public class Login extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Login() {
-        super();
-        // TODO Auto-generated constructor stub
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+public class LoginController {
+
+    private SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+
+    @PostMapping("/login")
+    public String login(@RequestParam("user_type") String userType,
+                        @RequestParam("username") String username,
+                        @RequestParam("password") String password,
+                        HttpSession session, Model model) {
+
+        CrudGeneric<?> user;
+        
+        if (userType != null) {
+            if (userType.equals("etudiant")) {
+                user = new CrudGeneric<>(sessionFactory, Etudiant.class);
+                Etudiant etudiant = (Etudiant) user.findByEmail(username);
+                if (etudiant != null) {
+                    if (etudiant.getMotDePasse().equals(password)) {
+                        session.setAttribute("username", etudiant);
+                        session.setAttribute("role", "Etudiant");
+                    } else {
+                        model.addAttribute("errorMessage", "Mot de passe incorrect");
+                        return "Connexion"; // Affiche la page de connexion avec un message d'erreur
+                    }
+                } else {
+                    model.addAttribute("errorMessage", "Adresse mail incorrecte");
+                    return "Connexion"; // Affiche la page de connexion avec un message d'erreur
+                }
+            } else if (userType.equals("administrateur")) {
+                user = new CrudGeneric<>(sessionFactory, Administrateur.class);
+                Administrateur administrateur = (Administrateur) user.findByEmail(username);
+                if (administrateur != null) {
+                    if (administrateur.getMotDePasse().equals(password)) {
+                        session.setAttribute("username", administrateur);
+                        session.setAttribute("role", "Administrateur");
+                    } else {
+                        model.addAttribute("errorMessage", "Mot de passe incorrect");
+                        return "Connexion"; // Affiche la page de connexion avec un message d'erreur
+                    }
+                } else {
+                    model.addAttribute("errorMessage", "Adresse mail incorrecte");
+                    return "Connexion"; // Affiche la page de connexion avec un message d'erreur
+                }
+            } else if (userType.equals("enseignant")) {
+                user = new CrudGeneric<>(sessionFactory, Enseignant.class);
+                Enseignant enseignant = (Enseignant) user.findByEmail(username);
+                if (enseignant != null) {
+                    if (enseignant.getMotDePasse().equals(password)) {
+                        session.setAttribute("username", enseignant);
+                        session.setAttribute("role", "Enseignant");
+                    } else {
+                        model.addAttribute("errorMessage", "Mot de passe incorrect");
+                        return "Connexion"; // Affiche la page de connexion avec un message d'erreur
+                    }
+                } else {
+                    model.addAttribute("errorMessage", "Adresse mail incorrecte");
+                    return "Connexion"; // Affiche la page de connexion avec un message d'erreur
+                }
+            }
+        } else {
+            model.addAttribute("errorMessage", "Veuillez sélectionner le type de votre compte");
+            return "Connexion"; // Affiche la page de connexion avec un message d'erreur
+        }
+
+        return "redirect:/accueil"; // Si l'authentification est réussie, redirige vers la page d'accueil
     }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String user_type=request.getParameter("user_type");
-		String username = request.getParameter("username");
-	    String password = request.getParameter("password");
-		
-	    SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-	    HttpSession session = request.getSession();
-	    CrudGeneric<?> user;
-	    
-	    if(user_type!=null) {
-	    	if(user_type.equals("etudiant")) {
-				user = new CrudGeneric<>(sessionFactory, Etudiant.class);
-				Etudiant test= new Etudiant();
-				test=(Etudiant)user.findByEmail(username);	
-				if(test!=null) {
-					if(test.getMotDePasse().equals(password)) {
-						session.setAttribute("username", test);
-						session.setAttribute("role", "Etudiant");
-					}else{
-						session.setAttribute("errorMessage", "Mot de passe incorrect");
-						request.getRequestDispatcher("Connexion.jsp").forward(request, response);
-						return;
-					}
-				}else{
-					session.setAttribute("errorMessage", "Adresse mail incorrecte");
-					request.getRequestDispatcher("Connexion.jsp").forward(request, response);
-					return;
-				}
-			}else if(user_type.equals("administrateur")) {
-				user = new CrudGeneric<>(sessionFactory, Administrateur.class);
-				Administrateur test= new Administrateur();
-				test=(Administrateur)user.findByEmail(username);
-				if(test!=null) {
-					if(test.getMotDePasse().equals(password)) {
-						session.setAttribute("username", test);
-						session.setAttribute("role", "Administrateur");
-					}else{
-						session.setAttribute("errorMessage", "Mot de passe incorrect");
-						request.getRequestDispatcher("Connexion.jsp").forward(request, response);
-						return;
-					}
-				}else{
-					session.setAttribute("errorMessage", "Adresse mail incorrecte");
-					request.getRequestDispatcher("Connexion.jsp").forward(request, response);
-					return;
-				}
-			}else if(user_type.equals("enseignant")) {
-				user = new CrudGeneric<>(sessionFactory, Enseignant.class);
-				Enseignant test= new Enseignant();
-				test=(Enseignant)user.findByEmail(username);
-				if(test!=null) {
-					if(test.getMotDePasse().equals(password)) {
-						session.setAttribute("username", test);
-						session.setAttribute("role", "Enseignant");
-					}else{
-						session.setAttribute("errorMessage", "Mot de passe incorrect");
-						request.getRequestDispatcher("Connexion.jsp").forward(request, response);
-						return;
-					}
-				}else{
-					session.setAttribute("errorMessage", "Adresse mail incorrecte");
-					request.getRequestDispatcher("Connexion.jsp").forward(request, response);
-					return;
-				}
-			}
-	    }else {
-	    	session.setAttribute("errorMessage", "Veuillez sï¿½lectionner le type de votre compte");
-			request.getRequestDispatcher("Connexion.jsp").forward(request, response);
-			return;
-	    }
-	    
-        response.sendRedirect("accueil.jsp");
-	}
-
 }

@@ -1,103 +1,89 @@
 package servlet;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
-
-import jakarta.servlet.RequestDispatcher;
-
-import jpa.Note;
-import jpa.Etudiant;
-import jpa.Cours;
 import daogenerique.CrudGeneric;
 import email.EmailUtil;
-
+import jpa.Cours;
+import jpa.Etudiant;
+import jpa.Note;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-@WebServlet("/AjouterNote")
-public class AjouterNote extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    private CrudGeneric<Note> noteDAO;
-    private CrudGeneric<Cours> coursDAO;
-    private CrudGeneric<Etudiant> etudiantDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-    @Override
-    public void init() throws ServletException {
+@Controller
+public class AjouterNote {
+
+    private final CrudGeneric<Note> noteDAO;
+    private final CrudGeneric<Cours> coursDAO;
+    private final CrudGeneric<Etudiant> etudiantDAO;
+
+    @Autowired
+    public AjouterNote() {
+        // Initialisation des DAO
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         noteDAO = new CrudGeneric<>(sessionFactory, Note.class);
         coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
         etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            // RÃ©cupÃ©ration des paramÃ¨tres de la requÃªte
-            int idEtudiant = Integer.parseInt(request.getParameter("idEtudiant"));
-            int coursId = Integer.parseInt(request.getParameter("coursId"));
+    // Affichage du formulaire d'ajout de note
+    @GetMapping("/AjouterNote")
+    public String afficherFormulaire(@RequestParam("idEtudiant") int idEtudiant,
+                                     @RequestParam("coursId") int coursId, Model model) {
+        // Récupérer l'étudiant et le cours à partir de leurs IDs
+        Etudiant etudiant = etudiantDAO.findById(idEtudiant);
+        Cours cours = coursDAO.findById(coursId);
 
-            // RÃ©cupÃ©rer les informations sur l'Ã©tudiant et le cours pour les afficher dans le formulaire
-            Etudiant etudiant = etudiantDAO.findById(idEtudiant);
-            Cours cours = coursDAO.findById(coursId);
-
-            if (etudiant != null && cours != null) {
-                // Mettre les donnÃ©es nÃ©cessaires dans la requÃªte
-                request.setAttribute("etudiant", etudiant);
-                request.setAttribute("cours", cours);
-                request.setAttribute("coursId", coursId);
-                // Rediriger vers la page JSP du formulaire
-                RequestDispatcher dispatcher = request.getRequestDispatcher("AjouterNote.jsp");
-                dispatcher.forward(request, response);
-            } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Ã‰tudiant ou cours introuvable.");
-            }
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "DonnÃ©es invalides.");
+        if (etudiant != null && cours != null) {
+            model.addAttribute("etudiant", etudiant);
+            model.addAttribute("cours", cours);
+            model.addAttribute("coursId", coursId);
+            return "AjouterNote"; // Page JSP ou template Thymeleaf
+        } else {
+            model.addAttribute("error", "Étudiant ou cours introuvable.");
+            return "error"; // Page d'erreur si étudiant ou cours est introuvable
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            int idEtudiant = Integer.parseInt(request.getParameter("idEtudiant"));
-            int coursId = Integer.parseInt(request.getParameter("coursId"));
-            double noteValue = Double.parseDouble(request.getParameter("note"));
+    // Traitement de l'ajout de la note
+    @PostMapping("/AjouterNote")
+    public String ajouterNote(@RequestParam("idEtudiant") int idEtudiant,
+                              @RequestParam("coursId") int coursId,
+                              @RequestParam("note") double noteValue,
+                              RedirectAttributes redirectAttributes) {
+        Etudiant etudiant = etudiantDAO.findById(idEtudiant);
+        Cours cours = coursDAO.findById(coursId);
 
-            // RÃ©cupÃ©ration de l'Ã©tudiant et du cours
-            Etudiant etudiant = etudiantDAO.findById(idEtudiant);
-            Cours cours = coursDAO.findById(coursId);
+        if (etudiant != null && cours != null) {
+            // Création de la nouvelle note
+            Note newNote = new Note();
+            newNote.setEtudiant(etudiant);
+            newNote.setCours(cours);
+            newNote.setNote(noteValue);
 
-            if (etudiant != null && cours != null) {
-                // CrÃ©ation d'une nouvelle note
-                Note newNote = new Note();
-                newNote.setEtudiant(etudiant);
-                newNote.setCours(cours);
-                newNote.setNote(noteValue);
+            // Sauvegarde de la note
+            noteDAO.create(newNote);
 
-                // Sauvegarde de la note
-                noteDAO.create(newNote);
-                
-             // Envoi d'un email aprï¿½s l'ajout de la note
-                String destinataire = etudiant.getEmail(); // Assurez-vous que l'objet Etudiant contient l'email
-                String sujet = "Nouvelle note ajoutÃ©e";
-                String contenu = "Bonjour " + etudiant.getPrenom() + " " + etudiant.getNom() +
-                                 ",\n\nUne nouvelle note a Ã©tÃ© ajoutÃ©e pour le cours " + cours.getNom() + ".\n" +
-                                 "Note : " + noteValue + "\n\nCordialement,\nL'Ã©quipe de gestion des Ã©tudes.";
+            // Envoi d'un email après l'ajout de la note
+            String destinataire = etudiant.getEmail();
+            String sujet = "Nouvelle note ajoutée";
+            String contenu = "Bonjour " + etudiant.getPrenom() + " " + etudiant.getNom() +
+                             ",\n\nUne nouvelle note a été ajoutée pour le cours " + cours.getNom() + ".\n" +
+                             "Note : " + noteValue + "\n\nCordialement,\nL'équipe de gestion des études.";
 
-                EmailUtil.envoyerEmail(destinataire, sujet, contenu);
+            EmailUtil.envoyerEmail(destinataire, sujet, contenu);
 
-
-                // Redirection aprÃ¨s l'ajout
-                response.sendRedirect("GestionNotes?coursId=" + coursId);
-            } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Ã‰tudiant ou cours introuvable.");
-            }
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "DonnÃ©es invalides.");
+            // Message de succès après l'ajout
+            redirectAttributes.addFlashAttribute("message", "La note a été ajoutée avec succès.");
+            return "redirect:/GestionNotes?coursId=" + coursId;
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Étudiant ou cours introuvable.");
+            return "redirect:/error";
         }
     }
 }

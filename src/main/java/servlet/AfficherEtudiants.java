@@ -1,36 +1,36 @@
 package servlet;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jpa.Etudiant;
 import daogenerique.CrudGeneric;
+import jpa.Etudiant;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/AfficherEtudiants")
-public class AfficherEtudiants extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+@Controller
+public class AfficherEtudiants {
+
+    @GetMapping("/AfficherEtudiants")
+    public String afficherEtudiants(Model model) {
+        // Configurer la SessionFactory pour Hibernate
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
 
-        // Rï¿½cupï¿½rer tous les ï¿½tudiants
+        // Récupérer tous les étudiants
         List<Etudiant> etudiants = etudiantDAO.findAll();
-        for (Etudiant etudianttemp : etudiants) {
-            System.out.println("Etudiant ID: " + etudianttemp.getId());
+        
+        // Debugging : Affichage des ID de chaque étudiant dans la console
+        for (Etudiant etudiant : etudiants) {
+            System.out.println("Etudiant ID: " + etudiant.getId());
         }
-        
-        // Passer la liste des ï¿½tudiants ï¿½ la JSP
-        request.setAttribute("etudiants", etudiants);
-        
-        // Redirection vers la page d'affichage
-        RequestDispatcher dispatcher = request.getRequestDispatcher("GestionEtudiants.jsp");
-        dispatcher.forward(request, response);
+
+        // Passer la liste des étudiants au modèle
+        model.addAttribute("etudiants", etudiants);
+
+        // Retourner le nom de la page JSP pour l'affichage
+        return "GestionEtudiants"; // Cette page JSP doit être dans le dossier WEB-INF/jsp/
     }
 }

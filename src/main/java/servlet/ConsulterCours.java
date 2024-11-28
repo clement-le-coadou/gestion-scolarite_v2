@@ -1,75 +1,62 @@
 package servlet;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jpa.Cours;
 import jpa.Etudiant;
 import jpa.Inscription;
 import daogenerique.CrudGeneric;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet("/ConsulterCours")
-public class ConsulterCours extends HttpServlet {
+@Controller
+public class ConsulterCoursController {
+
+    @Autowired
     private SessionFactory sessionFactory;
 
-    @Override
-    public void init() {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
+    private CrudGeneric<Etudiant> etudiantDAO;
+    private CrudGeneric<Inscription> inscriptionDAO;
+    private CrudGeneric<Cours> coursDAO;
+
+    // Constructeur pour l'initialisation de la SessionFactory et des DAOs
+    public ConsulterCoursController() {
+        this.sessionFactory = new Configuration().configure().buildSessionFactory();
+        this.etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
+        this.inscriptionDAO = new CrudGeneric<>(sessionFactory, Inscription.class);
+        this.coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // R√©cup√©ration du param√®tre id depuis l'URL
-        String idParam = request.getParameter("id");
-        Long etudiantId = null;
-
-        try {
-            // Conversion du param√®tre en Long (id de l'√©tudiant)
-            if (idParam != null) {
-                etudiantId = Long.valueOf(idParam);
-            }
-        } catch (NumberFormatException e) {
-            // Si l'id est invalide, renvoyer une erreur ou une page par d√©faut
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID de l'√©tudiant invalide");
-            return;
-        }
-
-        // R√©cup√©rer l'√©tudiant avec l'id donn√©
-        CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
+    @GetMapping("/ConsulterCours")
+    public String consulterCours(@RequestParam("id") Long etudiantId, Model model) {
+        // RÈcupÈrer l'Ètudiant avec l'id donnÈ
         Etudiant etudiant = etudiantDAO.findById(etudiantId.intValue());
 
         if (etudiant == null) {
-            // Si l'√©tudiant n'existe pas, renvoyer une erreur ou une page par d√©faut
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "√âtudiant non trouv√©");
-            return;
+            model.addAttribute("error", "…tudiant non trouvÈ");
+            return "error"; // Redirige vers une page d'erreur si l'Ètudiant n'existe pas
         }
 
-        // R√©cup√©rer la liste des inscriptions de l'√©tudiant
-        CrudGeneric<Inscription> inscriptionDAO = new CrudGeneric<>(sessionFactory, Inscription.class);
+        // RÈcupÈrer la liste des inscriptions de l'Ètudiant
         List<Inscription> inscriptions = inscriptionDAO.findAll()
                 .stream()
                 .filter(inscription -> inscription.getEtudiant().getId().equals(etudiant.getId()))
                 .collect(Collectors.toList());
 
-        // R√©cup√©rer les cours associ√©s √† l'√©tudiant
+        // RÈcupÈrer les cours associÈs ‡ l'Ètudiant
         List<Cours> coursList = inscriptions.stream()
                 .map(Inscription::getCours)
                 .distinct()
                 .collect(Collectors.toList());
 
-        // Passer la liste des cours √† la JSP
-        request.setAttribute("coursList", coursList);
-
-        // Rediriger vers la page JSP "ConsulterCours.jsp"
-        RequestDispatcher dispatcher = request.getRequestDispatcher("ConsulterCours.jsp");
-        dispatcher.forward(request, response);
+        // Passer la liste des cours ‡ la vue
+        model.addAttribute("coursList", coursList);
+        return "ConsulterCours"; // Retourne la vue ConsulterCours (JSP ou Thymeleaf)
     }
 }

@@ -1,27 +1,25 @@
 package servlet;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jpa.Enseignant;
 import daogenerique.CrudGeneric;
+import jpa.Enseignant;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/AfficherEnseignants")
-public class AfficherEnseignants extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+@Controller
+public class AfficherEnseignants {
+
+    @GetMapping("/AfficherEnseignants")
+    public String afficherEnseignants(Model model) {
         // Configurer la SessionFactory pour Hibernate
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
 
-        // Rï¿½cupï¿½rer tous les enseignants
+        // Récupérer tous les enseignants
         List<Enseignant> enseignants = enseignantDAO.findAll();
         
         // Debugging : Affichage des ID de chaque enseignant dans la console
@@ -29,14 +27,10 @@ public class AfficherEnseignants extends HttpServlet {
             System.out.println("Enseignant ID: " + enseignant.getId() + ", Nom: " + enseignant.getNom());
         }
 
-        // Passer la liste des enseignants ï¿½ la JSP
-        request.setAttribute("enseignants", enseignants);
+        // Passer la liste des enseignants à la JSP via le modèle
+        model.addAttribute("enseignants", enseignants);
 
-        // Rediriger vers la page JSP pour l'affichage
-        RequestDispatcher dispatcher = request.getRequestDispatcher("GestionEnseignants.jsp");
-        dispatcher.forward(request, response);
-
-        // Fermer la session Hibernate
-        sessionFactory.close();
+        // Retourner le nom de la page JSP pour l'affichage
+        return "GestionEnseignants"; // Cette page JSP doit être dans le dossier WEB-INF/jsp/
     }
 }

@@ -1,57 +1,53 @@
-package servlet;
+package service;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jpa.Cours;
+import jpa.Etudiant;
 import jpa.Enseignant;
+import jpa.Inscription;
 import daogenerique.CrudGeneric;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@WebServlet("/ModifierEnseignant")
-public class ModifierEnseignant extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long enseignantId = Long.valueOf(request.getParameter("id"));
+@Service
+public class CoursService {
 
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
+    private final CrudGeneric<Cours> coursDAO;
+    private final CrudGeneric<Inscription> inscriptionDAO;
 
-        // Rï¿½cupï¿½rer l'enseignant par ID
-        Enseignant enseignant = enseignantDAO.read(enseignantId);
-        
-        // Passer l'enseignant ï¿½ la JSP de modification
-        request.setAttribute("enseignant", enseignant);
-        
-        RequestDispatcher dispatcher = request.getRequestDispatcher("ModifierEnseignant.jsp");
-        dispatcher.forward(request, response);
+    @Autowired
+    public CoursService(SessionFactory sessionFactory) {
+        this.coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
+        this.inscriptionDAO = new CrudGeneric<>(sessionFactory, Inscription.class);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long enseignantId = Long.valueOf(request.getParameter("id"));
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String email = request.getParameter("email");
-        String contact = request.getParameter("contact");
+    public List<Cours> getCoursForUtilisateur(Object utilisateur) {
+        List<Cours> coursList = null;
 
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
+        if (utilisateur instanceof Etudiant) {
+            Etudiant etudiant = (Etudiant) utilisateur;
+            // Récupérer les cours auxquels l'étudiant est inscrit
+            List<Inscription> inscriptions = inscriptionDAO.findAll()
+                    .stream()
+                    .filter(inscription -> inscription.getEtudiant().getId().equals(etudiant.getId()))
+                    .collect(Collectors.toList());
 
-        // Rï¿½cupï¿½rer l'enseignant par ID et mettre ï¿½ jour les informations
-        Enseignant enseignant = enseignantDAO.read(enseignantId);
-        enseignant.setNom(nom);
-        enseignant.setPrenom(prenom);
-        enseignant.setEmail(email);
-        enseignant.setContact(contact);
+            coursList = inscriptions.stream()
+                    .map(Inscription::getCours)
+                    .distinct()
+                    .collect(Collectors.toList());
+        } else if (utilisateur instanceof Enseignant) {
+            Enseignant enseignant = (Enseignant) utilisateur;
+            // Récupérer les cours enseignés par l'enseignant
+            coursList = coursDAO.findAll()
+                    .stream()
+                    .filter(cours -> cours.getEnseignant() != null && cours.getEnseignant().getId().equals(enseignant.getId()))
+                    .collect(Collectors.toList());
+        }
 
-        // Enregistrer les modifications
-        enseignantDAO.update(enseignant);
-        
-        // Redirection aprï¿½s modification
-        response.sendRedirect("GestionEnseignants.jsp");
+        return coursList;
     }
 }
