@@ -1,7 +1,7 @@
-<%@ page import="model.Cours" %>
-<%@ page import="model.Enseignant" %>
+<%@ page import="mainApp.model.Cours" %>
+<%@ page import="mainApp.model.Enseignant" %>
 <%@ page import="java.util.List" %>
-<%@ page import="service.EnseignantService" %>
+<%@ page import="mainApp.service.EnseignantService" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

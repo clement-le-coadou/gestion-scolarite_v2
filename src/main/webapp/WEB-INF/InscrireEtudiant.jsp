@@ -1,8 +1,9 @@
 <%@ page import="java.util.List" %>
-<%@ page import="model.Cours" %>
-<%@ page import="model.Etudiant" %>
-<%@ page import="service.CoursService" %>
-<%@ page import="service.EtudiantService" %>
+<%@ page import="mainApp.model.Cours" %>
+<%@ page import="mainApp.model.Etudiant" %>
+<%@ page import="mainApp.service.CoursService" %>
+<%@ page import="mainApp.service.EtudiantService" %>
+<%@ page import="mainApp.dao.EtudiantRepository" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -21,7 +22,7 @@
                 <select class="form-control" id="etudiant" name="etudiantId" required>
                     <%
                         // Initialiser la session Hibernate pour récupérer les étudiants
-                        EtudiantService etudiantDAO = new EtudiantService();
+                        EtudiantService etudiantDAO = new EtudiantService(new EtudiantRepository());
                         List<Etudiant> etudiants = etudiantDAO.findAll();
 
                         for (Etudiant etudiant : etudiants) {

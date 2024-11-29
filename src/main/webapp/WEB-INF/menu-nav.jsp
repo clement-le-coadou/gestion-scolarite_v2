@@ -1,6 +1,6 @@
-<%@page import="model.Administrateur"%>
-<%@page import="model.Enseignant"%>
-<%@page import="model.Etudiant"%>
+<%@page import="mainApp.model.Administrateur"%>
+<%@page import="mainApp.model.Enseignant"%>
+<%@page import="mainApp.model.Etudiant"%>
 
 <%@ include file="header.jsp" %>
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">

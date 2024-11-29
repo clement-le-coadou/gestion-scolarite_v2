@@ -1,6 +1,6 @@
 <%@ page import="java.util.List" %>
-<%@ page import="model.Etudiant" %>
-<%@ page import="service.EtudiantService" %>
+<%@ page import="mainApp.model.Etudiant" %>
+<%@ page import="mainApp.service.EtudiantService" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

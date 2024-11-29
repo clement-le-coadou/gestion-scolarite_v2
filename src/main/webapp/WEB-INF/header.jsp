@@ -1,6 +1,6 @@
-<%@page import="model.Administrateur"%>
-<%@page import="model.Enseignant"%>
-<%@page import="model.Etudiant"%>
+<%@page import="mainApp.model.Administrateur"%>
+<%@page import="mainApp.model.Enseignant"%>
+<%@page import="mainApp.model.Etudiant"%>
 <header class="bg-primary text-white p-3 mb-4 shadow">
     <div class="container d-flex justify-content-between align-items-center">
         <h1><a class="text-white text-decoration-none" href="accueil.jsp">CY Tech</a></h1>
