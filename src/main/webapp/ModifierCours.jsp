@@ -1,5 +1,5 @@
-<%@ page import="jpa.Cours" %>
-<%@ page import="jpa.Enseignant" %>
+<%@ page import="model.Cours" %>
+<%@ page import="model.Enseignant" %>
 <%@ page import="java.util.List" %>
 <%@ page import="daogenerique.CrudGeneric" %>
 <%@ page import="org.hibernate.SessionFactory" %>

@@ -1,4 +1,4 @@
-<%@ page import="jpa.Note" %>
+<%@ page import="model.Note" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
