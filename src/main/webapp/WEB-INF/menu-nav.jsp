@@ -18,7 +18,7 @@
                 <% } %>
                 <% if ("Administrateur".equals(role) || "Enseignant".equals(role)) { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="GestionEtudiants">Gestion des étudiants</a>
+                        <a class="nav-link" href="AfficherEtudiant">Gestion des étudiants</a>
                     </li>
                 <% } %>
                 <li class="nav-item">
