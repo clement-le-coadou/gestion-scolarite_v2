@@ -2,7 +2,7 @@ package dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.yourcompany.yourprojectname.model.Enseignant;
+import model.Enseignant;
 
 import java.util.List;
 

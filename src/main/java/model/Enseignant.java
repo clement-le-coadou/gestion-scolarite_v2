@@ -1,4 +1,4 @@
-package com.yourcompany.yourprojectname.model;
+package model;
 
 import jakarta.persistence.*;
 import java.util.Set;
