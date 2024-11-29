@@ -48,8 +48,22 @@ public class CreerCompte {
             model.addAttribute("errorMessage", "Tous les champs sont obligatoires.");
             return "CreationCompte"; // Retourner à la page de création de compte
         }
+        
+        
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        
+        // Log pour debug : Afficher toutes les informations re�ues
+        System.out.println("=== Informations du formulaire ===");
+        System.out.println("Type d'utilisateur: " + userType);
+        System.out.println("Nom: " + nom);
+        System.out.println("Pr�nom: " + prenom);
+        System.out.println("Email: " + email);
+        System.out.println("Mot de passe: " + motDePasse);
+        System.out.println("Contact: " + contact);
+        if ("etudiant".equals(userType)) {
+            System.out.println("Date de naissance: " + dateNaissance);
+        }
 
         try {
             if ("etudiant".equals(userType)) {

@@ -57,11 +57,23 @@ public class ModifierUtilisateur {
             @RequestParam("email") String email,
             @RequestParam(value = "contact", required = false) String contact,
             @RequestParam(value = "dateNaissance", required = false) String dateNaissance,
-            HttpSession session) {
+            HttpSession session,
+            Model model) {
 
-        // Delegate to service for updating
+        // Mettre à jour les informations de l'utilisateur
         userService.updateUser(userType, userId, nom, prenom, email, contact, dateNaissance, session);
 
-        return "redirect:/AfficherInfos"; // Redirection après modification
+        // Récupérer les informations mises à jour de l'utilisateur
+        Object updatedUser = userService.getUserById(userType, session.getAttribute("username"));
+
+        // Ajouter l'utilisateur mis à jour au modèle
+        model.addAttribute("user", updatedUser);
+        model.addAttribute("userType", userType);
+    	session.setAttribute("username", updatedUser);
+    	session.setAttribute("userType", userType);
+    	
+        
+        // Retourner à la vue pour afficher les informations mises à jour
+        return "AfficherInfos"; // Redirection vers la page d'affichage
     }
 }
