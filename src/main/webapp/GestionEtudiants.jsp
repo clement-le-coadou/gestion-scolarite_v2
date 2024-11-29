@@ -1,8 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.Etudiant" %>
-<%@ page import="daogenerique.CrudGeneric" %>
-<%@ page import="org.hibernate.SessionFactory" %>
-<%@ page import="org.hibernate.cfg.Configuration" %>
+<%@ page import="service.EtudiantService" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,11 +15,15 @@
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Gestion des Étudiants</h2>
-	<%if("Administrateur".equals(role)) {%>
+    
+    <%-- Retrieve the role from the session --%>
+    <% role = (String) session.getAttribute("role"); %> <!-- Assuming role is in session -->
+    
+    <% if ("Administrateur".equals(role)) { %>
     <div class="mb-3">
         <a href="AjouterEtudiant.jsp" class="btn btn-success">Ajouter un Étudiant</a>
     </div>
-    <%} %>
+    <% } %>
     
 	<!-- Formulaire de recherche -->
 	<div class="mb-4">
@@ -30,7 +32,6 @@
 	        <button class="btn btn-primary" type="button">Rechercher</button>
 	    </div>
 	</div>
-
 
     <table class="table table-bordered">
         <thead>
@@ -43,24 +44,11 @@
             </tr>
         </thead>
         <tbody>
-            <%
-                // Initialisation de la session et récupération des étudiants
-                SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-                CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
-                List<Etudiant> etudiantList = etudiantDAO.findAll();
-                
-                String search = request.getParameter("search");
-                //List<Etudiant> etudiantList;
-                
-                /*
-                if (search != null && !search.isEmpty()) {
-                    etudiantList = etudiantDAO.findBy("nom", search); // Méthode à implémenter pour filtrer par nom ou prénom
-                } else {
-                    etudiantList = etudiantDAO.findAll();
-                }
-                */
-
-                for (Etudiant etudiant : etudiantList) {
+            <% 
+                // Get the list of Etudiant objects from the request or model
+                List<Etudiant> etudiantList = (List<Etudiant>) request.getAttribute("etudiantList");
+                if (etudiantList != null) {
+                    for (Etudiant etudiant : etudiantList) {
             %>
             <tr>
                 <td><%= etudiant.getId() %></td>
@@ -69,17 +57,24 @@
                 <td><%= etudiant.getEmail() %></td>
                 
                 <td>
-                	<a href="ConsulterCours?id=<%= etudiant.getId() %>" class="btn btn-info">Voir les Cours</a>
-                	<%if("Administrateur".equals(role)) {%>
+                    <a href="ConsulterCours?id=<%= etudiant.getId() %>" class="btn btn-info">Voir les Cours</a>
+                    <% if ("Administrateur".equals(role)) { %>
                     <a href="ModifierEtudiant?id=<%= etudiant.getId() %>" class="btn btn-primary">Modifier</a>
                     <form action="SupprimerEtudiant" method="post" style="display:inline;">
                         <input type="hidden" name="id" value="<%= etudiant.getId() %>">
                         <button type="submit" class="btn btn-danger">Supprimer</button>
                     </form>
-                    <%} %>
+                    <% } %>
                 </td>
             </tr>
-            <%
+            <% 
+                    }
+                } else {
+            %>
+                <tr>
+                    <td colspan="5" class="text-center">Aucun étudiant trouvé</td>
+                </tr>
+            <% 
                 }
             %>
         </tbody>
@@ -89,8 +84,8 @@
     
 </div>
 
-
 <script>
+    // Search function implemented in JavaScript
     function filterTable() {
         const searchValue = document.getElementById("searchInput").value.toLowerCase();
         const tableRows = document.querySelectorAll("table tbody tr");

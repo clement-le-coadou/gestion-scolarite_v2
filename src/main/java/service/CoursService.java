@@ -13,6 +13,11 @@ public class CoursService {
     @Autowired
     private CoursRepository coursRepository;
 
+    @Autowired
+    public CoursService(CoursRepository coursRepository) {
+        this.coursRepository = coursRepository;
+    }
+    
     public void createCours(Cours cours) {
         coursRepository.save(cours);
     }

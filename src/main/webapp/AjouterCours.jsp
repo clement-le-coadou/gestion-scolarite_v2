@@ -1,12 +1,12 @@
 <%@ page import="model.Enseignant" %>
-<%@ page import="daogenerique.CrudGeneric" %>
-<%@ page import="org.hibernate.SessionFactory" %>
-<%@ page import="org.hibernate.cfg.Configuration" %>
 <%@ page import="java.util.List" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un Cours</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -29,16 +29,17 @@
         <div class="form-group">
             <label for="enseignantId">Enseignant :</label>
             <select class="form-control" id="enseignantId" name="enseignantId" required>
-                <option value="">--Sélectionner--</option>
+                <option value="">--SÃ©lectionner--</option>
                 <%
-                    SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-                    CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
-                    List<Enseignant> enseignants = enseignantDAO.findAll();
+                    // Retrieve the enseignants list passed from the controller
+                    List<Enseignant> enseignants = (List<Enseignant>) request.getAttribute("enseignants");
 
-                    for (Enseignant enseignant : enseignants) {
+                    if (enseignants != null) {
+                        for (Enseignant enseignant : enseignants) {
                 %>
                     <option value="<%= enseignant.getId() %>"><%= enseignant.getNom() %> <%= enseignant.getPrenom() %></option>
                 <%
+                        }
                     }
                 %>
             </select>

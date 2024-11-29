@@ -1,9 +1,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.Cours" %>
 <%@ page import="model.Etudiant" %>
-<%@ page import="daogenerique.CrudGeneric" %>
-<%@ page import="org.hibernate.SessionFactory" %>
-<%@ page import="org.hibernate.cfg.Configuration" %>
+<%@ page import="service.CoursService" %>
+<%@ page import="service.EtudiantService" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -22,8 +21,7 @@
                 <select class="form-control" id="etudiant" name="etudiantId" required>
                     <%
                         // Initialiser la session Hibernate pour récupérer les étudiants
-                        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-                        CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
+                        EtudiantService etudiantDAO = new EtudiantService();
                         List<Etudiant> etudiants = etudiantDAO.findAll();
 
                         for (Etudiant etudiant : etudiants) {
@@ -39,7 +37,7 @@
                 <label for="cours">Sélectionner un Cours :</label>
                 <select class="form-control" id="cours" name="coursId" required>
                     <%
-                        CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
+                    	CoursService coursDAO = new CoursService();
                         List<Cours> coursList = coursDAO.findAll();
 
                         for (Cours cours : coursList) {

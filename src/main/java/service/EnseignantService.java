@@ -13,6 +13,12 @@ public class EnseignantService {
     @Autowired
     private EnseignantRepository enseignantRepository;
 
+    
+    @Autowired
+    public EnseignantService(EnseignantRepository enseignantRepository) {
+        this.enseignantRepository = enseignantRepository;
+    }
+    
     public void createEnseignant(Enseignant enseignant) {
         enseignantRepository.save(enseignant); // `save()` will insert or update the entity
     }

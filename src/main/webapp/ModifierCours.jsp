@@ -1,9 +1,7 @@
 <%@ page import="model.Cours" %>
 <%@ page import="model.Enseignant" %>
 <%@ page import="java.util.List" %>
-<%@ page import="daogenerique.CrudGeneric" %>
-<%@ page import="org.hibernate.SessionFactory" %>
-<%@ page import="org.hibernate.cfg.Configuration" %>
+<%@ page import="service.EnseignantService" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -21,8 +19,7 @@
         Cours cours = (Cours) request.getAttribute("cours");
 
         // Récupérer la liste des enseignants pour le champ select
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
+        EnseignantService enseignantDAO = new EnseignantService();
         List<Enseignant> enseignants = enseignantDAO.findAll();
     %>
 
