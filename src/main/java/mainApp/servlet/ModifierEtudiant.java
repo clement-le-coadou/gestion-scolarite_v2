@@ -1,14 +1,14 @@
 package mainApp.servlet;
 
-import daogenerique.CrudGeneric;
 import mainApp.model.Etudiant;
-
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import mainApp.service.EtudiantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,24 +18,22 @@ import java.util.Date;
 @RequestMapping("/modifierEtudiant")
 public class ModifierEtudiant {
 
-    private final SessionFactory sessionFactory;
+    private final EtudiantService etudiantService;
 
     @Autowired
-    public ModifierEtudiant() {
-        this.sessionFactory = new Configuration().configure().buildSessionFactory();
+    public ModifierEtudiant(EtudiantService etudiantService) {
+        this.etudiantService = etudiantService;
     }
 
     @GetMapping
     public String showEditForm(@RequestParam("id") Long etudiantId, Model model) {
-        CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
+        // Récupérer l'étudiant par ID
+        Etudiant etudiant = etudiantService.findEtudiantById(etudiantId);
 
-        // R�cup�rer l'�tudiant par ID
-        Etudiant etudiant = etudiantDAO.read(etudiantId);
-
-        // Ajouter l'�tudiant au mod�le pour le formulaire
+        // Ajouter l'étudiant au modèle pour le formulaire
         model.addAttribute("etudiant", etudiant);
 
-        return "ModifierEtudiant"; // Vue JSP/Thymeleaf � afficher
+        return "ModifierEtudiant"; // Vue JSP/Thymeleaf à afficher
     }
 
     @PostMapping
@@ -47,29 +45,27 @@ public class ModifierEtudiant {
             @RequestParam("email") String email,
             @RequestParam("contact") String contact) {
 
-        CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
-
-        // R�cup�rer l'�tudiant par ID et mettre � jour les informations
-        Etudiant etudiant = etudiantDAO.read(etudiantId);
+        // Récupérer l'étudiant par ID et mettre à jour les informations
+        Etudiant etudiant = etudiantService.findEtudiantById(etudiantId);
         etudiant.setNom(nom);
         etudiant.setPrenom(prenom);
 
-        // Convertir la date de naissance de String � Date
+        // Convertir la date de naissance de String à Date
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date dateNaissance = sdf.parse(dateNaissanceString);
             etudiant.setDateNaissance(dateNaissance);
         } catch (ParseException e) {
-            e.printStackTrace(); // G�rer l'exception de mani�re appropri�e
+            e.printStackTrace(); // Gérer l'exception de manière appropriée
         }
 
         etudiant.setEmail(email);
         etudiant.setContact(contact);
 
         // Enregistrer les modifications
-        etudiantDAO.update(etudiant);
+        etudiantService.updateEtudiant(etudiant);
 
-        // Rediriger apr�s la modification
-        return "redirect:/gestionEtudiants"; // URL pour la page de gestion des �tudiants
+        // Rediriger après la modification
+        return "redirect:/gestionEtudiants"; // URL pour la page de gestion des étudiants
     }
 }

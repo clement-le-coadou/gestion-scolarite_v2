@@ -1,61 +1,59 @@
 package mainApp.servlet;
 
-import model.Cours;
-import model.Etudiant;
-import model.Enseignant;
-import model.Inscription;
-import daogenerique.CrudGeneric;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import mainApp.model.Cours;
+import mainApp.model.Enseignant;
+import mainApp.service.CoursService;
+import mainApp.service.EnseignantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class MesCours {
+public class ModifierCours {
 
-    private final SessionFactory sessionFactory;
+    private final CoursService coursService;
+    private final EnseignantService enseignantService;
 
     @Autowired
-    public MesCours() {
-        this.sessionFactory = new Configuration().configure().buildSessionFactory();
+    public ModifierCours(CoursService coursService, EnseignantService enseignantService) {
+        this.coursService = coursService;
+        this.enseignantService = enseignantService;
     }
 
-    @GetMapping("/mesCours")
-    public String getMesCours(@SessionAttribute("username") Object utilisateur, Model model) {
-        CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
+    @GetMapping("/ModifierCours")
+    public String getModifierCours(@RequestParam("id") Long coursId, Model model) {
+        Cours cours = coursService.findCoursById(coursId);
+        model.addAttribute("cours", cours);
+        return "ModifierCours";  // JSP view to edit the course
+    }
 
-        List<Cours> coursList = null;
+    @PostMapping("/ModifierCours")
+    public String postModifierCours(@RequestParam("id") Long coursId,
+                                    @RequestParam("nom") String nom,
+                                    @RequestParam("description") String description,
+                                    @RequestParam("enseignantId") Long enseignantId,
+                                    Model model) {
 
-        if (utilisateur instanceof Etudiant) {
-            Etudiant etudiant = (Etudiant) utilisateur;
+        // Fetch course and update fields
+        Cours cours = coursService.findCoursById(coursId);
+        if (cours != null) {
+            cours.setNom(nom);
+            cours.setDescription(description);
 
-            CrudGeneric<Inscription> inscriptionDAO = new CrudGeneric<>(sessionFactory, Inscription.class);
-            List<Inscription> inscriptions = inscriptionDAO.findAll()
-                    .stream()
-                    .filter(inscription -> inscription.getEtudiant().getId().equals(etudiant.getId()))
-                    .collect(Collectors.toList());
+            // Fetch enseignant and assign to course
+            Enseignant enseignant = enseignantService.findEnseignantById(enseignantId);
+            if (enseignant != null) {
+                cours.setEnseignant(enseignant);
+            }
 
-            coursList = inscriptions.stream()
-                    .map(Inscription::getCours)
-                    .distinct()
-                    .collect(Collectors.toList());
-
-        } else if (utilisateur instanceof Enseignant) {
-            Enseignant enseignant = (Enseignant) utilisateur;
-
-            coursList = coursDAO.findAll()
-                    .stream()
-                    .filter(cours -> cours.getEnseignant() != null && cours.getEnseignant().getId().equals(enseignant.getId()))
-                    .collect(Collectors.toList());
+            // Save the updated course
+            coursService.updateCours(cours);
         }
 
-        model.addAttribute("coursList", coursList);
-        return "AfficherCours";  // View name (Thymeleaf template)
+        // Redirect to another page after successful modification
+        return "redirect:/AfficherCours?page=gestion";
     }
 }

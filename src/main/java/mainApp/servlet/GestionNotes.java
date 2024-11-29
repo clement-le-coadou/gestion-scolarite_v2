@@ -1,15 +1,18 @@
 package mainApp.servlet;
 
+import mainApp.model.Cours;
+import mainApp.model.Etudiant;
+import mainApp.model.Inscription;
+import mainApp.model.Note;
+import mainApp.service.CoursService;
+import mainApp.service.InscriptionService;
+import mainApp.service.NoteService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import mainApp.model.Cours;
-import mainApp.model.Etudiant;
-import mainApp.model.Inscription;
-import mainApp.model.Note;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,43 +21,56 @@ import java.util.stream.Collectors;
 public class GestionNotes {
 
     @Autowired
-    private CrudGeneric<Inscription> inscriptionDAO;
+    private InscriptionService inscriptionService;
 
     @Autowired
-    private CrudGeneric<Note> noteDAO;
+    private NoteService noteService;
 
     @Autowired
-    private CrudGeneric<Cours> coursDAO;
+    private CoursService coursService;
 
     @GetMapping("/GestionNotes")
-    public String gestionNotes(@RequestParam(value = "coursId", required = false) Integer coursId, Model model) {
+    public String gestionNotes(@RequestParam(value = "coursId", required = false) Long coursId, Model model) {
         if (coursId != null) {
             try {
-                // R�cup�rer toutes les inscriptions et filtrer celles pour le cours donn�
-                List<Inscription> inscriptions = inscriptionDAO.findAll();
+                // Vérifier si le cours existe
+                Cours cours = coursService.findCoursById(coursId);
+                if (cours == null) {
+                    model.addAttribute("errorMessage", "Le cours avec cet ID n'existe pas.");
+                    return "error"; // Redirige vers une page d'erreur si le cours est introuvable
+                }
+
+                // Récupérer toutes les inscriptions pour ce cours
+                List<Inscription> inscriptions = inscriptionService.findAllInscriptions()
+                        .stream()
+                        .filter(inscription -> inscription.getCours().getId().equals(coursId))
+                        .collect(Collectors.toList());
+
+                // Extraire les étudiants inscrits
                 List<Etudiant> etudiantList = inscriptions.stream()
-                        .filter(inscription -> inscription.getCours().getId() == coursId)
                         .map(Inscription::getEtudiant)
                         .collect(Collectors.toList());
 
-                // R�cup�rer les notes des �tudiants pour ce cours
-                List<Note> notes = noteDAO.findAll().stream()
-                        .filter(note -> note.getCours().getId() == coursId)
+                // Récupérer les notes des étudiants pour ce cours
+                List<Note> notes = noteService.findAllNotes()
+                        .stream()
+                        .filter(note -> note.getCours().getId().equals(coursId))
                         .collect(Collectors.toList());
 
                 model.addAttribute("notes", notes);
                 model.addAttribute("etudiantList", etudiantList);
                 model.addAttribute("coursId", coursId);
 
-                return "AfficherNoteEnseignant"; // Redirige vers la vue AfficherNoteEnseignant
+                return "AfficherNoteEnseignant"; // Affiche la vue des notes pour l'enseignant
+
             } catch (Exception e) {
                 e.printStackTrace();
-                model.addAttribute("errorMessage", "ID de cours invalide.");
-                return "error"; // Page d'erreur si le cours est invalide
+                model.addAttribute("errorMessage", "Une erreur est survenue lors du traitement.");
+                return "error";
             }
         } else {
-            model.addAttribute("errorMessage", "Aucun cours s�lectionn�.");
-            return "error"; // Page d'erreur si aucun cours n'est s�lectionn�
+            model.addAttribute("errorMessage", "Aucun cours sélectionné.");
+            return "error"; // Retourne une page d'erreur si aucun cours n'est sélectionné
         }
     }
 }

@@ -38,4 +38,8 @@ public class CoursService {
     public void deleteCours(Long id) {
         coursRepository.deleteById(id);
     }
+
+    public List<Cours> findByEnseignantId(Long enseignantId) {
+        return coursRepository.findByEnseignantId(enseignantId);
+    }
 }

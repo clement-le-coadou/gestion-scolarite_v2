@@ -1,22 +1,13 @@
 package mainApp.servlet;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import mainApp.model.Administrateur;
 import mainApp.model.Enseignant;
 import mainApp.model.Etudiant;
-
-import java.io.IOException;
-
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-
-import daogenerique.CrudGeneric;
-
+import mainApp.service.AdministrateurService;
+import mainApp.service.EnseignantService;
+import mainApp.service.EtudiantService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
@@ -25,7 +16,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class Login {
 
-    private SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+    private final EtudiantService etudiantService;
+    private final EnseignantService enseignantService;
+    private final AdministrateurService administrateurService;
+
+    @Autowired
+    public Login(EtudiantService etudiantService,
+                           EnseignantService enseignantService,
+                           AdministrateurService administrateurService) {
+        this.etudiantService = etudiantService;
+        this.enseignantService = enseignantService;
+        this.administrateurService = administrateurService;
+    }
 
     @PostMapping("/login")
     public String login(@RequestParam("user_type") String userType,
@@ -33,60 +35,47 @@ public class Login {
                         @RequestParam("password") String password,
                         HttpSession session, Model model) {
 
-        CrudGeneric<?> user;
-        
-        if (userType != null) {
-            if (userType.equals("etudiant")) {
-                user = new CrudGeneric<>(sessionFactory, Etudiant.class);
-                Etudiant etudiant = (Etudiant) user.findByEmail(username);
-                if (etudiant != null) {
-                    if (etudiant.getMotDePasse().equals(password)) {
-                        session.setAttribute("username", etudiant);
-                        session.setAttribute("role", "Etudiant");
-                    } else {
-                        model.addAttribute("errorMessage", "Mot de passe incorrect");
-                        return "Connexion"; // Affiche la page de connexion avec un message d'erreur
-                    }
-                } else {
-                    model.addAttribute("errorMessage", "Adresse mail incorrecte");
-                    return "Connexion"; // Affiche la page de connexion avec un message d'erreur
-                }
-            } else if (userType.equals("administrateur")) {
-                user = new CrudGeneric<>(sessionFactory, Administrateur.class);
-                Administrateur administrateur = (Administrateur) user.findByEmail(username);
-                if (administrateur != null) {
-                    if (administrateur.getMotDePasse().equals(password)) {
-                        session.setAttribute("username", administrateur);
-                        session.setAttribute("role", "Administrateur");
-                    } else {
-                        model.addAttribute("errorMessage", "Mot de passe incorrect");
-                        return "Connexion"; // Affiche la page de connexion avec un message d'erreur
-                    }
-                } else {
-                    model.addAttribute("errorMessage", "Adresse mail incorrecte");
-                    return "Connexion"; // Affiche la page de connexion avec un message d'erreur
-                }
-            } else if (userType.equals("enseignant")) {
-                user = new CrudGeneric<>(sessionFactory, Enseignant.class);
-                Enseignant enseignant = (Enseignant) user.findByEmail(username);
-                if (enseignant != null) {
-                    if (enseignant.getMotDePasse().equals(password)) {
-                        session.setAttribute("username", enseignant);
-                        session.setAttribute("role", "Enseignant");
-                    } else {
-                        model.addAttribute("errorMessage", "Mot de passe incorrect");
-                        return "Connexion"; // Affiche la page de connexion avec un message d'erreur
-                    }
-                } else {
-                    model.addAttribute("errorMessage", "Adresse mail incorrecte");
-                    return "Connexion"; // Affiche la page de connexion avec un message d'erreur
-                }
-            }
-        } else {
-            model.addAttribute("errorMessage", "Veuillez s�lectionner le type de votre compte");
-            return "Connexion"; // Affiche la page de connexion avec un message d'erreur
+        if (userType == null || userType.isEmpty()) {
+            model.addAttribute("errorMessage", "Veuillez sélectionner le type de votre compte.");
+            return "Connexion"; // Show the login page with an error message
         }
 
-        return "redirect:/accueil"; // Si l'authentification est r�ussie, redirige vers la page d'accueil
+        // Attempt authentication based on user type
+        switch (userType.toLowerCase()) {
+            case "etudiant":
+                Etudiant etudiant = etudiantService.findByEmail(username);
+                if (etudiant != null && etudiant.getMotDePasse().equals(password)) {
+                    session.setAttribute("user", etudiant);
+                    session.setAttribute("role", "Etudiant");
+                    return "redirect:/accueil"; // Redirect to the home page after successful login
+                }
+                break;
+
+            case "enseignant":
+                Enseignant enseignant = enseignantService.findByEmail(username);
+                if (enseignant != null && enseignant.getMotDePasse().equals(password)) {
+                    session.setAttribute("user", enseignant);
+                    session.setAttribute("role", "Enseignant");
+                    return "redirect:/accueil";
+                }
+                break;
+
+            case "administrateur":
+                Administrateur administrateur = administrateurService.findByEmail(username);
+                if (administrateur != null && administrateur.getMotDePasse().equals(password)) {
+                    session.setAttribute("user", administrateur);
+                    session.setAttribute("role", "Administrateur");
+                    return "redirect:/accueil";
+                }
+                break;
+
+            default:
+                model.addAttribute("errorMessage", "Type d'utilisateur invalide.");
+                return "Connexion";
+        }
+
+        // Authentication failed
+        model.addAttribute("errorMessage", "Nom d'utilisateur ou mot de passe incorrect.");
+        return "Connexion";
     }
 }

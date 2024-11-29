@@ -21,9 +21,7 @@
                 <label for="etudiant">Sélectionner un Étudiant :</label>
                 <select class="form-control" id="etudiant" name="etudiantId" required>
                     <%
-                        // Initialiser la session Hibernate pour récupérer les étudiants
-                        EtudiantService etudiantDAO = new EtudiantService(new EtudiantRepository());
-                        List<Etudiant> etudiants = etudiantDAO.findAll();
+                        List<Etudiant> etudiants = (List<Etudiant>) request.getAttribute("listEtudiant");
 
                         for (Etudiant etudiant : etudiants) {
                     %>
@@ -38,8 +36,7 @@
                 <label for="cours">Sélectionner un Cours :</label>
                 <select class="form-control" id="cours" name="coursId" required>
                     <%
-                    	CoursService coursDAO = new CoursService();
-                        List<Cours> coursList = coursDAO.findAll();
+                        List<Cours> coursList = (List<Cours>) request.getAttribute("listCours");
 
                         for (Cours cours : coursList) {
                     %>

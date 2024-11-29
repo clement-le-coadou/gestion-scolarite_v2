@@ -26,4 +26,6 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
 
     // Delete
     void deleteById(Long id);
+    
+    public Etudiant findByEmail(String email);
 }

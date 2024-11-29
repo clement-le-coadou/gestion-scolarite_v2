@@ -39,4 +39,8 @@ public class AdministrateurService {
     public void deleteAdministrateur(Long id) {
         administrateurRepository.deleteById(id);
     }
+
+    public Administrateur findByEmail(String email) {
+        return administrateurRepository.findByEmail(email);
+    }
 }

@@ -18,4 +18,6 @@ public interface CoursRepository extends JpaRepository<Cours, Long> {
 
     // Delete
     void deleteById(Long id);
+
+	List<Cours> findByEnseignantId(Long enseignantId);
 }

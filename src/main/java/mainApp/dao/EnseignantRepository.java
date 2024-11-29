@@ -26,4 +26,6 @@ public interface EnseignantRepository extends JpaRepository<Enseignant, Long> {
 
     // Delete
     void deleteById(Long id);
+    
+    public Enseignant findByEmail(String email);
 }
