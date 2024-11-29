@@ -1,9 +1,9 @@
 package service;
 
-import jpa.Cours;
-import jpa.Etudiant;
-import jpa.Enseignant;
-import jpa.Inscription;
+import model.Cours;
+import model.Etudiant;
+import model.Enseignant;
+import model.Inscription;
 import daogenerique.CrudGeneric;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

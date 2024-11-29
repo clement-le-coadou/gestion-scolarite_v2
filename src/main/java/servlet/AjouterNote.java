@@ -2,9 +2,9 @@ package servlet;
 
 import daogenerique.CrudGeneric;
 import email.EmailUtil;
-import jpa.Cours;
-import jpa.Etudiant;
-import jpa.Note;
+import model.Cours;
+import model.Etudiant;
+import model.Note;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;

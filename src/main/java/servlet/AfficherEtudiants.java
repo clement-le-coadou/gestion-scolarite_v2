@@ -1,7 +1,7 @@
 package servlet;
 
 import daogenerique.CrudGeneric;
-import jpa.Etudiant;
+import model.Etudiant;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Controller;

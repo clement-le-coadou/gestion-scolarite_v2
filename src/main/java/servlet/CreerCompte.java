@@ -1,7 +1,7 @@
 package servlet;
 
-import jpa.Enseignant;
-import jpa.Etudiant;
+import model.Enseignant;
+import model.Etudiant;
 import daogenerique.CrudGeneric;
 import exceptions.UniqueConstraintViolationException;
 import org.hibernate.SessionFactory;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import daogenerique.CrudGeneric;
-import jpa.Note;
+import model.Note;
 
 @Controller
 public class NoteController {

@@ -1,6 +1,6 @@
 package controller;
 
-import jpa.Note;
+import model.Note;
 import daogenerique.CrudGeneric;
 import email.EmailUtil;
 import org.hibernate.SessionFactory;

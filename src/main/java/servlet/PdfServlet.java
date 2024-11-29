@@ -11,8 +11,8 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
-import jpa.Cours;
-import jpa.Note;
+import model.Cours;
+import model.Note;
 
 import java.io.OutputStream;
 import java.util.List;

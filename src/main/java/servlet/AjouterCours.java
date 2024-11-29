@@ -1,8 +1,8 @@
 package servlet;
 
 import daogenerique.CrudGeneric;
-import jpa.Cours;
-import jpa.Enseignant;
+import model.Cours;
+import model.Enseignant;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Controller;

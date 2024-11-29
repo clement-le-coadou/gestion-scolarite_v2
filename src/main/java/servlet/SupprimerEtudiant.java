@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import daogenerique.CrudGeneric;
-import jpa.Etudiant;
+import model.Etudiant;
 
 @Controller
 public class SupprimerEtudiant {

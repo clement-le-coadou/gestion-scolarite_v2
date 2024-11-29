@@ -1,6 +1,6 @@
-<%@page import="jpa.Administrateur"%>
-<%@page import="jpa.Enseignant"%>
-<%@page import="jpa.Etudiant"%>
+<%@page import="model.Administrateur"%>
+<%@page import="model.Enseignant"%>
+<%@page import="model.Etudiant"%>
 
 <%@ include file="header.jsp" %>
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">

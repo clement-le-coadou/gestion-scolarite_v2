@@ -1,8 +1,8 @@
 package servlet;
 
-import jpa.Cours;
-import jpa.Etudiant;
-import jpa.Inscription;
+import model.Cours;
+import model.Etudiant;
+import model.Inscription;
 import daogenerique.CrudGeneric;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

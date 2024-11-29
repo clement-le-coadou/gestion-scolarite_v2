@@ -1,9 +1,9 @@
 package controller;
 
 import dao.CrudGeneric;
-import jpa.Cours;
-import jpa.Etudiant;
-import jpa.Inscription;
+import model.Cours;
+import model.Etudiant;
+import model.Inscription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

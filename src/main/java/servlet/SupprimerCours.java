@@ -1,7 +1,7 @@
 package controller;
 
 import dao.CrudGeneric;
-import jpa.Cours;
+import model.Cours;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

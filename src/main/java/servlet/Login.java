@@ -6,9 +6,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jpa.Administrateur;
-import jpa.Enseignant;
-import jpa.Etudiant;
+import model.Administrateur;
+import model.Enseignant;
+import model.Etudiant;
 
 import java.io.IOException;
 

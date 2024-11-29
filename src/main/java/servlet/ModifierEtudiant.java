@@ -1,6 +1,6 @@
 package controller;
 
-import jpa.Etudiant;
+import model.Etudiant;
 import daogenerique.CrudGeneric;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
