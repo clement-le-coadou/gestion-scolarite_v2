@@ -30,14 +30,17 @@ public class UtilisateurService {
     }
 
     // Fetch user by type and id
-    public Object getUserById(String userType, Long userId) {
+    public Object getUserById(String userType, Object user) {
+    	if(user == null) {
+    		return null;
+    	}
         switch (userType.toLowerCase()) {
             case "etudiant":
-                return etudiantRepository.findById(userId).orElse(null);
+                return etudiantRepository.findById(((Etudiant) user).getId()).orElse(null);
             case "enseignant":
-                return enseignantRepository.findById(userId).orElse(null);
+                return enseignantRepository.findById(((Enseignant) user).getId()).orElse(null);
             case "administrateur":
-                return administrateurRepository.findById(userId).orElse(null);
+                return administrateurRepository.findById(((Administrateur) user).getId()).orElse(null);
             default:
                 return null;
         }

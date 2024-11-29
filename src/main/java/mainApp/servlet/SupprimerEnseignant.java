@@ -15,7 +15,7 @@ public class SupprimerEnseignant {
     @Autowired
     private EnseignantRepository enseignantRepository;
 
-    @PostMapping("/supprimerEnseignant")
+    @PostMapping("/SupprimerEnseignant")
     public String supprimerEnseignant(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
         // Récupérer l'enseignant par ID avec Spring Data JPA
         Enseignant enseignant = enseignantRepository.findById(id).orElse(null);
@@ -31,6 +31,6 @@ public class SupprimerEnseignant {
         }
 
         // Rediriger vers la page de gestion des enseignants
-        return "redirect:/afficherEnseignants";
+        return "redirect:/AfficherEnseignants";
     }
 }

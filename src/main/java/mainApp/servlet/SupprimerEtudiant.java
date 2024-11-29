@@ -15,7 +15,7 @@ public class SupprimerEtudiant {
     @Autowired
     private EtudiantRepository etudiantRepository;
 
-    @PostMapping("/supprimerEtudiant")
+    @PostMapping("/SupprimerEtudiant")
     public String supprimerEtudiant(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
         // Récupérer l'étudiant par ID avec Spring Data JPA
         Etudiant etudiant = etudiantRepository.findById(id).orElse(null);
@@ -31,6 +31,6 @@ public class SupprimerEtudiant {
         }
 
         // Rediriger vers la page d'affichage des étudiants
-        return "redirect:/afficherEtudiants";
+        return "redirect:/AfficherEtudiants";
     }
 }

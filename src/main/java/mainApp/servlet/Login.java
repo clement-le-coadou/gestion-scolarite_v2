@@ -62,7 +62,7 @@ public class Login {
             case "enseignant":
                 Enseignant enseignant = enseignantService.findByEmail(username);
                 if (enseignant != null && enseignant.getMotDePasse().equals(password)) {
-                    session.setAttribute("user", enseignant);
+                    session.setAttribute("username", enseignant);
                     session.setAttribute("role", "Enseignant");
                     return "accueil";
                 }
@@ -71,7 +71,7 @@ public class Login {
             case "administrateur":
                 Administrateur administrateur = administrateurService.findByEmail(username);
                 if (administrateur != null && administrateur.getMotDePasse().equals(password)) {
-                    session.setAttribute("user", administrateur);
+                    session.setAttribute("username", administrateur);
                     session.setAttribute("role", "Administrateur");
                     return "accueil";
                 }

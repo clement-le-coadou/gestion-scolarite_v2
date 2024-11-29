@@ -31,7 +31,7 @@ public class MesCours {
         this.inscriptionService = inscriptionService;
     }
 
-    @GetMapping("/mesCours")
+    @GetMapping("/MesCours")
     public String getMesCours(@SessionAttribute("username") Object utilisateur, Model model) {
         List<Cours> coursList = null;
 

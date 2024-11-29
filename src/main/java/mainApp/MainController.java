@@ -12,4 +12,10 @@ public class MainController {
         // Retourne "accueil", ce qui signifie que Spring Boot cherchera un fichier "accueil.jsp"
         return "accueil";  
     }
+    
+    @GetMapping("/accueil")
+    public String accueil2() {
+        // Retourne "accueil", ce qui signifie que Spring Boot cherchera un fichier "accueil.jsp"
+        return "accueil";  
+    }
 }

@@ -23,20 +23,26 @@ public class ModifierEnseignant {
     }
 
     // Affichage de la page de modification de l'enseignant
-    @GetMapping("/modifierEnseignant")
+    @GetMapping("/ModifierEnseignant")
     public String showModifierForm(@RequestParam("id") Long id, Model model) {
         Enseignant enseignant = enseignantService.findEnseignantById(id); // Utilisation du service pour récupérer l'enseignant
         if (enseignant == null) {
-            return "redirect:/gestionEnseignants"; // Redirection vers la gestion des enseignants si non trouvé
+            return "redirect:/AfficherEnseignants"; // Redirection vers la gestion des enseignants si non trouvé
         }
         model.addAttribute("enseignant", enseignant);
-        return "modifierEnseignant"; // Nom de la vue Thymeleaf
+        return "ModifierEnseignant"; 
     }
 
     // Traitement de la modification de l'enseignant
-    @PostMapping("/modifierEnseignant")
+    @PostMapping("/ModifierEnseignant")
     public String updateEnseignant(@ModelAttribute Enseignant enseignant) {
-        enseignantService.updateEnseignant(enseignant); // Utilisation du service pour sauvegarder les modifications
-        return "redirect:/gestionEnseignants"; // Redirection après la modification
+    	Enseignant existingEnseignant = enseignantService.findEnseignantById(enseignant.getId());
+        if (existingEnseignant == null) {
+            return "redirect:/AfficherEnseignants"; // Redirect if the enseignant does not exist
+        }
+        enseignant.setMotDePasse(existingEnseignant.getMotDePasse());
+        
+        enseignantService.updateEnseignant(enseignant);
+        return "redirect:/AfficherEnseignants";
     }
 }

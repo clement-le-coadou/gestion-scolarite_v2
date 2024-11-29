@@ -6,11 +6,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 
 @Controller
-@RequestMapping("/modifierUtilisateur")
+@RequestMapping("/ModifierUtilisateur")
 @SessionAttributes("username")
 public class ModifierUtilisateur {
 
@@ -25,8 +28,18 @@ public class ModifierUtilisateur {
      * Affiche les informations de l'utilisateur pour modification.
      */
     @GetMapping
-    public String showUserInfo(@RequestParam("userType") String userType, @RequestParam("id") Long userId, Model model) {
-        Object user = userService.getUserById(userType, userId);
+    public String showUserInfo(HttpServletRequest request, HttpServletResponse response,Model model) {
+    	HttpSession session = request.getSession();
+    	String userType = (String) session.getAttribute("role");
+    	if(userType==null) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/Login");  // Forward to accueil page
+            try {
+				dispatcher.forward(request, response);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+    	}
+        Object user = userService.getUserById(userType, session.getAttribute("username"));
         model.addAttribute("user", user);
         model.addAttribute("userType", userType);
         return "AfficherInfos"; // Vue pour afficher les infos utilisateur

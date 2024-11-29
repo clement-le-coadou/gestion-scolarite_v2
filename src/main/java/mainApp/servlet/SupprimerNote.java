@@ -15,7 +15,7 @@ public class SupprimerNote {
     @Autowired
     private NoteRepository noteRepository;
 
-    @PostMapping("/supprimerNote")
+    @PostMapping("/SupprimerNote")
     public String supprimerNote(@RequestParam("idNote") Long idNote, RedirectAttributes redirectAttributes) {
         // Récupérer la note par ID avec Spring Data JPA
         Note note = noteRepository.findById(idNote).orElse(null);
@@ -29,6 +29,6 @@ public class SupprimerNote {
         }
 
         // Rediriger vers la page de gestion des notes pour le cours spécifique
-        return "redirect:/gestionNotes?coursId=" + note.getCours().getId();
+        return "redirect:/GestionNotes?coursId=" + note.getCours().getId();
     }
 }

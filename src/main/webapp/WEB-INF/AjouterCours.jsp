@@ -46,7 +46,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Ajouter le Cours</button>
-        <a href="gestionCours.jsp" class="btn btn-secondary">Annuler</a>
+        <a href="gestionCours" class="btn btn-secondary">Annuler</a>
     </form>
 </div>
 

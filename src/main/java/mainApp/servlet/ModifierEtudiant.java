@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Controller
-@RequestMapping("/modifierEtudiant")
+@RequestMapping("/ModifierEtudiant")
 public class ModifierEtudiant {
 
     private final EtudiantService etudiantService;
@@ -66,6 +66,6 @@ public class ModifierEtudiant {
         etudiantService.updateEtudiant(etudiant);
 
         // Rediriger après la modification
-        return "redirect:/gestionEtudiants"; // URL pour la page de gestion des étudiants
+        return "redirect:/AfficherEnseignants"; // URL pour la page de gestion des étudiants
     }
 }

@@ -21,7 +21,7 @@
     
     <% if ("Administrateur".equals(role)) { %>
     <div class="mb-3">
-        <a href="AjouterEtudiant.jsp" class="btn btn-success">Ajouter un Étudiant</a>
+        <a href="AjouterEtudiant" class="btn btn-success">Ajouter un Étudiant</a>
     </div>
     <% } %>
     
@@ -46,7 +46,7 @@
         <tbody>
             <% 
                 // Get the list of Etudiant objects from the request or model
-                List<Etudiant> etudiantList = (List<Etudiant>) request.getAttribute("etudiantList");
+                List<Etudiant> etudiantList = (List<Etudiant>) request.getAttribute("etudiants");
                 if (etudiantList != null) {
                     for (Etudiant etudiant : etudiantList) {
             %>
@@ -80,7 +80,7 @@
         </tbody>
     </table>
 
-    <a href="accueil.jsp" class="btn btn-secondary">Retour à l'accueil</a>
+    <a href="accueil" class="btn btn-secondary">Retour à l'accueil</a>
     
 </div>
 

@@ -50,7 +50,7 @@
     
     <!-- Bouton pour basculer entre Mes Cours et Tous les Cours -->
     <div class="d-flex justify-content-between w-100 mt-3">
-        <a href="accueil.jsp" class="btn btn-secondary">Retour à l'accueil</a>
+        <a href="accueil" class="btn btn-secondary">Retour à l'accueil</a>
         <%
             String afficher = request.getParameter("afficher");
             if ("mesCours".equals(afficher)) {

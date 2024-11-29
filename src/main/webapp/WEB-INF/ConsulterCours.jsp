@@ -52,7 +52,7 @@
 
         <!-- Bouton de retour -->
         <div class="text-center mt-4">
-            <a href="GestionEtudiants.jsp" class="btn btn-secondary">Retour</a>
+            <a href="AfficherEtudiants" class="btn btn-secondary">Retour</a>
         </div>
     </div>
 

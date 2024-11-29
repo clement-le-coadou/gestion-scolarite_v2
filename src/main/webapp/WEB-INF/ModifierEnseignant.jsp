@@ -39,6 +39,7 @@
             <input type="text" class="form-control" id="contact" name="contact" value="<%= enseignant.getContact() %>" required>
         </div>
 
+
         <button type="submit" class="btn btn-primary">Modifier</button>
     </form>
 </div>

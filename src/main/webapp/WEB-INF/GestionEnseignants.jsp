@@ -17,7 +17,7 @@
     <h2 class="text-center mb-4">Gestion des Enseignants</h2>
 
     <div class="mb-3">
-        <a href="AjouterEnseignant.jsp" class="btn btn-success">Ajouter un Enseignant</a>
+        <a href="AjouterEnseignant" class="btn btn-success">Ajouter un Enseignant</a>
     </div>
 
     <table class="table table-bordered">
@@ -57,7 +57,7 @@
         </tbody>
     </table>
     
-    <a href="accueil.jsp" class="btn btn-secondary">Retour à l'accueil</a>
+    <a href="accueil" class="btn btn-secondary">Retour à l'accueil</a>
     
 </div>
 

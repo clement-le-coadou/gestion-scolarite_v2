@@ -16,8 +16,8 @@
         <h2 class="text-center mb-4">Gestion des Cours</h2>
 
         <div class="d-flex justify-content-between w-100 mt-3 mb-3">
-            <a href="AjouterCours.jsp" class="btn btn-success">Ajouter un Cours</a>
-            <a href="InscrireEtudiant.jsp" class="btn btn-info">Inscrire un Étudiant</a>    
+            <a href="AjouterCours" class="btn btn-success">Ajouter un Cours</a>
+            <a href="InscrireEtudiant" class="btn btn-info">Inscrire un Étudiant</a>    
         </div>
 
         <table class="table table-bordered">
@@ -76,7 +76,7 @@
             </tbody>
         </table>
 
-        <a href="accueil.jsp" class="btn btn-secondary">Retour à l'accueil</a>
+        <a href="accueil" class="btn btn-secondary">Retour à l'accueil</a>
     </div>
 
 </body>

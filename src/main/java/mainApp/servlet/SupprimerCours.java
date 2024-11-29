@@ -31,6 +31,6 @@ public class SupprimerCours {
         }
 
         // Rediriger vers la page de gestion des cours
-        return "redirect:/afficherCours?page=gestion";
+        return "redirect:/AfficherCours?page=gestion";
     }
 }

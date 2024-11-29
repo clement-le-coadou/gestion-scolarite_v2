@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/modifierNote")
+@RequestMapping("/ModifierNote")
 public class ModifierNote {
 
     private final NoteService noteService;
@@ -60,6 +60,6 @@ public class ModifierNote {
         }
 
         // Redirection vers la page de gestion des notes pour ce cours
-        return "redirect:/gestionNotes?coursId=" + (note != null ? note.getCours().getId() : "");
+        return "redirect:/GestionNotes?coursId=" + (note != null ? note.getCours().getId() : "");
     }
 }

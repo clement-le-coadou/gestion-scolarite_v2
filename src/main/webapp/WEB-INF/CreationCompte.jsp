@@ -91,7 +91,7 @@
         <button type="submit" class="btn btn-primary btn-block mt-2 mb-1">Créer Compte</button>
     </form>
 	<div class="mt-2">
-    	<a href="Connexion.jsp">Vous avez déjà un compte ? Connectez-vous</a>
+    	<a href="Login">Vous avez déjà un compte ? Connectez-vous</a>
     </div>
 </div>
 </body>

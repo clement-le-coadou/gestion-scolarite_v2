@@ -53,7 +53,7 @@
 
 
         <div class="d-flex justify-content-center mt-4">
-            <a href="accueil" class="btn btn-secondary">Retour à l'accueil</a>
+            <a href="/accueil" class="btn btn-secondary">Retour à l'accueil</a>
         </div>
     </div>
 </body>

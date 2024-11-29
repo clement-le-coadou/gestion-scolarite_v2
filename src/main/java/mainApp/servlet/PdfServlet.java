@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,14 +46,24 @@ public class PdfServlet {
     		etudiant = (Etudiant) session.getAttribute("username");
     	}
     	else{
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Utilisateur non authentifié.");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/Login");  // Forward to accueil page
+            try {
+				dispatcher.forward(request, response);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
     		return;
     	}
 
 
         // If Etudiant is not found in session, send error
         if (etudiant == null) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Utilisateur non authentifié.");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/Login");  // Forward to accueil page
+            try {
+				dispatcher.forward(request, response);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
             return;
         }
 
