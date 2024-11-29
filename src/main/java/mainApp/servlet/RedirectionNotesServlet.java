@@ -38,7 +38,8 @@ public class RedirectionNotesServlet {
 
         // If role is not set, redirect to login page
         if (role == null) {
-            return "redirect:/Connexion"; // Redirect to the login page
+        	return "redirect:/Login";  // Cela effectue une redirection vers l'URL /login
+
         }
 
         // Get the logged-in user object (can be either Enseignant or Etudiant)
@@ -83,7 +84,8 @@ public class RedirectionNotesServlet {
 
         } else {
             // If the role is not recognized, redirect to login page
-            return "redirect:/Connexion"; // Redirect to the login page
+        	return "redirect:/Login";  // Cela effectue une redirection vers l'URL /login
+
         }
     }
 }

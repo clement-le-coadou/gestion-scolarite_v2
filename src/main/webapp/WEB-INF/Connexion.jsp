@@ -36,7 +36,7 @@
                     %>
 
                     <!-- Formulaire de connexion -->
-                    <form action="Login" method="post">
+                    <form action="/Login" method="post">
                         <div class="form-group">
                             <label for="username">E-mail</label>
                             <input type="email" class="form-control" id="username" name="username" placeholder="Entrez votre adresse mail" required>

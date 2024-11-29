@@ -34,10 +34,10 @@ public class Login {
     @GetMapping("/Login")
     public String afficherFormulaire() {
         // Retourner la vue du formulaire d'ajout de cours
-        return "Connexion.jsp"; // Cette page JSP doit être dans le dossier WEB-INF/
+        return "Connexion"; // Cette page JSP doit être dans le dossier WEB-INF/
     }
 
-    @PostMapping("/login")
+    @PostMapping("/Login")
     public String login(@RequestParam("user_type") String userType,
                         @RequestParam("username") String username,
                         @RequestParam("password") String password,
@@ -53,9 +53,9 @@ public class Login {
             case "etudiant":
                 Etudiant etudiant = etudiantService.findByEmail(username);
                 if (etudiant != null && etudiant.getMotDePasse().equals(password)) {
-                    session.setAttribute("user", etudiant);
+                    session.setAttribute("username", etudiant);
                     session.setAttribute("role", "Etudiant");
-                    return "redirect:/accueil"; // Redirect to the home page after successful login
+                    return "accueil"; // Redirect to the home page after successful login
                 }
                 break;
 
@@ -64,7 +64,7 @@ public class Login {
                 if (enseignant != null && enseignant.getMotDePasse().equals(password)) {
                     session.setAttribute("user", enseignant);
                     session.setAttribute("role", "Enseignant");
-                    return "redirect:/accueil";
+                    return "accueil";
                 }
                 break;
 
@@ -73,7 +73,7 @@ public class Login {
                 if (administrateur != null && administrateur.getMotDePasse().equals(password)) {
                     session.setAttribute("user", administrateur);
                     session.setAttribute("role", "Administrateur");
-                    return "redirect:/accueil";
+                    return "accueil";
                 }
                 break;
 

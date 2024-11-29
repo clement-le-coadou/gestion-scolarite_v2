@@ -47,12 +47,13 @@
         <p class="text-center text-danger">Aucune note disponible.</p>
         <% } %>
         
-        <div class="d-flex justify-content-center mt-4">
-		    <a href="generatePdf" class="btn btn-success btn-sm">Generer le PDF</a>
+		<div class="d-flex justify-content-center mt-4">
+		    <a href="/generatePdf" class="btn btn-success btn-sm">Generer le PDF</a>
 		</div>
 
+
         <div class="d-flex justify-content-center mt-4">
-            <a href="accueil.jsp" class="btn btn-secondary">Retour à l'accueil</a>
+            <a href="accueil" class="btn btn-secondary">Retour à l'accueil</a>
         </div>
     </div>
 </body>

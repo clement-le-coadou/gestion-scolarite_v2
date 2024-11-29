@@ -18,7 +18,7 @@
                 <% } %>
                 <% if ("Administrateur".equals(role) || "Enseignant".equals(role)) { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="GestionEtudiants.jsp">Gestion des étudiants</a>
+                        <a class="nav-link" href="GestionEtudiants">Gestion des étudiants</a>
                     </li>
                 <% } %>
                 <li class="nav-item">
@@ -29,7 +29,7 @@
                 </li>
                 <% if (user != null) { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="AfficherInfos.jsp">Mes infos</a>
+                        <a class="nav-link" href="ModifierUtilisateur">Mes infos</a>
                     </li>
                 <% } %>
                 <li class="nav-item">
