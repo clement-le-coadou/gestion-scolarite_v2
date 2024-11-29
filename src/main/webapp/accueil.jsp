@@ -17,8 +17,8 @@
             <p class="lead">Gérez les étudiants, enseignants, cours et résultats efficacement.</p>
             <hr class="my-4">
         </div>
-
         <div class="row text-center mt-5">
+		  <% if ("Administrateur".equals(role) || "Enseignant".equals(role)) { %>           
             <div class="col-md-4">
                 <a href="AfficherEtudiants" class="text-decoration-none">
                     <div class="card shadow">
@@ -30,7 +30,7 @@
                     </div>
                 </a>
             </div>
-
+			<%} %>
             <div class="col-md-4">
                 <a href="AfficherCours" class="text-decoration-none">
                     <div class="card shadow">
@@ -42,7 +42,7 @@
                     </div>
                 </a>
             </div>
-
+		  <% if ("Administrateur".equals(role) || "Enseignant".equals(role)) { %>           
             <div class="col-md-4">
                 <a href="AfficherEnseignants" class="text-decoration-none">
                     <div class="card shadow">
@@ -54,6 +54,7 @@
                     </div>
                 </a>
             </div>
+           <%} %> 
         </div>
     </div>
 </body>

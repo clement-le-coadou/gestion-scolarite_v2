@@ -24,9 +24,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="AfficherCours?page=liste">Liste des cours</a>
                 </li>
+                 <% if ("Etudiant".equals(role) || "Enseignant".equals(role)) { %>
                 <li class="nav-item">
                     <a class="nav-link" href="RedirectionNotesServlet">Notes</a>
                 </li>
+                <%} %>
                 <% if (user != null) { %>
                     <li class="nav-item">
                         <a class="nav-link" href="AfficherInfos.jsp">Mes infos</a>
