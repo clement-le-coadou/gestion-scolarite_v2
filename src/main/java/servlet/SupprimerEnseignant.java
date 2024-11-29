@@ -1,56 +1,32 @@
-package servlet;
+package controller;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import dao.CrudGeneric;
 import jpa.Enseignant;
-import jpa.Etudiant;
 
-import java.io.IOException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+@Controller
+public class Enseignant {
 
-import daogenerique.CrudGeneric;
+    @Autowired
+    private CrudGeneric<Enseignant> enseignantDAO;
 
-/**
- * Servlet implementation class SupprimerEnseignant
- */
-@WebServlet("/SupprimerEnseignant")
-public class SupprimerEnseignant extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-	private CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);   
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public SupprimerEnseignant() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Long id = Long.parseLong(request.getParameter("id"));
-        
+    @PostMapping("/supprimerEnseignant")
+    public String supprimerEnseignant(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
+        // Récupérer l'enseignant par ID
         Enseignant enseignant = enseignantDAO.read(id);
         if (enseignant != null) {
-        	enseignantDAO.delete(enseignant);
+            enseignantDAO.delete(enseignant);
+            redirectAttributes.addFlashAttribute("message", "Enseignant supprimé avec succès.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Enseignant introuvable.");
         }
-        response.sendRedirect("AfficherEnseignants");
-	}
-
+        
+        // Redirection vers la liste des enseignants
+        return "redirect:/afficherEnseignants";
+    }
 }

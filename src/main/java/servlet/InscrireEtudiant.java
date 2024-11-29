@@ -1,9 +1,9 @@
-package com.example.demo.controller;
+package controller;
 
-import com.example.demo.dao.CrudGeneric;
-import com.example.demo.jpa.Cours;
-import com.example.demo.jpa.Etudiant;
-import com.example.demo.jpa.Inscription;
+import dao.CrudGeneric;
+import jpa.Cours;
+import jpa.Etudiant;
+import jpa.Inscription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class InscrireEtudiantController {
+public class InscrireEtudiant {
 
     @Autowired
     private CrudGeneric<Etudiant> etudiantDAO;

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class ConsulterCoursController {
+public class ConsulterCours {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -26,7 +26,7 @@ public class ConsulterCoursController {
     private CrudGeneric<Cours> coursDAO;
 
     // Constructeur pour l'initialisation de la SessionFactory et des DAOs
-    public ConsulterCoursController() {
+    public ConsulterCours() {
         this.sessionFactory = new Configuration().configure().buildSessionFactory();
         this.etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
         this.inscriptionDAO = new CrudGeneric<>(sessionFactory, Inscription.class);

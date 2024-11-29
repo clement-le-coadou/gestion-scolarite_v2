@@ -23,7 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class LoginController {
+public class Login {
 
     private SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 

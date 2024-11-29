@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class MesCoursController {
+public class MesCours {
 
     private final SessionFactory sessionFactory;
 
     @Autowired
-    public MesCoursController() {
+    public MesCours() {
         this.sessionFactory = new Configuration().configure().buildSessionFactory();
     }
 

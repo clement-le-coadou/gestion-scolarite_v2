@@ -1,145 +1,127 @@
-package servlet;
+package controller;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jpa.Etudiant;
 import jpa.Enseignant;
 import jpa.Administrateur;
 import daogenerique.CrudGeneric;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
-@WebServlet("/ModifierUtilisateur")
-public class ModifierUtilisateur extends HttpServlet {
-    private SessionFactory sessionFactory;
+@Controller
+@RequestMapping("/modifierUtilisateur")
+@SessionAttributes("username")
+public class ModifierUtilisateurController {
 
-    @Override
-    public void init() throws ServletException {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
+    private final CrudGeneric<Etudiant> etudiantDAO;
+    private final CrudGeneric<Enseignant> enseignantDAO;
+    private final CrudGeneric<Administrateur> adminDAO;
+
+    @Autowired
+    public ModifierUtilisateurController() {
+        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+        this.etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
+        this.enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
+        this.adminDAO = new CrudGeneric<>(sessionFactory, Administrateur.class);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String type = request.getParameter("userType");
-        Long userId = Long.valueOf(request.getParameter("id"));
+    /**
+     * Affiche les informations de l'utilisateur pour modification.
+     */
+    @GetMapping
+    public String showUserInfo(
+            @RequestParam("userType") String userType,
+            @RequestParam("id") Long userId,
+            Model model) {
 
         Object user = null;
-        if ("etudiant".equalsIgnoreCase(type)) {
-            CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
+        if ("etudiant".equalsIgnoreCase(userType)) {
             user = etudiantDAO.read(userId);
-        } else if ("enseignant".equalsIgnoreCase(type)) {
-            CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
+        } else if ("enseignant".equalsIgnoreCase(userType)) {
             user = enseignantDAO.read(userId);
-        } else if ("administrateur".equalsIgnoreCase(type)) {
-            CrudGeneric<Administrateur> adminDAO = new CrudGeneric<>(sessionFactory, Administrateur.class);
+        } else if ("administrateur".equalsIgnoreCase(userType)) {
             user = adminDAO.read(userId);
         }
 
-        request.setAttribute("user", user);
-        request.setAttribute("userType", type);
+        model.addAttribute("user", user);
+        model.addAttribute("userType", userType);
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("AfficherInfos.jsp");
-        dispatcher.forward(request, response);
+        return "AfficherInfos"; // Vue pour afficher les infos utilisateur
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	System.out.println("debug");
-        String type = request.getParameter("userType");
-        System.out.println(type);
-        Long userId = Long.valueOf(request.getParameter("id"));
-        System.out.println(userId);
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String email = request.getParameter("email");
+    /**
+     * Met à jour les informations de l'utilisateur en fonction de son type.
+     */
+    @PostMapping
+    public String updateUser(
+            @RequestParam("userType") String userType,
+            @RequestParam("id") Long userId,
+            @RequestParam("nom") String nom,
+            @RequestParam("prenom") String prenom,
+            @RequestParam("email") String email,
+            @RequestParam(value = "contact", required = false) String contact,
+            @RequestParam(value = "dateNaissance", required = false) String dateNaissance,
+            HttpSession session) {
 
-        if ("etudiant".equalsIgnoreCase(type)) {
-            updateEtudiant(request, userId, nom, prenom, email);
-        } else if ("enseignant".equalsIgnoreCase(type)) {
-            updateEnseignant(request, userId, nom, prenom, email);
-        } else if ("administrateur".equalsIgnoreCase(type)) {
-            updateAdministrateur(request, userId, nom, prenom, email);
+        if ("etudiant".equalsIgnoreCase(userType)) {
+            updateEtudiant(userId, nom, prenom, email, contact, dateNaissance, session);
+        } else if ("enseignant".equalsIgnoreCase(userType)) {
+            updateEnseignant(userId, nom, prenom, email, contact, session);
+        } else if ("administrateur".equalsIgnoreCase(userType)) {
+            updateAdministrateur(userId, nom, prenom, email, session);
         }
-        response.sendRedirect("AfficherInfos.jsp");
+
+        return "redirect:/AfficherInfos"; // Redirection après modification
     }
 
-    private void updateEtudiant(HttpServletRequest request, Long id, String nom, String prenom, String email) {
-	    HttpSession session = request.getSession();
-    	System.out.println("etudiant");
-        CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
+    private void updateEtudiant(Long id, String nom, String prenom, String email, String contact, String dateNaissance, HttpSession session) {
         Etudiant etudiant = etudiantDAO.read(id);
 
         etudiant.setNom(nom);
         etudiant.setPrenom(prenom);
         etudiant.setEmail(email);
-        System.out.println(etudiant.getNom());
-        System.out.println(etudiant.getPrenom());
-        System.out.println(etudiant.getEmail());
-        System.out.println(etudiant.getContact());
-        System.out.println(etudiant.getMotDePasse());
-        // Parse date of birth for Etudiant
-        String dateNaissanceString = request.getParameter("dateNaissance");
-        if (dateNaissanceString != null && !dateNaissanceString.isEmpty()) {
-            	 LocalDate dateNaissance = LocalDate.parse(dateNaissanceString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                 etudiant.setDateNaissance(java.sql.Date.valueOf(dateNaissance));
+
+        if (dateNaissance != null && !dateNaissance.isEmpty()) {
+            LocalDate parsedDate = LocalDate.parse(dateNaissance, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            etudiant.setDateNaissance(java.sql.Date.valueOf(parsedDate));
         }
-        
-       
 
-        // Set contact for Etudiant
-        String contact = request.getParameter("contact");
         etudiant.setContact(contact);
-
         etudiantDAO.update(etudiant);
+
         session.setAttribute("username", etudiant);
     }
 
-    private void updateEnseignant(HttpServletRequest request, Long id, String nom, String prenom, String email) {
-	    HttpSession session = request.getSession();
-    	System.out.println("enseignant");
-        CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
+    private void updateEnseignant(Long id, String nom, String prenom, String email, String contact, HttpSession session) {
         Enseignant enseignant = enseignantDAO.read(id);
 
         enseignant.setNom(nom);
         enseignant.setPrenom(prenom);
         enseignant.setEmail(email);
-
-        // Set contact for Enseignant
-        String contact = request.getParameter("contact");
         enseignant.setContact(contact);
 
         enseignantDAO.update(enseignant);
+
         session.setAttribute("username", enseignant);
     }
 
-    private void updateAdministrateur(HttpServletRequest request, Long id, String nom, String prenom, String email) {
-	    HttpSession session = request.getSession();
-    	System.out.println("admin");
-        CrudGeneric<Administrateur> adminDAO = new CrudGeneric<>(sessionFactory, Administrateur.class);
+    private void updateAdministrateur(Long id, String nom, String prenom, String email, HttpSession session) {
         Administrateur admin = adminDAO.read(id);
 
         admin.setNom(nom);
         admin.setPrenom(prenom);
         admin.setEmail(email);
 
-        // Administrateur does not have contact or date of birth
-
         adminDAO.update(admin);
-        session.setAttribute("username", admin);
-    }
 
-    @Override
-    public void destroy() {
-        sessionFactory.close();
+        session.setAttribute("username", admin);
     }
 }

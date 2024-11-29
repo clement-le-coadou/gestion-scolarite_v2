@@ -1,71 +1,55 @@
-package servlet;
+package controller;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import dao.CrudGeneric;
 import jpa.Cours;
 import jpa.Etudiant;
 import jpa.Inscription;
 import jpa.Enseignant;
 import jpa.Note;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import dao.CoursDAO;
-import dao.NoteDAO;
-import daogenerique.CrudGeneric;
-
-import java.io.IOException;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+@Controller
+public class Notes {
 
-@WebServlet("/RedirectionNotesServlet")
-public class RedirectionNotesServlet extends HttpServlet {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private SessionFactory sessionFactory;
+    @Autowired
+    private CrudGeneric<Cours> coursDAO;
 
-    @Override
-    public void init() {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
-    }
+    @Autowired
+    private CrudGeneric<Note> noteDAO;
 
+    @Autowired
+    private CrudGeneric<Inscription> inscriptionDAO;
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+    @GetMapping("/notes")
+    public String redirectToNotes(HttpSession session, Model model) {
         String role = (String) session.getAttribute("role");
-        System.out.println(role);
-        if(role == null) {
-        	response.sendRedirect("Connexion.jsp");
-        	return;
+        if (role == null) {
+            return "redirect:/Connexion";
         }
-        Object utilisateur = session.getAttribute("username");
-        CrudGeneric<Note> noteDAO = new CrudGeneric<>(sessionFactory, Note.class);
-        CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
-        if (role.equals("Enseignant")) {
-        	Enseignant enseignant = (Enseignant) utilisateur;
 
-            List<Cours> coursList = coursDAO.findAll()
-                    .stream()
+        Object utilisateur = session.getAttribute("username");
+
+        if ("Enseignant".equals(role)) {
+            Enseignant enseignant = (Enseignant) utilisateur;
+
+            List<Cours> coursList = coursDAO.findAll().stream()
                     .filter(cours -> cours.getEnseignant() != null && cours.getEnseignant().getId().equals(enseignant.getId()))
                     .collect(Collectors.toList());
-            request.setAttribute("coursList", coursList);
-            request.getRequestDispatcher("GestionNotes.jsp").forward(request, response);
-        } else if (role.equals("Etudiant")) {
+
+            model.addAttribute("coursList", coursList);
+            return "GestionNotes"; // Vue pour la gestion des notes par les enseignants
+        } else if ("Etudiant".equals(role)) {
             Etudiant etudiant = (Etudiant) utilisateur;
 
-            CrudGeneric<Inscription> inscriptionDAO = new CrudGeneric<>(sessionFactory, Inscription.class);
-            List<Inscription> inscriptions = inscriptionDAO.findAll()
-                    .stream()
+            List<Inscription> inscriptions = inscriptionDAO.findAll().stream()
                     .filter(inscription -> inscription.getEtudiant().getId().equals(etudiant.getId()))
                     .collect(Collectors.toList());
 
@@ -73,14 +57,14 @@ public class RedirectionNotesServlet extends HttpServlet {
                     .map(Inscription::getCours)
                     .distinct()
                     .collect(Collectors.toList());
-            
+
             List<Note> notesList = noteDAO.findAll();
-                   
-            request.setAttribute("coursList", coursList);
-            request.setAttribute("notesList", notesList);
-            request.getRequestDispatcher("AfficherNotes.jsp").forward(request, response);
+
+            model.addAttribute("coursList", coursList);
+            model.addAttribute("notesList", notesList);
+            return "AfficherNotes"; // Vue pour afficher les notes de l'étudiant
         } else {
-            response.sendRedirect("Connexion.jsp");
+            return "redirect:/Connexion";
         }
     }
 }

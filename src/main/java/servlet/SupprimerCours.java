@@ -1,34 +1,32 @@
-package servlet;
+package controller;
 
-import daogenerique.CrudGeneric;
+import dao.CrudGeneric;
 import jpa.Cours;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+@Controller
+public class Cours {
 
+    @Autowired
+    private CrudGeneric<Cours> coursDAO;
 
-@WebServlet("/SupprimerCours")
-public class SupprimerCours extends HttpServlet {
-
-    private SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-    private CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long id = Long.parseLong(request.getParameter("id"));
-        
-        // RÃ©cupÃ©rer le cours par ID
+    @PostMapping("/supprimerCours")
+    public String supprimerCours(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
+        // Récupérer le cours par ID
         Cours cours = coursDAO.read(id);
         if (cours != null) {
             coursDAO.delete(cours);
+            redirectAttributes.addFlashAttribute("message", "Cours supprimé avec succès.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Cours introuvable.");
         }
-
-        response.sendRedirect("AfficherCours?page=gestion");
+        
+        // Redirection vers la page de gestion des cours
+        return "redirect:/afficherCours?page=gestion";
     }
 }

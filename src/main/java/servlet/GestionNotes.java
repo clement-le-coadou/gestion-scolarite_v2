@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class GestionNotesController {
+public class GestionNotes {
 
     @Autowired
     private CrudGeneric<Inscription> inscriptionDAO;

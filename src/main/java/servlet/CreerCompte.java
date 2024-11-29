@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 @Controller
-public class CreerCompteController {
+public class CreerCompte {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -26,7 +26,7 @@ public class CreerCompteController {
     private CrudGeneric<Enseignant> enseignantDAO;
 
     // Constructeur pour initialiser les DAOs
-    public CreerCompteController() {
+    public CreerCompte() {
         this.sessionFactory = new Configuration().configure().buildSessionFactory();
         this.etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
         this.enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
