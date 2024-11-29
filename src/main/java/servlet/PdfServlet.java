@@ -37,7 +37,6 @@ import jpa.Note;
 public class PdfServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private CrudGeneric<Note> noteDAO;
-    private CrudGeneric<Cours> coursDAO;
     private CrudGeneric<Inscription> inscriptionDAO;
 
     public PdfServlet() {
@@ -48,7 +47,7 @@ public class PdfServlet extends HttpServlet {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         inscriptionDAO = new CrudGeneric<>(sessionFactory, Inscription.class);
         noteDAO = new CrudGeneric<>(sessionFactory, Note.class);
-        coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
+        new CrudGeneric<>(sessionFactory, Cours.class);
     }
 
     @Override
@@ -56,7 +55,9 @@ public class PdfServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Etudiant etudiant = (Etudiant) session.getAttribute("username");
 
-        List<Note> notesList = noteDAO.findAll();
+        List<Note> notesList = noteDAO.findAll().stream()
+                .filter(inscription -> inscription.getEtudiant().getId().equals(etudiant.getId()))
+                .collect(Collectors.toList());
         List<Inscription> inscriptions = inscriptionDAO.findAll()
                 .stream()
                 .filter(inscription -> inscription.getEtudiant().getId().equals(etudiant.getId()))
@@ -68,25 +69,25 @@ public class PdfServlet extends HttpServlet {
                 .collect(Collectors.toList());
 
         if (coursList == null || notesList == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Les données sont introuvables.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Les donnï¿½es sont introuvables.");
             return;
         }
 
-        // Définir le type de contenu comme PDF
+        // Dï¿½finir le type de contenu comme PDF
         response.setContentType("application/pdf");
         OutputStream outputStream = response.getOutputStream();
         
-        // Créer un PdfWriter et un PdfDocument
+        // Crï¿½er un PdfWriter et un PdfDocument
         PdfWriter writer = new PdfWriter(outputStream);
         PdfDocument pdfDoc = new PdfDocument(writer);
         Document document = new Document(pdfDoc);
 
-        // Charger les polices (polices de base et personnalisées)
+        // Charger les polices (polices de base et personnalisï¿½es)
         PdfFont fontBold = PdfFontFactory.createFont("Helvetica-Bold");
         PdfFont fontRegular = PdfFontFactory.createFont("Helvetica");
 
         // Titre du document (header) avec style et couleur
-        Paragraph header = new Paragraph("Relevé de Notes - CY Tech")
+        Paragraph header = new Paragraph("Relevï¿½ de Notes - CY Tech")
                 .setFont(fontBold)
                 .setFontSize(22)
                 .setTextAlignment(TextAlignment.CENTER)
@@ -95,9 +96,9 @@ public class PdfServlet extends HttpServlet {
                 .setFontColor(ColorConstants.WHITE); // texte blanc
         document.add(header);
 
-        // Informations de l'étudiant
+        // Informations de l'ï¿½tudiant
         Paragraph studentInfo = new Paragraph("Nom : " + etudiant.getNom() + "\n" +
-                                              "Prénom : " + etudiant.getPrenom() + "\n" +
+                                              "Prï¿½nom : " + etudiant.getPrenom() + "\n" +
                                               "Email : " + etudiant.getEmail())
                 .setFont(fontRegular)
                 .setFontSize(12)
@@ -105,11 +106,11 @@ public class PdfServlet extends HttpServlet {
                 .setMarginBottom(20);
         document.add(studentInfo);
 
-        // Créer une table pour les résultats
+        // Crï¿½er une table pour les rï¿½sultats
         Table table = new Table(2);  // 2 colonnes : "Cours" et "Note"
         table.setWidth(UnitValue.createPercentValue(100));  // Table pleine largeur
 
-        // Ajouter les en-têtes de table avec une couleur de fond et un texte centré
+        // Ajouter les en-tï¿½tes de table avec une couleur de fond et un texte centrï¿½
         table.addHeaderCell(new Cell().add(new Paragraph("Cours"))
                 .setBackgroundColor(new com.itextpdf.kernel.colors.DeviceRgb(0, 123, 255))  // bleu
                 .setTextAlignment(TextAlignment.CENTER)
@@ -121,7 +122,7 @@ public class PdfServlet extends HttpServlet {
                 .setFont(fontBold)
                 .setFontColor(ColorConstants.WHITE));
 
-        // Remplir la table avec les données
+        // Remplir la table avec les donnï¿½es
         for (Cours cours : coursList) {
             Note note = notesList.stream().filter(n -> n.getCours().getId().equals(cours.getId())).findFirst().orElse(null);
             String noteValue = (note != null) ? String.valueOf(note.getNote()) : "Pas de note";
@@ -141,8 +142,8 @@ public class PdfServlet extends HttpServlet {
         // Ajouter la table au document
         document.add(table);
 
-        // Ajouter une section de pied de page pour l'email ou des informations supplémentaires si nécessaire
-        Paragraph footer = new Paragraph("Pour plus d'informations, contactez nous à : contact@cytech.com")
+        // Ajouter une section de pied de page pour l'email ou des informations supplï¿½mentaires si nï¿½cessaire
+        Paragraph footer = new Paragraph("Pour plus d'informations, contactez nous ï¿½ : contact@cytech.com")
                 .setTextAlignment(TextAlignment.CENTER)
                 .setFont(fontRegular)
                 .setFontSize(10)

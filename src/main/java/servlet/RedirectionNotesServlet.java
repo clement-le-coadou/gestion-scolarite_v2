@@ -82,7 +82,10 @@ public class RedirectionNotesServlet extends HttpServlet {
                     .distinct()
                     .collect(Collectors.toList());
             
-            List<Note> notesList = noteDAO.findAll();
+            List<Note> notesList = noteDAO.findAll()
+            		.stream()
+                    .filter(inscription -> inscription.getEtudiant().getId().equals(etudiant.getId()))
+                    .collect(Collectors.toList());
                    
             request.setAttribute("coursList", coursList);
             request.setAttribute("notesList", notesList);
