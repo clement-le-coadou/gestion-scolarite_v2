@@ -33,7 +33,7 @@
                     </li>
                 <% } %>
                 <li class="nav-item">
-                    <a class="nav-link" href="Connexion.jsp">
+                    <a class="nav-link" href="Login">
                         <% if ("Non connecté".equals(role)) { %>Se connecter<% } else { %>Se déconnecter<% } %>
                     </a>
                 </li>

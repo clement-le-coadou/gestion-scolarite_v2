@@ -1,27 +1,23 @@
 package mainApp.servlet;
 
-import mainApp.model.Administrateur;
-import mainApp.model.Enseignant;
-import mainApp.model.Etudiant;
 import mainApp.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 @RequestMapping("/modifierUtilisateur")
 @SessionAttributes("username")
-public class ModifierUtilisateurController {
+public class ModifierUtilisateur {
 
-    private final UserService userService;
+    private final UtilisateurService userService;
 
     @Autowired
-    public ModifierUtilisateurController(UserService userService) {
+    public ModifierUtilisateur(UtilisateurService userService) {
         this.userService = userService;
     }
 

@@ -9,7 +9,6 @@ import mainApp.model.Etudiant;
 import mainApp.model.Inscription;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class InscriptionService {
@@ -21,58 +20,53 @@ public class InscriptionService {
         this.inscriptionRepository = inscriptionRepository;
     }
 
-    // Create a new Inscription
+    // Créer une nouvelle inscription
     public Inscription createInscription(Inscription inscription) {
         return inscriptionRepository.save(inscription);
     }
 
-    // Find Inscription by ID
+    // Trouver une inscription par ID
     public Inscription findInscriptionById(Long id) {
-        return inscriptionRepository.findById(id).orElse(null); // Return null if not found
+        return inscriptionRepository.findById(id).orElse(null); // Retourne null si non trouvé
     }
 
-    // Find all Inscriptions
+    // Trouver toutes les inscriptions
     public List<Inscription> findAllInscriptions() {
         return inscriptionRepository.findAll();
     }
 
-    // Update an existing Inscription
+    // Mettre à jour une inscription existante
     public Inscription updateInscription(Inscription inscription) {
         if (inscriptionRepository.existsById(inscription.getId())) {
-            return inscriptionRepository.save(inscription); // Save updates if exists
+            return inscriptionRepository.save(inscription); // Sauvegarde la mise à jour si elle existe
         } else {
-            throw new IllegalArgumentException("Inscription with ID " + inscription.getId() + " does not exist.");
+            throw new IllegalArgumentException("Inscription avec l'ID " + inscription.getId() + " n'existe pas.");
         }
     }
 
-    // Delete Inscription by ID
+    // Supprimer une inscription par ID
     public void deleteInscription(Long id) {
         if (inscriptionRepository.existsById(id)) {
             inscriptionRepository.deleteById(id);
         } else {
-            throw new IllegalArgumentException("Inscription with ID " + id + " does not exist.");
+            throw new IllegalArgumentException("Inscription avec l'ID " + id + " n'existe pas.");
         }
     }
 
-    // Find all inscriptions for a specific Etudiant
+    // Trouver toutes les inscriptions pour un étudiant spécifique
     public List<Inscription> findInscriptionsByEtudiantId(Long etudiantId) {
         return inscriptionRepository.findByEtudiantId(etudiantId);
     }
 
-    // Find all inscriptions for a specific Etudiant and Cours
-    public List<Inscription> findByEtudiantAndCours(Long etudiantId, Long coursId) {
-        return inscriptionRepository.findByEtudiantIdAndCoursId(etudiantId, coursId);
-    }
-
-    // Check if an Etudiant is already inscribed in a Cours
+    // Vérifier si un étudiant est déjà inscrit à un cours donné
     public boolean isAlreadyInscribed(Etudiant etudiant, Cours cours) {
-        return !inscriptionRepository.findByEtudiantAndCours(etudiant, cours).isEmpty();
+        return inscriptionRepository.isAlreadyInscribed(etudiant, cours);
     }
 
-    // Helper method to manage inscription creation with validation
+    // Méthode pour créer une inscription si elle n'existe pas déjà
     public Inscription createInscriptionIfNotExists(Etudiant etudiant, Cours cours) {
         if (isAlreadyInscribed(etudiant, cours)) {
-            throw new IllegalArgumentException("Etudiant is already inscribed in the course.");
+            throw new IllegalArgumentException("L'étudiant est déjà inscrit à ce cours.");
         }
         Inscription inscription = new Inscription();
         inscription.setEtudiant(etudiant);

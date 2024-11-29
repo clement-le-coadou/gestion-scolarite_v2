@@ -18,6 +18,7 @@
             <hr class="my-4">
         </div>
 
+			<%if(role != null && (role.equals("Administrateur") || role.equals("Enseignant"))){ %>
         <div class="row text-center mt-5">
             <div class="col-md-4">
                 <a href="AfficherEtudiants" class="text-decoration-none">
@@ -30,7 +31,8 @@
                     </div>
                 </a>
             </div>
-
+            <%} %>
+			<%if(role != null && (role.equals("Administrateur") || role.equals("Enseignant"))){ %>
             <div class="col-md-4">
                 <a href="AfficherCours" class="text-decoration-none">
                     <div class="card shadow">
@@ -42,7 +44,8 @@
                     </div>
                 </a>
             </div>
-
+            <%} %>
+			<%if(role.equals("Administrateur")){ %>
             <div class="col-md-4">
                 <a href="AfficherEnseignants" class="text-decoration-none">
                     <div class="card shadow">
@@ -54,6 +57,7 @@
                     </div>
                 </a>
             </div>
+            <%} %>
         </div>
     </div>
 </body>

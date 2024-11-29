@@ -1,8 +1,7 @@
 package mainApp.servlet;
 
-import dao.CrudGeneric;
+import mainApp.dao.CoursRepository;
 import mainApp.model.Cours;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,23 +9,28 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class Cours {
+public class SupprimerCours {
 
+    // Injection du repository CoursRepository
     @Autowired
-    private CrudGeneric<Cours> coursDAO;
+    private CoursRepository coursRepository;
 
     @PostMapping("/supprimerCours")
     public String supprimerCours(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
-        // R�cup�rer le cours par ID
-        Cours cours = coursDAO.read(id);
+        // Récupérer le cours par ID avec Spring Data JPA
+        Cours cours = coursRepository.findById(id).orElse(null);
+
         if (cours != null) {
-            coursDAO.delete(cours);
-            redirectAttributes.addFlashAttribute("message", "Cours supprim� avec succ�s.");
+            // Supprimer le cours
+            coursRepository.delete(cours);
+            // Ajouter un message de succès dans les attributs de redirection
+            redirectAttributes.addFlashAttribute("message", "Cours supprimé avec succès.");
         } else {
+            // Ajouter un message d'erreur si le cours n'est pas trouvé
             redirectAttributes.addFlashAttribute("error", "Cours introuvable.");
         }
-        
-        // Redirection vers la page de gestion des cours
+
+        // Rediriger vers la page de gestion des cours
         return "redirect:/afficherCours?page=gestion";
     }
 }

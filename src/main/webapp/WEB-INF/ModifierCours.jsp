@@ -19,8 +19,7 @@
         Cours cours = (Cours) request.getAttribute("cours");
 
         // Récupérer la liste des enseignants pour le champ select
-        EnseignantService enseignantDAO = new EnseignantService();
-        List<Enseignant> enseignants = enseignantDAO.findAll();
+        List<Enseignant> enseignants = (List<Enseignant>) request.getAttribute("listeEnseignant");
     %>
 
     <form action="ModifierCours" method="post">

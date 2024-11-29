@@ -9,6 +9,7 @@ import mainApp.service.EnseignantService;
 import mainApp.service.EtudiantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +28,13 @@ public class Login {
         this.etudiantService = etudiantService;
         this.enseignantService = enseignantService;
         this.administrateurService = administrateurService;
+    }
+    
+    // Méthode pour afficher le formulaire d'ajout
+    @GetMapping("/Login")
+    public String afficherFormulaire() {
+        // Retourner la vue du formulaire d'ajout de cours
+        return "Connexion.jsp"; // Cette page JSP doit être dans le dossier WEB-INF/
     }
 
     @PostMapping("/login")

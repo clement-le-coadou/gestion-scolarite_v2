@@ -4,6 +4,9 @@ import mainApp.model.Cours;
 import mainApp.model.Enseignant;
 import mainApp.service.CoursService;
 import mainApp.service.EnseignantService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +29,9 @@ public class ModifierCours {
     @GetMapping("/ModifierCours")
     public String getModifierCours(@RequestParam("id") Long coursId, Model model) {
         Cours cours = coursService.findCoursById(coursId);
+        List<Enseignant> listeEnseignant = enseignantService.findAllEnseignants();
         model.addAttribute("cours", cours);
+        model.addAttribute("listeEnseignant", listeEnseignant);
         return "ModifierCours";  // JSP view to edit the course
     }
 

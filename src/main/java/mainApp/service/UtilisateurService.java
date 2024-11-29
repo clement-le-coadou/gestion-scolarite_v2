@@ -6,12 +6,14 @@ import mainApp.model.Etudiant;
 import mainApp.dao.AdministrateurRepository;
 import mainApp.dao.EnseignantRepository;
 import mainApp.dao.EtudiantRepository;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class UtilisateurService {

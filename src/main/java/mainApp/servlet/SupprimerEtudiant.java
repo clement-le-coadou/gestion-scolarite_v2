@@ -1,32 +1,36 @@
 package mainApp.servlet;
 
+import mainApp.dao.EtudiantRepository;
+import mainApp.model.Etudiant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import daogenerique.CrudGeneric;
-import mainApp.model.Etudiant;
-
 @Controller
 public class SupprimerEtudiant {
 
+    // Injection du repository EtudiantRepository
     @Autowired
-    private CrudGeneric<Etudiant> etudiantDAO;
+    private EtudiantRepository etudiantRepository;
 
     @PostMapping("/supprimerEtudiant")
     public String supprimerEtudiant(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
-        // R�cup�rer l'�tudiant par ID
-        Etudiant etudiant = etudiantDAO.read(id);
+        // Récupérer l'étudiant par ID avec Spring Data JPA
+        Etudiant etudiant = etudiantRepository.findById(id).orElse(null);
+
         if (etudiant != null) {
-            etudiantDAO.delete(etudiant);
-            redirectAttributes.addFlashAttribute("message", "�tudiant supprim� avec succ�s.");
+            // Supprimer l'étudiant
+            etudiantRepository.delete(etudiant);
+            // Ajouter un message de succès dans les attributs de redirection
+            redirectAttributes.addFlashAttribute("message", "Étudiant supprimé avec succès.");
         } else {
-            redirectAttributes.addFlashAttribute("error", "�tudiant introuvable.");
+            // Ajouter un message d'erreur si l'étudiant n'est pas trouvé
+            redirectAttributes.addFlashAttribute("error", "Étudiant introuvable.");
         }
-        
-        // Rediriger vers la page d'affichage des �tudiants
+
+        // Rediriger vers la page d'affichage des étudiants
         return "redirect:/afficherEtudiants";
     }
 }

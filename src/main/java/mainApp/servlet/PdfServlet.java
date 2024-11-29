@@ -18,7 +18,7 @@ import mainApp.model.Note;
 import java.io.OutputStream;
 import java.util.List;
 
-public class PdfUtil {
+public class PdfServlet {
 
     public static void generateRelevePdf(OutputStream outputStream, String nomEtudiant, String prenomEtudiant, String emailEtudiant,
                                          List<Cours> coursList, List<Note> notesList) throws Exception {
