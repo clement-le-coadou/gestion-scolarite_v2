@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import daogenerique.CrudGeneric;
+import email.EmailUtil;
 import jpa.Etudiant;
 import jpa.Cours;
 import jpa.Inscription;
@@ -39,7 +40,17 @@ public class InscrireEtudiant extends HttpServlet {
         // Enregistrer l'inscription
         CrudGeneric<Inscription> inscriptionDAO = new CrudGeneric<>(sessionFactory, Inscription.class);
         inscriptionDAO.create(inscription);
+        
+        // Envoi d'un email apr�s la modification de la note
+        String destinataire = inscription.getEtudiant().getEmail(); // Assurez-vous que l'objet Etudiant contient l'email
+        String sujet = "Inscription au cours";
+        String contenu = "Bonjour " + inscription.getEtudiant().getPrenom() + " " + inscription.getEtudiant().getNom() +
+                         ",\n\nVotre inscription pour le cours " + inscription.getCours().getNom() + " a été validé.\n" +
+                         "\n\nCordialement,\nL'équipe de gestion des études.";
 
+        EmailUtil.envoyerEmail(destinataire, sujet, contenu);
+        
+        
         // Rediriger vers la page de confirmation ou liste des cours
         response.sendRedirect("AfficherCours?page=gestion");
     }

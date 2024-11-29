@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jpa.Administrateur;
 import jpa.Cours;
 import jpa.Etudiant;
 import jpa.Inscription;
@@ -60,6 +61,13 @@ public class RedirectionNotesServlet extends HttpServlet {
                     .collect(Collectors.toList());
             request.setAttribute("coursList", coursList);
             request.getRequestDispatcher("GestionNotes.jsp").forward(request, response);
+        } else if (role.equals("Administrateur")) {
+            	Administrateur administrateur = (Administrateur) utilisateur;
+
+                List<Cours> coursList = coursDAO.findAll();
+                        
+                request.setAttribute("coursList", coursList);
+                request.getRequestDispatcher("GestionNotes.jsp").forward(request, response);    
         } else if (role.equals("Etudiant")) {
             Etudiant etudiant = (Etudiant) utilisateur;
 
