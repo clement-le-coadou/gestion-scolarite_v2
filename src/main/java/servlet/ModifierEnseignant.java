@@ -1,53 +1,40 @@
-package service;
+package servlet;
 
-import model.Cours;
-import model.Etudiant;
 import model.Enseignant;
-import model.Inscription;
-import daogenerique.CrudGeneric;
-import org.hibernate.SessionFactory;
+import service.EnseignantService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
-import java.util.List;
-import java.util.stream.Collectors;
+@Controller
+public class ModifierEnseignant {
 
-@Service
-public class CoursService {
-
-    private final CrudGeneric<Cours> coursDAO;
-    private final CrudGeneric<Inscription> inscriptionDAO;
+    private final EnseignantService enseignantService;
 
     @Autowired
-    public CoursService(SessionFactory sessionFactory) {
-        this.coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
-        this.inscriptionDAO = new CrudGeneric<>(sessionFactory, Inscription.class);
+    public ModifierEnseignant(EnseignantService enseignantService) {
+        this.enseignantService = enseignantService;
     }
 
-    public List<Cours> getCoursForUtilisateur(Object utilisateur) {
-        List<Cours> coursList = null;
-
-        if (utilisateur instanceof Etudiant) {
-            Etudiant etudiant = (Etudiant) utilisateur;
-            // RÈcupÈrer les cours auxquels l'Ètudiant est inscrit
-            List<Inscription> inscriptions = inscriptionDAO.findAll()
-                    .stream()
-                    .filter(inscription -> inscription.getEtudiant().getId().equals(etudiant.getId()))
-                    .collect(Collectors.toList());
-
-            coursList = inscriptions.stream()
-                    .map(Inscription::getCours)
-                    .distinct()
-                    .collect(Collectors.toList());
-        } else if (utilisateur instanceof Enseignant) {
-            Enseignant enseignant = (Enseignant) utilisateur;
-            // RÈcupÈrer les cours enseignÈs par l'enseignant
-            coursList = coursDAO.findAll()
-                    .stream()
-                    .filter(cours -> cours.getEnseignant() != null && cours.getEnseignant().getId().equals(enseignant.getId()))
-                    .collect(Collectors.toList());
+    // Affichage de la page de modification de l'enseignant
+    @GetMapping("/modifierEnseignant")
+    public String showModifierForm(@RequestParam("id") Long id, Model model) {
+        Enseignant enseignant = enseignantService.findEnseignantById(id); // Utilisation du service pour r√©cup√©rer l'enseignant
+        if (enseignant == null) {
+            return "redirect:/gestionEnseignants"; // Redirection vers la gestion des enseignants si non trouv√©
         }
+        model.addAttribute("enseignant", enseignant);
+        return "modifierEnseignant"; // Nom de la vue Thymeleaf
+    }
 
-        return coursList;
+    // Traitement de la modification de l'enseignant
+    @PostMapping("/modifierEnseignant")
+    public String updateEnseignant(@ModelAttribute Enseignant enseignant) {
+        enseignantService.updateEnseignant(enseignant); // Utilisation du service pour sauvegarder les modifications
+        return "redirect:/gestionEnseignants"; // Redirection apr√®s la modification
     }
 }
