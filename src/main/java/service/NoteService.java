@@ -1,7 +1,7 @@
-package com.yourcompany.yourprojectname.service;
+package service;
 
-import com.yourcompany.yourprojectname.dao.NoteRepository;
-import com.yourcompany.yourprojectname.model.Note;
+import dao.NoteRepository;
+import model.Note;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,8 @@
 package servlet;
 
-import daogenerique.CrudGeneric;
+import service.CoursService;
 import model.Cours;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,24 +13,27 @@ import java.util.List;
 @Controller
 public class AfficherCours {
 
+    private final CoursService coursService;
+
+    @Autowired
+    public AfficherCours(CoursService coursService) {
+        this.coursService = coursService;
+    }
+
     @GetMapping("/AfficherCours")
     public String afficherCours(@RequestParam(value = "page", required = false) String page, Model model) {
-        // Configurer la SessionFactory pour Hibernate
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
+        // RÃ©cupÃ©rer tous les cours
+        List<Cours> coursList = coursService.findAllCours();
 
-        // Récupérer tous les cours
-        List<Cours> coursList = coursDAO.findAll();
-        
         // Debugging : Affichage des ID de chaque cours dans la console
         for (Cours cours : coursList) {
             System.out.println("Cours ID: " + cours.getId() + ", Nom: " + cours.getNom());
         }
 
-        // Passer la liste des cours à la JSP
+        // Passer la liste des cours Ã  la JSP
         model.addAttribute("coursList", coursList);
 
-        // Rediriger vers la page appropriée
+        // Rediriger vers la page appropriÃ©e
         if ("gestion".equals(page)) {
             return "GestionCours"; // Page de gestion des cours
         } else {

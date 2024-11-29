@@ -1,9 +1,8 @@
 package servlet;
 
-import daogenerique.CrudGeneric;
+import service.EtudiantService;
 import model.Etudiant;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,24 +12,27 @@ import java.util.List;
 @Controller
 public class AfficherEtudiants {
 
+    private final EtudiantService etudiantService;
+
+    @Autowired
+    public AfficherEtudiants(EtudiantService etudiantService) {
+        this.etudiantService = etudiantService;
+    }
+
     @GetMapping("/AfficherEtudiants")
     public String afficherEtudiants(Model model) {
-        // Configurer la SessionFactory pour Hibernate
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        CrudGeneric<Etudiant> etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
+        // RÃ©cupÃ©rer tous les Ã©tudiants
+        List<Etudiant> etudiants = etudiantService.findAllEtudiants();
 
-        // Récupérer tous les étudiants
-        List<Etudiant> etudiants = etudiantDAO.findAll();
-        
-        // Debugging : Affichage des ID de chaque étudiant dans la console
+        // Debugging : Affichage des ID de chaque Ã©tudiant dans la console
         for (Etudiant etudiant : etudiants) {
             System.out.println("Etudiant ID: " + etudiant.getId());
         }
 
-        // Passer la liste des étudiants au modèle
+        // Passer la liste des Ã©tudiants au modÃ¨le
         model.addAttribute("etudiants", etudiants);
 
         // Retourner le nom de la page JSP pour l'affichage
-        return "GestionEtudiants"; // Cette page JSP doit être dans le dossier WEB-INF/jsp/
+        return "GestionEtudiants"; // Cette page JSP doit Ãªtre dans le dossier WEB-INF/jsp/
     }
 }

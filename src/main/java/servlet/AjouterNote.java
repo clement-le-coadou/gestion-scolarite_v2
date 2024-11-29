@@ -1,15 +1,14 @@
 package servlet;
 
-import daogenerique.CrudGeneric;
+import service.NoteService;
+import service.CoursService;
+import service.EtudiantService;
 import email.EmailUtil;
+import model.Note;
 import model.Cours;
 import model.Etudiant;
-import model.Note;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,26 +17,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class AjouterNote {
 
-    private final CrudGeneric<Note> noteDAO;
-    private final CrudGeneric<Cours> coursDAO;
-    private final CrudGeneric<Etudiant> etudiantDAO;
+    private final NoteService noteService;
+    private final CoursService coursService;
+    private final EtudiantService etudiantService;
 
     @Autowired
-    public AjouterNote() {
-        // Initialisation des DAO
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        noteDAO = new CrudGeneric<>(sessionFactory, Note.class);
-        coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
-        etudiantDAO = new CrudGeneric<>(sessionFactory, Etudiant.class);
+    public AjouterNote(NoteService noteService, CoursService coursService, EtudiantService etudiantService) {
+        this.noteService = noteService;
+        this.coursService = coursService;
+        this.etudiantService = etudiantService;
     }
 
     // Affichage du formulaire d'ajout de note
     @GetMapping("/AjouterNote")
     public String afficherFormulaire(@RequestParam("idEtudiant") int idEtudiant,
                                      @RequestParam("coursId") int coursId, Model model) {
-        // Récupérer l'étudiant et le cours à partir de leurs IDs
-        Etudiant etudiant = etudiantDAO.findById(idEtudiant);
-        Cours cours = coursDAO.findById(coursId);
+        // RÃ©cupÃ©rer l'Ã©tudiant et le cours Ã  partir de leurs IDs
+        Etudiant etudiant = etudiantService.findEtudiantById(idEtudiant);
+        Cours cours = coursService.findCoursById(coursId);
 
         if (etudiant != null && cours != null) {
             model.addAttribute("etudiant", etudiant);
@@ -45,8 +42,8 @@ public class AjouterNote {
             model.addAttribute("coursId", coursId);
             return "AjouterNote"; // Page JSP ou template Thymeleaf
         } else {
-            model.addAttribute("error", "Étudiant ou cours introuvable.");
-            return "error"; // Page d'erreur si étudiant ou cours est introuvable
+            model.addAttribute("error", "Ã‰tudiant ou cours introuvable.");
+            return "error"; // Page d'erreur si Ã©tudiant ou cours est introuvable
         }
     }
 
@@ -56,33 +53,32 @@ public class AjouterNote {
                               @RequestParam("coursId") int coursId,
                               @RequestParam("note") double noteValue,
                               RedirectAttributes redirectAttributes) {
-        Etudiant etudiant = etudiantDAO.findById(idEtudiant);
-        Cours cours = coursDAO.findById(coursId);
+        Etudiant etudiant = etudiantService.findEtudiantById(idEtudiant);
+        Cours cours = coursService.findCoursById(coursId);
 
         if (etudiant != null && cours != null) {
-            // Création de la nouvelle note
+            // CrÃ©ation de la nouvelle note
             Note newNote = new Note();
             newNote.setEtudiant(etudiant);
             newNote.setCours(cours);
             newNote.setNote(noteValue);
 
             // Sauvegarde de la note
-            noteDAO.create(newNote);
+            noteService.createNote(newNote);
 
-            // Envoi d'un email après l'ajout de la note
+            // Envoi d'un email aprÃ¨s l'ajout de la note
             String destinataire = etudiant.getEmail();
-            String sujet = "Nouvelle note ajoutée";
+            String sujet = "Nouvelle note ajoutÃ©e";
             String contenu = "Bonjour " + etudiant.getPrenom() + " " + etudiant.getNom() +
-                             ",\n\nUne nouvelle note a été ajoutée pour le cours " + cours.getNom() + ".\n" +
-                             "Note : " + noteValue + "\n\nCordialement,\nL'équipe de gestion des études.";
-
+                             ",\n\nUne nouvelle note a Ã©tÃ© ajoutÃ©e pour le cours " + cours.getNom() + ".\n" +
+                             "Note : " + noteValue + "\n\nCordialement,\nL'Ã©quipe de gestion des Ã©tudes.";
             EmailUtil.envoyerEmail(destinataire, sujet, contenu);
 
-            // Message de succès après l'ajout
-            redirectAttributes.addFlashAttribute("message", "La note a été ajoutée avec succès.");
+            // Message de succÃ¨s aprÃ¨s l'ajout
+            redirectAttributes.addFlashAttribute("message", "La note a Ã©tÃ© ajoutÃ©e avec succÃ¨s.");
             return "redirect:/GestionNotes?coursId=" + coursId;
         } else {
-            redirectAttributes.addFlashAttribute("error", "Étudiant ou cours introuvable.");
+            redirectAttributes.addFlashAttribute("error", "Ã‰tudiant ou cours introuvable.");
             return "redirect:/error";
         }
     }

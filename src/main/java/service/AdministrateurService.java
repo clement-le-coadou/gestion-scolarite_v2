@@ -1,7 +1,7 @@
 package service;
 
-import com.yourcompany.yourprojectname.dao.AdministrateurRepository;
-import com.yourcompany.yourprojectname.model.Administrateur;
+import dao.AdministrateurRepository;
+import model.Administrateur;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

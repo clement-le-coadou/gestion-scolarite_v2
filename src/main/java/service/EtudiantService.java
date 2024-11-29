@@ -1,7 +1,7 @@
 package service;
 
-import com.yourcompany.yourprojectname.dao.EtudiantRepository;
-import com.yourcompany.yourprojectname.model.Etudiant;
+import dao.EtudiantRepository;
+import model.Etudiant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

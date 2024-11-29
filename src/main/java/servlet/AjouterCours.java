@@ -1,10 +1,10 @@
 package servlet;
 
-import daogenerique.CrudGeneric;
+import service.CoursService;
+import service.EnseignantService;
 import model.Cours;
 import model.Enseignant;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,36 +14,41 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class AjouterCours {
 
-    private final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-    private final CrudGeneric<Cours> coursDAO = new CrudGeneric<>(sessionFactory, Cours.class);
+    private final CoursService coursService;
+    private final EnseignantService enseignantService;
 
-    // Méthode pour afficher la page de formulaire d'ajout (si nécessaire)
-    @GetMapping("/AjouterCours")
-    public String afficherFormulaire() {
-        // Retourner la vue du formulaire d'ajout de cours (nom du fichier JSP ou autre template)
-        return "AjouterCours"; // Cette page JSP doit être dans le dossier WEB-INF/jsp/
+    @Autowired
+    public AjouterCours(CoursService coursService, EnseignantService enseignantService) {
+        this.coursService = coursService;
+        this.enseignantService = enseignantService;
     }
 
-    // Méthode pour traiter la soumission du formulaire
+    // MÃ©thode pour afficher le formulaire d'ajout
+    @GetMapping("/AjouterCours")
+    public String afficherFormulaire() {
+        // Retourner la vue du formulaire d'ajout de cours
+        return "AjouterCours"; // Cette page JSP doit Ãªtre dans le dossier WEB-INF/jsp/
+    }
+
+    // MÃ©thode pour traiter la soumission du formulaire
     @PostMapping("/AjouterCours")
     public String ajouterCours(@RequestParam("nom") String nom, 
                                @RequestParam("description") String description, 
                                @RequestParam("enseignantId") Long enseignantId, 
                                RedirectAttributes redirectAttributes) {
-        // Récupération de l'enseignant par son ID
-        CrudGeneric<Enseignant> enseignantDAO = new CrudGeneric<>(sessionFactory, Enseignant.class);
-        Enseignant enseignant = enseignantDAO.read(enseignantId);
+        // RÃ©cupÃ©ration de l'enseignant par son ID
+        Enseignant enseignant = enseignantService.findEnseignantById(enseignantId);
 
         if (enseignant != null) {
-            // Création du cours
+            // CrÃ©ation du cours
             Cours cours = new Cours(nom, description, enseignant);
-            coursDAO.create(cours);
+            coursService.createCours(cours);
             
-            // Ajouter un message de succès dans les attributs de redirection
-            redirectAttributes.addFlashAttribute("message", "Cours ajouté avec succès!");
+            // Ajouter un message de succÃ¨s dans les attributs de redirection
+            redirectAttributes.addFlashAttribute("message", "Cours ajoutÃ© avec succÃ¨s!");
         } else {
-            // Ajouter un message d'erreur en cas de problème avec l'enseignant
-            redirectAttributes.addFlashAttribute("message", "Enseignant non trouvé!");
+            // Ajouter un message d'erreur en cas de problÃ¨me avec l'enseignant
+            redirectAttributes.addFlashAttribute("message", "Enseignant non trouvÃ©!");
         }
 
         // Redirection vers la liste des cours ou la page de gestion des cours

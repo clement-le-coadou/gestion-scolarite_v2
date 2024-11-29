@@ -2,8 +2,8 @@ package service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.yourcompany.yourprojectname.dao.CoursRepository;
-import com.yourcompany.yourprojectname.model.Cours;
+import dao.CoursRepository;
+import model.Cours;
 
 import java.util.List;
 

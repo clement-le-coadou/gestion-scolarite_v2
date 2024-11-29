@@ -1,7 +1,7 @@
-package com.yourcompany.yourprojectname.service;
+package service;
 
-import com.yourcompany.yourprojectname.dao.InscriptionRepository;
-import com.yourcompany.yourprojectname.model.Inscription;
+import dao.InscriptionRepository;
+import model.Inscription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
