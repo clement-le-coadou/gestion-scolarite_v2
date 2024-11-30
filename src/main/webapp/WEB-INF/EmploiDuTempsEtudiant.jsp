@@ -8,43 +8,84 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emploi du Temps - Etudiant</title>
+    <link rel="stylesheet" href="resources/emploiDuTemps.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Mon Emploi du Temps</h1>
+<body class="bg-light">
+    <%@ include file="menu-nav.jsp" %>
+    <div class="container my-5">
+        <h1 class="text-center text-primary">Mon Emploi du Temps</h1>
 
-    <!-- Vérification du message d'erreur -->
-    <p><%= request.getAttribute("message") != null ? request.getAttribute("message") : "" %></p>
+        <!-- Vérification du message d'erreur -->
+        <p class="text-danger text-center"><%= request.getAttribute("message") != null ? request.getAttribute("message") : "" %></p>
 
-    <h2>Emploi du temps de la semaine</h2>
+        <div class="emploi-du-temps mt-4">
+            <table class="table table-bordered text-center">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Heures</th>
+                        <th>Lundi</th>
+                        <th>Mardi</th>
+                        <th>Mercredi</th>
+                        <th>Jeudi</th>
+                        <th>Vendredi</th>
+                        <th>Samedi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% 
+                        // Définir les plages horaires
+                        String[] heures = { "08:00", "09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00" };
+                        String[] jours = { "LUNDI", "MARDI", "MERCREDI", "JEUDI", "VENDREDI", "SAMEDI" };
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Jour</th>
-                <th>Heure</th>
-                <th>Matière</th>
-                <th>Salle</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% 
-                List<EmploiDuTempsEleve> emploiDuTemps = (List<EmploiDuTempsEleve>) request.getAttribute("emploiDuTemps");
-                if (emploiDuTemps != null && !emploiDuTemps.isEmpty()) {
-                    for (EmploiDuTempsEleve emploi : emploiDuTemps) {
-            %>
-            <tr>
-                <td><%= emploi.getJourSemaine() %></td>
-                <td><%= emploi.getHeureDebut() + " - " + emploi.getHeureDebut().plusMinutes(emploi.getDuree()) %></td>
-                <td><%= emploi.getCours().getNom() %></td>
-                <td><%= emploi.getSalle() %></td>
-            </tr>
-            <% 
-                    }
-                }
-            %>
-        </tbody>
-    </table>
+                        // Récupérer l'emploi du temps
+                        List<EmploiDuTempsEleve> emploiDuTemps = (List<EmploiDuTempsEleve>) request.getAttribute("emploiDuTemps");
+                         if (emploiDuTemps != null && !emploiDuTemps.isEmpty()) { %>
+                        <p>Cours trouvés : <%= emploiDuTemps.size() %></p>
+                    <% } else { %>
+                        <p>Aucun cours trouvé pour l'emploi du temps.</p>
+                    <% } 
 
-    <a href="/logout">Déconnexion</a>
+                        for (int i = 0; i < heures.length - 1; i++) {
+                    %>
+                    <tr>
+                        <td><%= heures[i] %> - <%= heures[i + 1] %></td>
+                        <% for (String jour : jours) { %>
+                            <td>
+                                <%
+                                    boolean coursTrouve = false;
+                                    if (emploiDuTemps != null) {
+                                        for (EmploiDuTempsEleve emploi : emploiDuTemps) {
+                                            if (emploi.getJourSemaine().name().equals(jour) &&
+                                                emploi.getHeureDebut().toString().startsWith(heures[i])) {
+                                    %>
+                                    <div class="cours bg-primary text-white p-2 rounded">
+                                        <strong><%= emploi.getCours().getNom() %></strong><br>
+                                        <small>Salle : <%= emploi.getSalle() %></small><br>
+                                        <small>Durée : <%= emploi.getDuree() %> min</small><br>
+                                        <small>Prof : <%= emploi.getCours().getEnseignant() != null ? emploi.getCours().getEnseignant().getNom() : "Inconnu" %></small>
+                                    </div>
+                                    <%
+                                                coursTrouve = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if (!coursTrouve) {
+                                        out.print(""); // Affiche une cellule vide si aucun cours n'est trouvé
+                                    }
+                                %>
+                            </td>
+                        <% } %>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="/logout" class="btn btn-danger">Déconnexion</a>
+        </div>
+    </div>
 </body>
 </html>

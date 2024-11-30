@@ -1,0 +1,107 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+p {
+    text-align: center;
+    color: #dc3545; /* Rouge pour les messages d'erreur */
+}
+
+/* Table Styles */
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead tr {
+    background-color: #007bff;
+    color: white;
+    text-align: left;
+}
+
+thead th {
+    padding: 15px;
+    font-size: 16px;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody td {
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+}
+
+tbody tr:hover {
+    background-color: #e9ecef;
+    cursor: default;
+}
+
+tbody td:first-child {
+    font-weight: bold;
+    color: #495057;
+}
+
+/* Link Styles */
+a {
+    display: inline-block;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #007bff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    margin: 20px auto;
+}
+
+a:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+a:visited {
+    color: white;
+}
+
+/* Emploi du temps */
+.emploi-du-temps table {
+    table-layout: fixed;
+    width: 100%;
+    margin: auto;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.emploi-du-temps th,
+.emploi-du-temps td {
+    vertical-align: middle;
+    word-wrap: break-word;
+    padding: 10px;
+}
+
+.cours {
+    font-size: 14px;
+    text-align: center;
+}
+

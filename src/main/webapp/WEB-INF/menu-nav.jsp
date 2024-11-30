@@ -32,6 +32,17 @@
                         <a class="nav-link" href="ModifierUtilisateur">Mes infos</a>
                     </li>
                 <% } %>
+                <% if ("Administrateur".equals(role) || "Enseignant".equals(role)) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="AjouterEmploiDuTemps">Gestion des étudiants</a>
+                    </li>
+                <% } %>
+                <% if ("Etudiant".equals(role) || "Enseignant".equals(role)) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="AfficherEmploiDuTemps">Afficher Emploi du temps</a>
+                    </li>
+                <% } %>
+                
                 <li class="nav-item">
                     <a class="nav-link" href="Login">
                         <% if ("Non connecté".equals(role)) { %>Se connecter<% } else { %>Se déconnecter<% } %>

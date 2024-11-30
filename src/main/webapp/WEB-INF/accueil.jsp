@@ -18,9 +18,9 @@
             <hr class="my-4">
         </div>
 
-			<%if(role != null && ((role.equals("Administrateur") || role.equals("Enseignant")))){ %>
+		<%if(role != null && ((role.equals("Administrateur") || role.equals("Enseignant")))){ %>
         <div class="row text-center mt-5">
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6 col-xs-12 mb-4">
                 <a href="AfficherEtudiants" class="text-decoration-none">
                     <div class="card shadow">
                         <div class="card-body">
@@ -33,7 +33,7 @@
             </div>
             <%} %>
 			<%if(role != null && ((role.equals("Administrateur") || role.equals("Enseignant")))){ %>
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6 col-xs-12 mb-4">
                 <a href="AfficherCours" class="text-decoration-none">
                     <div class="card shadow">
                         <div class="card-body">
@@ -46,7 +46,7 @@
             </div>
             <%} %>
 			<%if(role.equals("Administrateur")){ %>
-            <div class="col-md-4">
+            <div class="col-md-4 col-sm-6 col-xs-12 mb-4">
                 <a href="AfficherEnseignants" class="text-decoration-none">
                     <div class="card shadow">
                         <div class="card-body">
@@ -57,6 +57,22 @@
                     </div>
                 </a>
             </div>
+            <%} %>
+            
+            <%if(role.equals("Administrateur") ||role.equals("Enseignant")){ %>
+			<div class="col-md-4 col-sm-6 col-xs-12 mb-4">
+			    <a href="AjouterEmploiDuTemps" class="text-decoration-none">
+			        <div class="card shadow">
+			            <div class="card-body">
+			                <!-- Nouvelle icône de calendrier -->
+			                <i class="fas fa-calendar fa-3x text-warning mb-3"></i>
+			                <h5 class="card-title">Ajouter Créneau</h5>
+			                <p class="card-text">Consultez et attribuez des cours aux enseignants.</p>
+			            </div>
+			        </div>
+			    </a>
+			</div>
+
             <%} %>
         </div>
     </div>

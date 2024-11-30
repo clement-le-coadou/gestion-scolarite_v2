@@ -13,10 +13,12 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
+    <%@ include file="menu-nav.jsp" %>
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Ajouter un Emploi du Temps</h2>
-
+    <h2 class="text-center mb-4">Ajouter un Créneau</h2>
+    <!-- Vérification du message d'erreur -->
+    <p><%= request.getAttribute("message") != null ? request.getAttribute("message") : "" %></p>
     <form action="AjouterEmploiDuTemps" method="post">
         <!-- Sélection du Cours -->
         <div class="form-group">
@@ -24,7 +26,6 @@
             <select class="form-control" id="coursId" name="coursId" required>
                 <option value="">--Sélectionner--</option>
                 <%
-                    // Récupération de la liste des cours depuis le contrôleur
                     List<Cours> coursList = (List<Cours>) request.getAttribute("coursList");
                     if (coursList != null) {
                         for (Cours cours : coursList) {
@@ -43,7 +44,6 @@
             <select class="form-control" id="etudiantId" name="etudiantId" required>
                 <option value="">--Sélectionner--</option>
                 <%
-                    // Récupération de la liste des étudiants depuis le contrôleur
                     List<Etudiant> etudiants = (List<Etudiant>) request.getAttribute("etudiants");
                     if (etudiants != null) {
                         for (Etudiant etudiant : etudiants) {
@@ -62,7 +62,6 @@
             <select class="form-control" id="enseignantId" name="enseignantId" required>
                 <option value="">--Sélectionner--</option>
                 <%
-                    // Récupération de la liste des enseignants depuis le contrôleur
                     List<Enseignant> enseignants = (List<Enseignant>) request.getAttribute("enseignants");
                     if (enseignants != null) {
                         for (Enseignant enseignant : enseignants) {
@@ -75,10 +74,23 @@
             </select>
         </div>
 
-        <!-- Date et Heure de Début -->
+        <!-- Jour de la semaine -->
         <div class="form-group">
-            <label for="dateHeureDebut">Date et Heure de Début :</label>
-            <input type="datetime-local" class="form-control" id="dateHeureDebut" name="dateHeureDebut" required>
+            <label for="jourSemaine">Jour de la semaine :</label>
+            <select class="form-control" id="jourSemaine" name="jourSemaine" required>
+                <option value="">--Sélectionner--</option>
+                <option value="LUNDI">Lundi</option>
+                <option value="MARDI">Mardi</option>
+                <option value="MERCREDI">Mercredi</option>
+                <option value="JEUDI">Jeudi</option>
+                <option value="VENDREDI">Vendredi</option>
+            </select>
+        </div>
+
+        <!-- Heure de Début -->
+        <div class="form-group">
+            <label for="heureDebut">Heure de Début :</label>
+            <input type="time" class="form-control" id="heureDebut" name="heureDebut" required>
         </div>
 
         <!-- Durée du Cours -->
