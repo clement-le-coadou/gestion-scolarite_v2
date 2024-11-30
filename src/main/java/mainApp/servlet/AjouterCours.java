@@ -26,8 +26,17 @@ public class AjouterCours {
 
     // Méthode pour afficher le formulaire d'ajout
     @GetMapping("/AjouterCours")
-    public String afficherFormulaire() {
-        // Retourner la vue du formulaire d'ajout de cours
+    public String afficherFormulaire(Model model) {
+        // Récupérer tous les enseignants
+        List<Enseignant> enseignants = enseignantService.findAllEnseignants();
+
+        // Debugging : Affichage des ID de chaque enseignant dans la console
+        for (Enseignant enseignant : enseignants) {
+            System.out.println("Enseignant ID: " + enseignant.getId() + ", Nom: " + enseignant.getNom());
+        }
+
+        // Passer la liste des enseignants au modèle
+        model.addAttribute("enseignants", enseignants);
         return "AjouterCours"; // Cette page JSP doit être dans le dossier WEB-INF/jsp/
     }
 
