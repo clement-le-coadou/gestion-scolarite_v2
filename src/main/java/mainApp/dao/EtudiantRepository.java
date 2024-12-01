@@ -1,6 +1,8 @@
 package mainApp.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import mainApp.model.Etudiant;
@@ -28,4 +30,8 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
     void deleteById(Long id);
     
     public Etudiant findByEmail(String email);
+
+    @Query("SELECT e FROM Etudiant e JOIN e.inscriptions i WHERE i.cours.id = :coursId")
+    List<Etudiant> findEtudiantsByCoursId(@Param("coursId") Long coursId);
+
 }

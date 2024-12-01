@@ -5,6 +5,7 @@ import mainApp.model.EmploiDuTempsEnseignant;
 import mainApp.emploiDuTemps.JourSemaine;
 import mainApp.model.Cours;
 import mainApp.model.Etudiant;
+import mainApp.model.Inscription;
 import mainApp.model.Enseignant;
 import mainApp.service.EmploiDuTempsEleveService;
 import mainApp.service.EmploiDuTempsEnseignantService;
@@ -15,15 +16,25 @@ import mainApp.service.EnseignantService;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Controller
 public class AjouterEmploiDuTemps {
@@ -84,6 +95,30 @@ public class AjouterEmploiDuTemps {
             redirectAttributes.addFlashAttribute("message", "Erreur : Cours, étudiant ou enseignant non trouvé.");
             return "redirect:/AjouterEmploiDuTemps"; // Redirection en cas d'erreur
         }
+
+        // Vérification que l'enseignant enseigne bien le cours
+        List<Cours> coursEnseignant = coursService.findByEnseignantId(enseignantId);
+        boolean enseignantEnseigneLeCours = coursEnseignant.stream().anyMatch(c -> c.getId().equals(coursId));
+        if (!enseignantEnseigneLeCours) {
+            redirectAttributes.addFlashAttribute("message", "Erreur : L'enseignant ne donne pas ce cours.");
+            return "redirect:/AjouterEmploiDuTemps";
+        }
+
+        // Vérification que l'étudiant est bien inscrit au cours
+        Set<Inscription> inscriptions = etudiant.getInscriptions(); // Obtenez les inscriptions de l'étudiant
+        boolean estInscrit = false;
+        for (Inscription inscription : inscriptions) {
+            if (inscription.getCours().equals(cours)) {
+                estInscrit = true;
+                break;
+            }
+        }
+
+        if (!estInscrit) {
+            redirectAttributes.addFlashAttribute("message", "Erreur : L'étudiant n'est pas inscrit à ce cours.");
+            return "redirect:/AjouterEmploiDuTemps";
+        }
+
         LocalTime heureDebut = LocalTime.parse(heureDebutBefore);
 
         // Vérification de la disponibilité de la salle
@@ -134,4 +169,5 @@ public class AjouterEmploiDuTemps {
         redirectAttributes.addFlashAttribute("message", "Emploi du temps ajouté avec succès.");
         return "redirect:/AfficherEmploiDuTemps"; // Redirection vers la page d'affichage
     }
+
 }

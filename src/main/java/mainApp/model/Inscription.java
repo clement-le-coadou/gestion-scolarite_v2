@@ -1,5 +1,7 @@
 package mainApp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -11,10 +13,12 @@ public class Inscription {
 
     @ManyToOne
     @JoinColumn(name = "etudiant_id", nullable = false)
+    @JsonBackReference
     private Etudiant etudiant;
 
     @ManyToOne
     @JoinColumn(name = "cours_id", nullable = false)
+    @JsonBackReference
     private Cours cours;
 
     // Default constructor

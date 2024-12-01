@@ -54,4 +54,9 @@ public class EtudiantService {
     public Etudiant findByEmail(String email) {
         return etudiantRepository.findByEmail(email);
     }
+    
+    public List<Etudiant> findEtudiantsByCoursId(Long coursId) {
+        return etudiantRepository.findEtudiantsByCoursId(coursId);
+    }
+
 }

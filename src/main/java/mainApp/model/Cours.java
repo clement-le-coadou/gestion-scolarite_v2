@@ -3,6 +3,8 @@ package mainApp.model;
 import jakarta.persistence.*;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Cours {
 
@@ -20,6 +22,7 @@ public class Cours {
     private Enseignant enseignant;
 
     @OneToMany(mappedBy = "cours", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Inscription> inscriptions;
 
     @OneToMany(mappedBy = "cours", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
