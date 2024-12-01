@@ -96,7 +96,7 @@
         <!-- Durée du Cours -->
         <div class="form-group">
             <label for="duree">Durée (en minutes) :</label>
-            <input type="number" class="form-control" id="duree" name="duree" required>
+            <input type="number" class="form-control" id="duree" name="duree" required value="60">
         </div>
 
         <!-- Salle -->

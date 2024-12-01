@@ -1,5 +1,11 @@
 package mainApp.servlet;
 
+import mainApp.model.Administrateur;
+import mainApp.model.Enseignant;
+import mainApp.model.Etudiant;
+import mainApp.service.AdministrateurService;
+import mainApp.service.EnseignantService;
+import mainApp.service.EtudiantService;
 import mainApp.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,10 +24,17 @@ import jakarta.servlet.http.HttpSession;
 public class ModifierUtilisateur {
 
     private final UtilisateurService userService;
+    private final EtudiantService etudiantService;
+    private final EnseignantService enseignantService;
+    private final AdministrateurService administrateurService;
+    
 
     @Autowired
-    public ModifierUtilisateur(UtilisateurService userService) {
+    public ModifierUtilisateur(UtilisateurService userService, EtudiantService etudiantService, EnseignantService enseignantService, AdministrateurService administrateurService) {
         this.userService = userService;
+		this.etudiantService = etudiantService;
+		this.enseignantService = enseignantService;
+		this.administrateurService = administrateurService;
     }
 
     /**
@@ -40,8 +53,8 @@ public class ModifierUtilisateur {
 			}
     	}
         Object user = userService.getUserById(userType, session.getAttribute("username"));
-        model.addAttribute("user", user);
-        model.addAttribute("userType", userType);
+        request.setAttribute("user", user);
+        request.setAttribute("userType", userType);
         return "AfficherInfos"; // Vue pour afficher les infos utilisateur
     }
 
@@ -58,19 +71,27 @@ public class ModifierUtilisateur {
             @RequestParam(value = "contact", required = false) String contact,
             @RequestParam(value = "dateNaissance", required = false) String dateNaissance,
             HttpSession session,
-            Model model) {
+            Model model, HttpServletRequest request) {
 
         // Mettre à jour les informations de l'utilisateur
         userService.updateUser(userType, userId, nom, prenom, email, contact, dateNaissance, session);
+        String userTypeTemp = (String) session.getAttribute("role");
+        Object updatedUser = null;  // Déclaration d'une variable commune pour l'utilisateur mis à jour
 
-        // Récupérer les informations mises à jour de l'utilisateur
-        Object updatedUser = userService.getUserById(userType, session.getAttribute("username"));
+        // Récupérer l'utilisateur mis à jour en fonction du type
+        if ("Etudiant".equals(userTypeTemp)) {
+            updatedUser = etudiantService.findEtudiantById(userId);
+        } else if ("Enseignant".equals(userTypeTemp)) {
+            updatedUser = enseignantService.findEnseignantById(userId);
+        } else if ("Administrateur".equals(userTypeTemp)) {
+            updatedUser = administrateurService.findAdministrateurById(userId);
+        }
 
         // Ajouter l'utilisateur mis à jour au modèle
-        model.addAttribute("user", updatedUser);
-        model.addAttribute("userType", userType);
+        request.setAttribute("user", updatedUser);
+        request.setAttribute("userType", userTypeTemp);
     	session.setAttribute("username", updatedUser);
-    	session.setAttribute("userType", userType);
+    	session.setAttribute("role", userType);
     	
         
         // Retourner à la vue pour afficher les informations mises à jour

@@ -11,6 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
@@ -28,15 +31,17 @@ public class AfficherEmploiDuTemps {
     }
 
     @GetMapping("/AfficherEmploiDuTemps")
-    public String afficherEmploiDuTemps(HttpSession session, Model model) {
+    public String afficherEmploiDuTemps(HttpSession session, Model model,HttpServletRequest request,HttpServletResponse response) {
+        if (session.getAttribute("role") == null) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/Login");  // Forward to accueil page
+            try {
+				dispatcher.forward(request, response);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+        }
         // Vérification du type d'utilisateur dans la session
         String userType = (String) session.getAttribute("role");
-        System.out.println(userType);
-
-        if (userType == null) {
-            return "redirect:/Login"; // Rediriger vers la page de login si l'utilisateur n'est pas connecté
-        }
-
         // Récupération de l'emploi du temps en fonction du type d'utilisateur
         if (userType.equals("Etudiant")) {
         	
