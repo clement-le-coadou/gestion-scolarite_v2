@@ -18,4 +18,5 @@ public class MainController {
         // Retourne "accueil", ce qui signifie que Spring Boot cherchera un fichier "accueil.jsp"
         return "accueil";  
     }
+    
 }

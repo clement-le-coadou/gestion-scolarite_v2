@@ -74,7 +74,14 @@ public class ModifierUtilisateur {
             Model model, HttpServletRequest request) {
 
         // Mettre à jour les informations de l'utilisateur
-        userService.updateUser(userType, userId, nom, prenom, email, contact, dateNaissance, session);
+    	try {
+            userService.updateUser(userType, userId, nom, prenom, email, contact, dateNaissance, session);
+    	}catch(Exception e) {
+    		model.addAttribute("errorCode","Mail déjà utilisé");
+    		model.addAttribute("errorMessage", "Une autre personne de votre catégorie possède cette adresse mail");
+    		return "error";
+    	}
+
         String userTypeTemp = (String) session.getAttribute("role");
         Object updatedUser = null;  // Déclaration d'une variable commune pour l'utilisateur mis à jour
 

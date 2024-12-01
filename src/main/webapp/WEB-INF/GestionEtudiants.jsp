@@ -19,12 +19,6 @@
     <%-- Retrieve the role from the session --%>
     <% role = (String) session.getAttribute("role"); %> <!-- Assuming role is in session -->
     
-    <% if ("Administrateur".equals(role)) { %>
-    <div class="mb-3">
-        <a href="AjouterEtudiant" class="btn btn-success">Ajouter un Étudiant</a>
-    </div>
-    <% } %>
-    
 	<!-- Formulaire de recherche -->
 	<div class="mb-4">
 	    <div class="input-group">

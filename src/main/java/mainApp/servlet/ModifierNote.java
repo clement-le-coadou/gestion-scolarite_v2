@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.*;
 public class ModifierNote {
 
     private final NoteService noteService;
+    private final EmailUtil emailUtil;
 
     @Autowired
-    public ModifierNote(NoteService noteService) {
+    public ModifierNote(NoteService noteService, EmailUtil emailUtil) {
         this.noteService = noteService;
+		this.emailUtil = emailUtil;
     }
 
     /**
@@ -55,11 +57,10 @@ public class ModifierNote {
                     ",\n\nVotre note pour le cours " + note.getCours().getNom() + " a été mise à jour.\n" +
                     "Nouvelle note : " + newNoteValue + "\n\nCordialement,\nL'équipe de gestion des études.";
 
-            EmailUtil emailUtil = new EmailUtil();
 			emailUtil.envoyerEmail(destinataire, sujet, contenu);
         }
 
         // Redirection vers la page de gestion des notes pour ce cours
-        return "redirect:/GestionNotes?coursId=" + (note != null ? note.getCours().getId() : "");
+        return "redirect:/RedirectionNotesServlet";
     }
 }

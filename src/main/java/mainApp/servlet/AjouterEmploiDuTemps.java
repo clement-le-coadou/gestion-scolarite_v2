@@ -120,6 +120,21 @@ public class AjouterEmploiDuTemps {
         }
 
         LocalTime heureDebut = LocalTime.parse(heureDebutBefore);
+        
+
+        // Vérification de la plage horaire (8h à 17h)
+        LocalTime heureDebutPlageMin = LocalTime.of(8, 0);
+        LocalTime heureDebutPlageMax = LocalTime.of(17, 0);
+        if (heureDebut.isBefore(heureDebutPlageMin) || heureDebut.isAfter(heureDebutPlageMax)) {
+            redirectAttributes.addFlashAttribute("message", "Erreur : L'heure de début doit être entre 08h00 et 17h00.");
+            return "redirect:/AjouterEmploiDuTemps";
+        }
+        
+        // Vérification de la durée du cours (maximum 60 minutes)
+        if (duree > 60) {
+            redirectAttributes.addFlashAttribute("message", "Erreur : La durée du cours ne peut pas dépasser 60 minutes.");
+            return "redirect:/AjouterEmploiDuTemps";
+        }
 
         // Vérification de la disponibilité de la salle
         boolean salleDisponible = emploiDuTempsEleveService.verifierDisponibiliteSalle(salle, heureDebut, duree) && 

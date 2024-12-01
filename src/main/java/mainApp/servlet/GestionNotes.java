@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -29,8 +30,9 @@ public class GestionNotes {
     @Autowired
     private CoursService coursService;
 
-    @GetMapping("/GestionNotes")
+    @PostMapping("/GestionNotes")
     public String gestionNotes(@RequestParam(value = "coursId", required = false) Long coursId, Model model) {
+    	System.out.println(coursId);
         if (coursId != null) {
             try {
                 // Vérifier si le cours existe

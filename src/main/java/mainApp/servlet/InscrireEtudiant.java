@@ -10,6 +10,7 @@ import mainApp.service.InscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -25,6 +26,14 @@ public class InscrireEtudiant {
     @Autowired
     private InscriptionService inscriptionService;
 
+    
+    @GetMapping("/InscrireEtudiant")
+    public String afficherInscrireEtudiant(Model model) {
+    	model.addAttribute("listEtudiant",etudiantService.findAllEtudiants());
+    	model.addAttribute("listCours",coursService.findAllCours());
+    	return "InscrireEtudiant";
+    }
+    
     // Méthode pour gérer l'inscription d'un étudiant à un cours
     @PostMapping("/InscrireEtudiant")
     public String inscrireEtudiant(@RequestParam("etudiantId") Long etudiantId, 

@@ -82,7 +82,7 @@ public class AjouterNote {
 
             // Message de succès après l'ajout
             redirectAttributes.addFlashAttribute("message", "La note a été ajoutée avec succès.");
-            return "redirect:/GestionNotes?coursId=" + coursId;
+            return "redirect:/RedirectionNotesServlet";
         } else {
             redirectAttributes.addFlashAttribute("error", "Étudiant ou cours introuvable.");
             return "redirect:/error";

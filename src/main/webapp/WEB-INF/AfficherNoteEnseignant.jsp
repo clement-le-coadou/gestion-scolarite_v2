@@ -28,7 +28,7 @@
             <tbody>
                 <%
                     // Récupérer les données passées depuis le contrôleur
-                    int coursId = (int) request.getAttribute("coursId");
+                    Long coursId = (Long) request.getAttribute("coursId");
                     List<Note> notes = (List<Note>) request.getAttribute("notes");
                     List<Etudiant> etudiantList = (List<Etudiant>) request.getAttribute("etudiantList");
 

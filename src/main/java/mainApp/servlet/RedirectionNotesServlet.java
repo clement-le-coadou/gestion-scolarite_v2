@@ -35,7 +35,7 @@ public class RedirectionNotesServlet {
     public String redirectToNotes(HttpSession session, Model model) {
         // Get the role of the logged-in user from the session
         String role = (String) session.getAttribute("role");
-
+        System.out.println(role);
         // If role is not set, redirect to login page
         if (role == null) {
         	return "redirect:/Login";  // Cela effectue une redirection vers l'URL /login

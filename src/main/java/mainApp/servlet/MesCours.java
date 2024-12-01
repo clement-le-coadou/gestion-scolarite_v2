@@ -15,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import jakarta.servlet.http.HttpSession;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,8 +34,16 @@ public class MesCours {
     }
 
     @GetMapping("/MesCours")
-    public String getMesCours(@SessionAttribute("username") Object utilisateur, Model model) {
+    public String getMesCours(Model model, HttpSession session) {
         List<Cours> coursList = null;
+        
+        String role = (String) session.getAttribute("role");
+        System.out.println(role);
+        // If role is not set, redirect to login page
+        if (role == null) {
+        	return "redirect:/Login";  // Cela effectue une redirection vers l'URL /login
+        }
+        Object utilisateur = session.getAttribute("username");
 
         if (utilisateur instanceof Etudiant) {
             Etudiant etudiant = (Etudiant) utilisateur;

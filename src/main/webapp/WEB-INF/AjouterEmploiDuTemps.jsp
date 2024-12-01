@@ -107,7 +107,7 @@
 
         <!-- Boutons de soumission -->
         <button type="submit" class="btn btn-success">Ajouter l'Emploi du Temps</button>
-        <a href="gestionEmploiDuTemps" class="btn btn-secondary">Annuler</a>
+        <a href="accueil" class="btn btn-secondary">Annuler</a>
     </form>
 </div>
 

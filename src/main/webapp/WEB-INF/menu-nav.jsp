@@ -18,7 +18,7 @@
                 <% } %>
                 <% if ("Administrateur".equals(role) || "Enseignant".equals(role)) { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="AfficherEtudiant">Gestion des étudiants</a>
+                        <a class="nav-link" href="AfficherEtudiants">Gestion des étudiants</a>
                     </li>
                 <% } %>
                 <li class="nav-item">
@@ -34,7 +34,7 @@
                 <% } %>
                 <% if ("Administrateur".equals(role) || "Enseignant".equals(role)) { %>
                     <li class="nav-item">
-                        <a class="nav-link" href="AjouterEmploiDuTemps">Gestion des étudiants</a>
+                        <a class="nav-link" href="AjouterEmploiDuTemps">Ajouter un créneau</a>
                     </li>
                 <% } %>
                 <% if ("Etudiant".equals(role) || "Enseignant".equals(role)) { %>
