@@ -92,7 +92,7 @@ public class ModifierUtilisateur {
         request.setAttribute("userType", userTypeTemp);
     	session.setAttribute("username", updatedUser);
     	session.setAttribute("role", userType);
-    	
+   	
         
         // Retourner à la vue pour afficher les informations mises à jour
         return "AfficherInfos"; // Redirection vers la page d'affichage
