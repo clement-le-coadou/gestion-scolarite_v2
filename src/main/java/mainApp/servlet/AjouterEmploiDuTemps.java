@@ -134,6 +134,9 @@ public class AjouterEmploiDuTemps {
         if (duree > 60) {
             redirectAttributes.addFlashAttribute("message", "Erreur : La durée du cours ne peut pas dépasser 60 minutes.");
             return "redirect:/AjouterEmploiDuTemps";
+        }else if(duree < 0) {
+            redirectAttributes.addFlashAttribute("message", "Erreur : La durée du cours ne peut pas être négative.");
+            return "redirect:/AjouterEmploiDuTemps";        	
         }
 
         // Vérification de la disponibilité de la salle

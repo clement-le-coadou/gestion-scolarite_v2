@@ -16,9 +16,6 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">Gestion des Enseignants</h2>
 
-    <div class="mb-3">
-        <a href="AjouterEnseignant" class="btn btn-success">Ajouter un Enseignant</a>
-    </div>
 
     <table class="table table-bordered">
         <thead>
