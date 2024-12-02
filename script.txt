@@ -1,30 +1,23 @@
 DROP TABLE IF EXISTS Note;
 DROP TABLE IF EXISTS Inscription;
-DROP TABLE IF EXISTS Emploi_du_temps_eleve;
-DROP TABLE IF EXISTS Emploidu_temps_enseignant;
-DROP TABLE IF EXISTS emploidutempsenseignant;
-DROP TABLE IF EXISTS emploidutempseleve;
 DROP TABLE IF EXISTS Cours;
 DROP TABLE IF EXISTS Enseignant;
 DROP TABLE IF EXISTS Etudiant;
 DROP TABLE IF EXISTS Administrateur;
 
 
-
-
--- CrÃ©ation de la base de donnÃ©es si elle n'existe pas dÃ©jÃ 
+-- Création de la base de données si elle n'existe pas déjà
 CREATE DATABASE IF NOT EXISTS gestion_scolarite;
 
--- Sélectionner la base de données
+-- Sélection de la base de données pour les commandes suivantes
 USE gestion_scolarite;
-
 
 -- Table pour les Etudiants
 CREATE TABLE Etudiant (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,           -- Identifiant unique pour chaque utilisateur
     nom VARCHAR(100) NOT NULL,                      -- Nom de l'utilisateur
     prenom VARCHAR(100) NOT NULL,                   -- Prénom de l'utilisateur
-    date_naissance DATE NOT NULL,                   -- Date de naissance de l'utilisateur
+    dateNaissance DATE NOT NULL,                   -- Date de naissance de l'utilisateur
     email VARCHAR(100) NOT NULL UNIQUE,             -- Adresse email, doit être unique
     contact VARCHAR(15) NOT NULL,                   -- Numéro de contact
     mot_de_passe VARCHAR(255) NOT NULL             -- Mot de passe (devrait être stocké haché)
@@ -49,72 +42,38 @@ CREATE TABLE Administrateur (
     mot_de_passe VARCHAR(255) NOT NULL             -- Mot de passe (devrait être stocké haché)
 );
 
--- Table pour les Cours
+
+-- Table pour gérer les cours offerts
 CREATE TABLE Cours (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,               -- Identifiant unique pour chaque cours
     nom VARCHAR(100) NOT NULL,                          -- Nom du cours
     description TEXT,                                   -- Description du cours
     enseignant_id BIGINT,                               -- Identifiant de l'enseignant qui enseigne ce cours
-    CONSTRAINT fk_enseignant FOREIGN KEY (enseignant_id) REFERENCES Enseignant(id) ON DELETE SET NULL  -- Clé étrangère vers la table Enseignant
+    CONSTRAINT fk_enseignant FOREIGN KEY (enseignant_id) REFERENCES Enseignant(id) ON DELETE SET NULL  -- Clé étrangère vers la table Utilisateur
 );
 
--- Table pour les Inscriptions des Etudiants
+-- Table pour gérer les inscriptions des étudiants aux cours
 CREATE TABLE Inscription (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,               -- Identifiant unique pour chaque inscription
     etudiant_id BIGINT,                                 -- Identifiant de l'étudiant inscrit
     cours_id BIGINT,                                    -- Identifiant du cours auquel l'étudiant est inscrit
-    CONSTRAINT fk_etudiant FOREIGN KEY (etudiant_id) REFERENCES Etudiant(id) ON DELETE CASCADE,  -- Clé étrangère vers la table Etudiant
+    CONSTRAINT fk_etudiant FOREIGN KEY (etudiant_id) REFERENCES Etudiant(id) ON DELETE CASCADE,  -- Clé étrangère vers la table Utilisateur
     CONSTRAINT fk_cours FOREIGN KEY (cours_id) REFERENCES Cours(id) ON DELETE CASCADE,  -- Clé étrangère vers la table Cours
     UNIQUE(etudiant_id, cours_id)                       -- Empêche une inscription multiple au même cours
 );
 
--- Table pour les Notes des Etudiants dans les Cours
+-- Table pour gérer les notes des étudiants dans les cours
 CREATE TABLE Note (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,               -- Identifiant unique pour chaque note
     etudiant_id BIGINT,                                 -- Identifiant de l'étudiant ayant reçu la note
     cours_id BIGINT,                                    -- Identifiant du cours pour lequel la note est attribuée
     note DECIMAL(5,2) CHECK (note >= 0 AND note <= 20), -- Note entre 0 et 20, avec deux décimales
-    CONSTRAINT fk_etudiant_note FOREIGN KEY (etudiant_id) REFERENCES Etudiant(id) ON DELETE CASCADE,  -- Clé étrangère vers la table Etudiant
+    CONSTRAINT fk_etudiant_note FOREIGN KEY (etudiant_id) REFERENCES Etudiant(id) ON DELETE CASCADE,  -- Clé étrangère vers la table Utilisateur
     CONSTRAINT fk_cours_note FOREIGN KEY (cours_id) REFERENCES Cours(id) ON DELETE CASCADE  -- Clé étrangère vers la table Cours
 );
 
-CREATE TABLE Emploi_du_temps_eleve (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    eleve_id BIGINT,
-    cours_id BIGINT,
-    salle VARCHAR(50) NOT NULL,                      
-    jour_semaine ENUM('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi') NOT NULL,  
-    heure_debut TIME NOT NULL,                        
-    duree INT NOT NULL,                               
-    CONSTRAINT fk_eleve_emploidu FOREIGN KEY (eleve_id) REFERENCES Etudiant(id),  
-    CONSTRAINT fk_cours_emploidu_eleve FOREIGN KEY (cours_id) REFERENCES Cours(id),
-    CONSTRAINT chk_emploi_du_temps UNIQUE(eleve_id, cours_id, jour_semaine, heure_debut), 
-    CONSTRAINT chk_salle UNIQUE(salle, jour_semaine, heure_debut)
-);
 
-
-CREATE TABLE Emploi_du_temps_enseignant (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    enseignant_id BIGINT,
-    cours_id BIGINT,
-    salle VARCHAR(50) NOT NULL,                      
-    jour_semaine ENUM('Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi') NOT NULL,  
-    heure_debut TIME NOT NULL,                        
-    duree INT NOT NULL,                               
-    CONSTRAINT fk_enseignant_emploidu FOREIGN KEY (enseignant_id) REFERENCES Enseignant(id),
-    CONSTRAINT fk_cours_emploidu_enseignant FOREIGN KEY (cours_id) REFERENCES Cours(id),
-    CONSTRAINT chk_emploi_du_temps UNIQUE(enseignant_id, cours_id, jour_semaine, heure_debut), 
-    CONSTRAINT chk_salle UNIQUE(salle, jour_semaine, heure_debut)
-);
-
-
-
--- Exemple d'insertions pour les emplois du temps
-
--- Emploi du temps pour les étudiants
-
-
-INSERT INTO Etudiant (nom, prenom, date_naissance, email, contact, mot_de_passe)
+INSERT INTO Etudiant (nom, prenom, dateNaissance, email, contact, mot_de_passe)
 VALUES
 ('Martin', 'Emma', '2000-01-15', 'emma.martin@example.com', '0612345001', 'password123'),
 ('Durand', 'Lucas', '2000-02-20', 'lucas.durand@example.com', '0612345002', 'password123'),
@@ -136,7 +95,7 @@ VALUES
 ('Chevalier', 'Noah', '2000-06-09', 'noah.chevalier@example.com', '0612345018', 'password123'),
 ('Baron', 'Manon', '2000-07-30', 'manon.baron@example.com', '0612345019', 'password123'),
 ('Perrin', 'Nathan', '2000-08-12', 'nathan.perrin@example.com', '0612345020', 'password123'),
-('Léa', 'Léa', '2000-09-05', 'lea.clement@example.com', '0612345021', 'password123'),
+('Clément', 'Léa', '2000-09-05', 'lea.clement@example.com', '0612345021', 'password123'),
 ('Lambert', 'Adam', '2000-10-19', 'adam.lambert@example.com', '0612345022', 'password123'),
 ('Bonnet', 'Sarah', '2000-11-23', 'sarah.bonnet@example.com', '0612345023', 'password123'),
 ('Dupuis', 'Enzo', '2000-12-11', 'enzo.dupuis@example.com', '0612345024', 'password123'),
@@ -154,11 +113,11 @@ VALUES
 ('Collet', 'Léo', '2000-12-21', 'leo.collet@example.com', '0612345036', 'password123'),
 ('Benoit', 'Axelle', '2000-01-10', 'axelle.benoit@example.com', '0612345037', 'password123'),
 ('Moulin', 'Théo', '2000-02-22', 'theo.moulin@example.com', '0612345038', 'password123'),
-('Descamps', 'Maelle', '2000-03-08', 'maelle.descamps@example.com', '0612345039', 'password123'),
+('Descamps', 'Maëlle', '2000-03-08', 'maelle.descamps@example.com', '0612345039', 'password123'),
 ('Charpentier', 'Liam', '2000-04-30', 'liam.charpentier@example.com', '0612345040', 'password123');
 
 
--- Insertion de donnÃ©es de test pour les Enseignants
+-- Insertion de données de test pour les Enseignants
 INSERT INTO Enseignant (nom, prenom, email, contact, mot_de_passe)
 VALUES
 ('Legrand', 'Paul', 'paul.legrand@example.com', '0611122233', 'password123'),
@@ -172,26 +131,26 @@ VALUES
 ('Lopez', 'Camille', 'camille.lopez@example.com', '0644901234', 'password123');
 
 
--- Insertion de donnÃ©es de test pour les Administrateurs
+-- Insertion de données de test pour les Administrateurs
 INSERT INTO Administrateur (nom, prenom, email, mot_de_passe) VALUES
 ('Admin', 'Super', 'admin@example.com', 'admin123'),
 ('User', 'Test', 'user@example.com', 'user123');
 
--- Insertion de donnÃ©es de test pour les Cours
+-- Insertion de données de test pour les Cours
 INSERT INTO Cours (nom, description, enseignant_id)
 VALUES
 ('Mathématiques', 'Introduction aux concepts mathématiques.', 1),
 ('Physique', 'Principes de la physique moderne.', 2),
 ('Chimie', 'Chimie organique et inorganique.', 3),
-('Informatique', 'Introduction à  la programmation.', 4),
-('Philosophie', 'Philosophie.', 5),
+('Informatique', 'Introduction à la programmation.', 4),
+('Philosophie', 'Philosophie et éthique.', 5),
 ('Histoire', 'Exploration des grandes périodes historiques.', 6),
-('Biologie', 'Etude des organismes vivants.', 7),
-('Economie', 'Introduction aux principes Economiques.', 8),
+('Biologie', 'Étude des organismes vivants.', 7),
+('Économie', 'Introduction aux principes économiques.', 8),
 ('Littérature', 'Analyse des grands classiques.', 9);
 
 
--- Insertion de donnÃ©es de test pour les Inscriptions
+-- Insertion de données de test pour les Inscriptions
 INSERT INTO Inscription (etudiant_id, cours_id)
 VALUES
 (1, 1), (1, 2), (1, 3), (1, 4), (1, 5),
@@ -236,7 +195,7 @@ VALUES
 (40, 5), (40, 6), (40, 7), (40, 8), (40, 9);
 
 
--- Insertion de donnÃ©es de test pour les Notes
+-- Insertion de données de test pour les Notes
 INSERT INTO Note (etudiant_id, cours_id, note) VALUES
 (1, 1, 15.50),
 (1, 2, 18.00),
@@ -248,19 +207,3 @@ INSERT INTO Note (etudiant_id, cours_id, note) VALUES
 (4, 5, 16.00),
 (5, 3, 13.50);
 
-INSERT INTO Emploi_du_temps_eleve (eleve_id, cours_id, salle, jour_semaine, heure_debut, duree)
-VALUES
-(1, 1, 'Salle 101', 'Lundi', '08:00:00', 120),
-(1, 2, 'Salle 102', 'Mardi', '10:00:00', 90),
-(2, 3, 'Salle 103', 'Mercredi', '14:00:00', 90),
-(3, 4, 'Salle 104', 'Jeudi', '11:00:00', 120),
-(4, 5, 'Salle 105', 'Vendredi', '09:00:00', 60);
-
-
-INSERT INTO Emploi_du_temps_enseignant (enseignant_id, cours_id, salle, jour_semaine, heure_debut, duree)
-VALUES
-(1, 1, 'Salle 101', 'Lundi', '08:00:00', 120),
-(2, 2, 'Salle 102', 'Mardi', '10:00:00', 90),
-(3, 3, 'Salle 103', 'Mercredi', '14:00:00', 90),
-(4, 4, 'Salle 104', 'Jeudi', '11:00:00', 120),
-(5, 5, 'Salle 105', 'Vendredi', '09:00:00', 60);
